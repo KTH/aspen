@@ -5,6 +5,8 @@
 * Increased testability
 * Improve deployment performance
 * Improved error handling
+* Open source all the things!
+* Improve caching and redeployments after fatal errors
 
 ## Main loop
 
@@ -22,3 +24,4 @@
     * Save deployment to cache
     * Send to dizin
     * Send recommendations
+    * Information on deployment status/success
