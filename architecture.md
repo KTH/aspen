@@ -2,6 +2,7 @@
 
 * General clean up (old code)
 * Improve code structure/readability
+* Increased testability
 * Improve deployment performance
 
 # Main loop
