@@ -4,6 +4,7 @@
 * Improve code structure/readability
 * Increased testability
 * Improve deployment performance
+* Improved error handling
 
 # Main loop
 
