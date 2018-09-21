@@ -16,6 +16,7 @@
         * Verify cluster for deployment (cellus and application)
         * docker-stack.yml has changed (check cache)
         * New version exists
+        * Secrets.env has changed
         * Verify policies (restart, resource, logging)
     * Run service
     * Post deploy hooks
