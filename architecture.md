@@ -5,6 +5,8 @@
 * Increased testability
 * Improve deployment performance
 * Improved error handling
+* Open source all the things!
+* Improve caching and redeployments after fatal errors
 
 # Main loop
 
