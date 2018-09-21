@@ -2,6 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 from modules.steps.parse_stack_file import ParseStackFile
 from modules.steps.parse_stack_path import ParseStackPath
+from modules.steps.create_stack_object import CreateStackObject
 from modules.util import pipeline
 
 class DeploymentPipeline():
@@ -10,7 +11,8 @@ class DeploymentPipeline():
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             ParseStackPath(),
-            ParseStackFile()
+            ParseStackFile(),
+            CreateStackObject()
         ])
 
     def set_pipeline_data(self, pipeline_data):

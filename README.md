@@ -14,3 +14,5 @@ passwords:
 ```
 
 * Docker stack files must be named `docker-stack.yml`
+
+* Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file
