@@ -4,6 +4,7 @@ from modules.steps.fetch_app_registry import FetchAppRegistry
 from modules.steps.decrypt_app_passwords import DecryptAppPasswords
 from modules.steps.find_docker_stack_files import FindDockerStackFiles
 from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
+from modules.util.exceptions import FatalAspenException
 from modules.util import pipeline
 
 class MasterPipeline():
@@ -18,4 +19,7 @@ class MasterPipeline():
         ])
 
     def run_pipeline(self):
-        self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
+        try:
+            self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
+        except FatalAspenException as fae:
+            pass
