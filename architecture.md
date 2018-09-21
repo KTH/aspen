@@ -23,3 +23,4 @@
         * Save deployment to cache
         * Send to dizin
         * Send recommendations
+        * Information on deployment status/success
