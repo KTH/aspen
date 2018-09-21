@@ -15,8 +15,8 @@ class BasePipelineStep:
         self.next_step = None
 
     @abstractmethod
-    def run_step(self, data): #pragma: no cover
-        """ Should return data """
+    def run_step(self, pipeline_data): #pragma: no cover
+        """ Should return pipeline_data """
         pass
 
     @abstractmethod
