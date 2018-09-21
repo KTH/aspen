@@ -2,9 +2,11 @@
 
 * General clean up (old code)
 * Improve code structure/readability
+* Increased testability
 * Improve deployment performance
+* Improved error handling
 
-# Flow of control
+# Main loop
 
 * Fetch latest cellus-registry
 * Decrypt and load app passwords
