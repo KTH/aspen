@@ -4,7 +4,7 @@
 * Improve code structure/readability
 * Improve deployment performance
 
-# Flow of control
+# Main loop
 
 * Fetch latest cellus-registry
 * Decrypt and load app passwords
