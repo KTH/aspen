@@ -5,3 +5,6 @@ class FatalAspenException(Exception):
 
 class ExpectedApplicationException(Exception):
     pass
+
+class UnExpectedApplicationException(Exception):
+    pass
