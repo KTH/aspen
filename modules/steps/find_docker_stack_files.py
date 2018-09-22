@@ -1,6 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import os
+import root_path
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs
 
@@ -11,13 +12,13 @@ class FindDockerStackFiles(BasePipelineStep):
         self.registry_root = None
 
     def get_required_env_variables(self):
-        return [environment.REGISTRY_ROOT]
+        return [environment.REGISTRY_SUB_DIRECTORY]
 
     def get_required_data_keys(self):
         return []
 
     def run_step(self, pipeline_data):
-        self.registry_root = environment.get_env(environment.REGISTRY_ROOT)
+        self.registry_root = environment.get_registry_path()
         pipeline_data[data_defs.DOCKER_STACK_FILES] = self.walk_repository()
         return pipeline_data
 

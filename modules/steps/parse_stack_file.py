@@ -8,7 +8,7 @@ from modules.util.exceptions import UnExpectedApplicationException
 class ParseStackFile(BasePipelineStep):
 
     def get_required_env_variables(self):
-        return [environment.PROJECT_ROOT]
+        return []
 
     def get_required_data_keys(self):
         return [data_defs.DOCKER_STACK_FILE_PATH]

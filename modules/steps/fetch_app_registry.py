@@ -1,6 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import os
+import root_path
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, process
 from modules.util.exceptions import FatalAspenException
@@ -13,14 +14,14 @@ class FetchAppRegistry(BasePipelineStep):
         self.repository_local_path = None
 
     def get_required_env_variables(self):
-        return [environment.REGISTRY_ROOT, environment.REGISTRY_REPOSITORY_URL]
+        return [environment.REGISTRY_SUB_DIRECTORY,
+                environment.REGISTRY_REPOSITORY_URL]
 
     def get_required_data_keys(self):
         return []
 
     def run_step(self, pipeline_data):
-        self.repository_url = environment.get_env(environment.REGISTRY_REPOSITORY_URL)
-        self.repository_local_path = environment.get_env(environment.REGISTRY_ROOT)
+        self.repository_local_path = environment.get_registry_path()
         if not self.repository_path_ok():
             raise FatalAspenException('Local repository path is not a valid directory')
         self.get_latest_changes()
