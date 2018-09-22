@@ -1,5 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
+import logging
 from modules.steps.parse_stack_file import ParseStackFile
 from modules.steps.parse_stack_path import ParseStackPath
 from modules.steps.logging_policy_checker import LoggingPolicyChecker
@@ -14,11 +15,12 @@ from modules.steps.init_service_pipeline_data import InitServicePipelineData
 from modules.steps.calculate_semantic_version import CalculateSemanticVersion
 from modules.util.exceptions import (UnExpectedApplicationException,
                                      ExpectedApplicationException)
-from modules.util import pipeline
+from modules.util import pipeline, data_defs
 
 class DeploymentPipeline():
 
     def __init__(self):
+        self.log = logging.getLogger(__name__)
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             ParseStackPath(),
@@ -40,6 +42,8 @@ class DeploymentPipeline():
 
     def run_pipeline(self):
         try:
+            stack_file = self.pipeline_data[data_defs.DOCKER_STACK_FILE_PATH]
+            self.log.info('Starting DeploymentPipline for file "%s"', stack_file)
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
         except UnExpectedApplicationException as ueae:
             pass

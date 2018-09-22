@@ -1,7 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
 import os
-import root_path
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, process
 from modules.util.exceptions import FatalAspenException

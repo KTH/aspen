@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import yaml
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, data_defs
+from modules.util import data_defs
 from modules.util.exceptions import UnExpectedApplicationException
 
 class ParseStackFile(BasePipelineStep):

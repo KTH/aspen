@@ -1,7 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
 import os
-import root_path
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs
 
@@ -28,4 +27,5 @@ class FindDockerStackFiles(BasePipelineStep):
             for file in files:
                 if file == 'docker-stack-yml':
                     docker_stack_files.append(os.path.join(dirpath, file))
+        self.log.debug('Found %s docker stack files', len(docker_stack_files))
         return docker_stack_files
