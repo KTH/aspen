@@ -4,6 +4,7 @@ from modules.steps.fetch_app_registry import FetchAppRegistry
 from modules.steps.decrypt_app_passwords import DecryptAppPasswords
 from modules.steps.find_docker_stack_files import FindDockerStackFiles
 from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
+from modules.steps.registry_login import RegistryLogin
 from modules.util.exceptions import FatalAspenException
 from modules.util import pipeline
 
@@ -12,6 +13,7 @@ class AspenPipeline():
     def __init__(self):
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
+            RegistryLogin(),
             FetchAppRegistry(),
             DecryptAppPasswords(),
             FindDockerStackFiles(),
