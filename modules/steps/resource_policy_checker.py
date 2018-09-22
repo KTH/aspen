@@ -17,7 +17,7 @@ class ResourcePolicyChecker(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         stack_contents = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
-        for service in stack_contents['services']:
+        for _, service in stack_contents['services'].items():
             self.has_resource_policy(service)
             self.verify_resource_policy(service['deploy']['resources'])
         return pipeline_data
