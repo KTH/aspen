@@ -3,6 +3,10 @@ __author__ = 'tinglev@kth.se'
 from modules.steps.parse_stack_file import ParseStackFile
 from modules.steps.parse_stack_path import ParseStackPath
 from modules.steps.create_stack_object import CreateStackObject
+from modules.steps.logging_policy_checker import LoggingPolicyChecker
+from modules.steps.restart_policy_checker import RestartPolicyChecker
+from modules.steps.resource_policy_checker import ResourcePolicyChecker
+from modules.steps.calculate_md5 import CalculateMd5
 from modules.util.exceptions import (UnExpectedApplicationException,
                                      ExpectedApplicationException)
 from modules.util import pipeline
@@ -14,6 +18,10 @@ class DeploymentPipeline():
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             ParseStackPath(),
             ParseStackFile(),
+            CalculateMd5(),
+            LoggingPolicyChecker(),
+            RestartPolicyChecker(),
+            ResourcePolicyChecker(),
             CreateStackObject()
         ])
 

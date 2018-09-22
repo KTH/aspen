@@ -17,7 +17,9 @@ class ParseStackFile(BasePipelineStep):
         file_path = pipeline_data[data_defs.DOCKER_STACK_FILE_PATH]
         try:
             with open(file_path, 'r') as content_file:
-                pipeline_data[data_defs.STACK_FILE_CONTENTS] = yaml.load(content_file.read())
+                raw_data = content_file.read()
+                pipeline_data[data_defs.STACK_FILE_RAW_CONTENT] = raw_data
+                pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT] = yaml.load(raw_data)
         except yaml.YAMLError:
             raise UnExpectedApplicationException('Error when parsing docker-stack.yml')
         except IOError:

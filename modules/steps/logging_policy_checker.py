@@ -13,10 +13,10 @@ class LoggingPolicyChecker(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.STACK_FILE_CONTENTS]
+        return [data_defs.STACK_FILE_PARSED_CONTENT]
 
     def run_step(self, pipeline_data):
-        stack_contents = pipeline_data[data_defs.STACK_FILE_CONTENTS]
+        stack_contents = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
         for service in stack_contents['services']:
             self.has_logging_policy(service)
             self.verify_logging_policy(service['logging'])
