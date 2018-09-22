@@ -30,9 +30,7 @@ class DecryptAppSecrets(BasePipelineStep):
         self.run_ansible_vault(app_pwd_file, output_file, secrets_file)
 
     def run_ansible_vault(self, app_pwd_file, output_file, secrets_file):
-        process.run_with_output('ansible-vault decrypt '
-                                '--vault-password-file={} '
-                                '--output={} {}'
-                                .format(app_pwd_file,
-                                        output_file,
-                                        secrets_file))
+        cmd = (f'ansible-vault decrypt '
+               f'--vault-password-file={app_pwd_file} '
+               f'--output={output_file} {secrets_file}')
+        process.run_with_output(cmd)

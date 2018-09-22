@@ -38,7 +38,8 @@ class BasePipelineStep:
     def step_data_is_ok(self, data):
         for key in self.get_required_data_keys():
             if not data or not key in data:
-                err = '"{}" missing data key "{}"'.format(self.get_step_name(), key)
+                step_name = self.get_step_name()
+                err = f'"{step_name}" missing data key "{key}"'
                 self.handle_step_error(err)
                 return False
         return True
@@ -46,7 +47,8 @@ class BasePipelineStep:
     def step_environment_ok(self):
         for env in self.get_required_env_variables():
             if not env in os.environ:
-                err = '"{}" missing env variable "{}"'.format(self.get_step_name(), env)
+                step_name = self.get_step_name()
+                err = f'"{step_name}" missing env variable "{key}"'
                 self.handle_step_error(err)
                 return False
             if not os.environ.get(env):

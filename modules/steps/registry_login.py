@@ -24,5 +24,5 @@ class RegistryLogin(BasePipelineStep):
         return pipeline_data
 
     def run_docker_login(self, url, user, password):
-        process.run_with_output('docker login {} --password {} --username {}'
-                                .format(url, password, user))
+        cmd = f'docker login {url} --password {password} --username {user}'
+        process.run_with_output(cmd)

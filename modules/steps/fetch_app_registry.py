@@ -30,26 +30,31 @@ class FetchAppRegistry(BasePipelineStep):
         return os.path.isdir(self.repository_local_path)
 
     def clone(self):
-        return process.run_with_output('git clone {} {}'
-                                       .format(self.repository_url,
-                                               self.repository_local_path))
+        cmd = f'git clone {self.repository_url} {self.repository_local_path}'
+        return process.run_with_output(cmd)
 
     def reset(self):
-        return process.run_with_output('git --work-tree={0} --git-dir={0}/.git reset '
-                                       '--hard FETCH_HEAD'
-                                       .format(self.repository_local_path))
+        cmd = (f'git --work-tree={self.repository_local_path} '
+               f'--git-dir={self.repository_local_path}/.git reset '
+               f'--hard FETCH_HEAD')
+        return process.run_with_output(cmd)
 
     def fetch(self):
-        return process.run_with_output('git --work-tree={0} --git-dir={0}/.git fetch origin master'
-                                       .format(self.repository_local_path))
+        cmd = (f'git --work-tree={self.repository_local_path} '
+               f'--git-dir={self.repository_local_path}/.git fetch origin master')
+        return process.run_with_output(cmd)
 
     def clean(self):
-        return process.run_with_output('git --work-tree={0} --git-dir={0}/.git clean -df'
-                                       .format(self.repository_local_path))
+        cmd = (f'git --work-tree={self.repository_local_path} '
+               f'--git-dir={self.repository_local_path}/.git clean -df')
+        return process.run_with_output(cmd)
 
     def get_latest_changes(self):
         try:
-            return '{}{}{}{}'.format(self.clone(), self.fetch(), self.reset(), self.clean())
+            self.clone()
+            self.fetch()
+            self.reset()
+            self.clean()
         except MemoryError:
             raise FatalAspenException('Out of memory when fetching lastest git changes')
   
