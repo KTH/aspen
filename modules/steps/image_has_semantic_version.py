@@ -4,7 +4,7 @@ import re
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, regex
 
-class ImageSemanticVersion(BasePipelineStep):
+class ImageIsHasSemanticVersion(BasePipelineStep):
 
     def __init__(self):
         BasePipelineStep.__init__(self)

@@ -6,7 +6,8 @@ from modules.steps.logging_policy_checker import LoggingPolicyChecker
 from modules.steps.restart_policy_checker import RestartPolicyChecker
 from modules.steps.resource_policy_checker import ResourcePolicyChecker
 from modules.steps.parse_images import ParseImages
-from modules.steps.image_semantic_version import ImageSemanticVersion
+from modules.steps.image_has_semantic_version import ImageIsHasSemanticVersion
+from modules.steps.get_semantic_versions import GetSemanticVersions
 from modules.steps.calculate_md5 import CalculateMd5
 from modules.util.exceptions import (UnExpectedApplicationException,
                                      ExpectedApplicationException)
@@ -24,7 +25,8 @@ class DeploymentPipeline():
             RestartPolicyChecker(),
             ResourcePolicyChecker(),
             ParseImages(),
-            ImageSemanticVersion()
+            ImageIsHasSemanticVersion(),
+            GetSemanticVersions()
         ])
 
     def set_pipeline_data(self, pipeline_data):
