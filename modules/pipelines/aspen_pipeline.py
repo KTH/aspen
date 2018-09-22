@@ -7,7 +7,7 @@ from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
 from modules.util.exceptions import FatalAspenException
 from modules.util import pipeline
 
-class MasterPipeline():
+class AspenPipeline():
 
     def __init__(self):
         self.pipeline_data = {}
