@@ -16,11 +16,13 @@ class ImageSemanticVersion(BasePipelineStep):
         return [data_defs.SERVICE_IMAGES]
 
     def run_step(self, pipeline_data):
-        for service_image in pipeline_data[data_defs.SERVICE_IMAGES]:
+        for i, service_image in enumerate(pipeline_data[data_defs.SERVICE_IMAGES]):
             match = self.is_semver(service_image)
             if match:
                 service_image['is_semver'] = True
                 service_image['semver_env_key'] = match.group(1)
+            # Update the service image with semantic versioning
+            pipeline_data[data_defs.SERVICE_IMAGES][i] = service_image
         return pipeline_data
 
     def is_semver(self, semver_image):
