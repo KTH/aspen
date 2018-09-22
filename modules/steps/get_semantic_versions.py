@@ -19,9 +19,12 @@ class GetSemanticVersions(BasePipelineStep):
         registry_url = environment.get_env(environment.DOCKER_REGISTRY_URL)
         for i, service in enumerate(pipeline_data[data_defs.SERVICES]):
             image_data = service[data_defs.S_IMAGE]
+            self.log.debug('Image data is "%s"', image_data)
             if image_data['is_semver']:
                 tags_url = self.get_tags_url(image_data['image_name'], registry_url)
+                self.log.debug('Got url for tag fetching "%s"', tags_url)
                 image_data['image_tags'] = self.get_tags_from_registry(tags_url)
+                self.log.debug('Tags set to "%s"', image_data['image_tags'])
                 pipeline_data[data_defs.SERVICES][i][data_defs.S_IMAGE] = image_data
         return pipeline_data
 

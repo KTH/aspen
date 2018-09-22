@@ -24,4 +24,5 @@ class InitServicePipelineData(BasePipelineStep):
                 data_defs.S_ENVIRONMENT: []
             })
         pipeline_data[data_defs.SERVICES] = service_data
+        self.log.debug('Service data set to "%s"', service_data)
         return pipeline_data
