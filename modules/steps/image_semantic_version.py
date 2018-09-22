@@ -27,4 +27,3 @@ class ImageSemanticVersion(BasePipelineStep):
 
     def is_semver(self, semver_image):
         return re.match(regex.get_semver_regex, semver_image['image_version'])
-

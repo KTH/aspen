@@ -24,7 +24,7 @@ class ResourcePolicyChecker(BasePipelineStep):
 
     def has_resource_policy(self, service):
         if not 'deploy' in service or not 'resources' in service['deploy']:
-            raise ExpectedApplicationException('docker-stack.yml missing resource policy')       
+            raise ExpectedApplicationException('docker-stack.yml missing resource policy')
 
     def verify_resource_policy(self, policy_struct):
         if not ('limits' in policy_struct and
