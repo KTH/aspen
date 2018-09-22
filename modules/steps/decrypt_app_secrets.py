@@ -27,6 +27,9 @@ class DecryptAppSecrets(BasePipelineStep):
             tmp_pwd_file.write(pipeline_data[data_defs.APPLICATION_PASSWORD])
         yield os.remove(app_pwd_file)
         output_file = os.path.join(base_dir, 'secrets.decrypted.env')
+        self.run_ansible_vault(app_pwd_file, output_file, secrets_file)
+
+    def run_ansible_vault(self, app_pwd_file, output_file, secrets_file):
         process.run_with_output('ansible-vault decrypt '
                                 '--vault-password-file={} '
                                 '--output={} {}'

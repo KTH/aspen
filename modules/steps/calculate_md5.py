@@ -16,7 +16,9 @@ class CalculateMd5(BasePipelineStep):
         return [data_defs.STACK_FILE_RAW_CONTENT]
 
     def run_step(self, pipeline_data):
-        raw_file_content = pipeline_data[data_defs.STACK_FILE_RAW_CONTENT]
-        md5_hash = hashlib.md5(raw_file_content.encode('utf-8')).hexdigest()
+        md5_hash = self.get_md5_hash(pipeline_data[data_defs.STACK_FILE_RAW_CONTENT])
         pipeline_data[data_defs.STACK_FILE_MD5] = md5_hash
         return pipeline_data
+
+    def get_md5_hash(self, raw_file_content):
+        return hashlib.md5(raw_file_content.encode('utf-8')).hexdigest()

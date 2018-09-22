@@ -20,6 +20,9 @@ class RegistryLogin(BasePipelineStep):
         user = environment.get_env(environment.DOCKER_REGISTRY_USER)
         registry_url = environment.get_env(environment.DOCKER_REGISTRY_URL)
         password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
-        process.run_with_output('docker login {} --password {} --username {}'
-                                .format(registry_url, password, user))
+        self.run_docker_login(registry_url, user, password)
         return pipeline_data
+
+    def run_docker_login(self, url, user, password):
+        process.run_with_output('docker login {} --password {} --username {}'
+                                .format(url, password, user))
