@@ -48,7 +48,7 @@ class BasePipelineStep:
         for env in self.get_required_env_variables():
             if not env in os.environ:
                 step_name = self.get_step_name()
-                err = f'"{step_name}" missing env variable "{key}"'
+                err = f'"{step_name}" missing env variable "{env}"'
                 self.handle_step_error(err)
                 return False
             if not os.environ.get(env):
