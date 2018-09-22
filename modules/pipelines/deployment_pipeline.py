@@ -11,6 +11,7 @@ from modules.steps.get_semantic_versions import GetSemanticVersions
 from modules.steps.calculate_md5 import CalculateMd5
 from modules.steps.cluster_verification import ClusterVerification
 from modules.steps.init_service_pipeline_data import InitServicePipelineData
+from modules.steps.calculate_semantic_version import CalculateSemanticVersion
 from modules.util.exceptions import (UnExpectedApplicationException,
                                      ExpectedApplicationException)
 from modules.util import pipeline
@@ -30,7 +31,8 @@ class DeploymentPipeline():
             InitServicePipelineData(),
             ParseImageData(),
             ImageHasSemanticVersion(),
-            GetSemanticVersions()
+            GetSemanticVersions(),
+            CalculateSemanticVersion()
         ])
 
     def set_pipeline_data(self, pipeline_data):
