@@ -24,7 +24,8 @@ class AspenPipeline():
 
     def run_pipeline(self):
         try:
-            self.log.info('Starting AspenPipeline')
+            self.log.info('Starting AspenPipeline with "%s" steps', len(self.pipeline_steps))
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
-        except FatalAspenException as fae:
-            pass
+        except FatalAspenException:
+            self.log.exception('An exception occured during aspen pipeline execution')
+            raise

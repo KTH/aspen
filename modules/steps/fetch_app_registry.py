@@ -22,7 +22,8 @@ class FetchAppRegistry(BasePipelineStep):
     def run_step(self, pipeline_data):
         self.repository_local_path = environment.get_registry_path()
         if not self.repository_path_ok():
-            raise FatalAspenException('Local repository path is not a valid directory')
+            raise FatalAspenException((f'Local repository path "{self.repository_local_path}" '
+                                       f'is not a valid directory'))
         self.get_latest_changes()
         return pipeline_data
 

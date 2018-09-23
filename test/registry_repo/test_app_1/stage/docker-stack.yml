@@ -1,0 +1,101 @@
+version: '3'
+
+#
+# Docs: https://gita.sys.kth.se/Infosys/cellus-registry/blob/master/deploy/kth-azure-app/active/docker-stack.yml
+#
+
+services:
+
+  web:
+    environment:
+      WEB_VERSION: "~2.9.155"
+      STRESS_TEST: "performance"
+      LOGGING_USER: "kth-azure-app"
+
+    env_file:
+      - secrets.decrypted.env
+
+    image: kthregistryv2.sys.kth.se/kth-azure-app:${WEB_VERSION}
+
+    ports:
+      - 3000
+
+    labels:
+      - se.kth.monitorUrl=https://app.kth.se/kth-azure-app/_monitor
+      - se.kth.cluster=stage
+      - se.kth.slackChannels="#team-pipeline-build"
+      - se.kth.importance="high"
+      - se.kth.publicName.swedish="CD ref App"
+      - se.kth.publicName.english="KTH Azure App"
+      - se.kth.description.swedish="Referens applikation för KTH:s Docker kluster i Azure."
+      - se.kth.description.english="Reference application for KTHs Docker kluster."
+
+    depends_on:
+     - redis
+
+    deploy:
+      replicas: 2
+      
+      placement:
+        constraints:
+          - node.role == worker
+
+      labels:
+        - com.df.notify=true
+        - com.df.distribute=true
+        - com.df.servicePath=/kth-azure-app/
+        - com.df.port=3000
+        - traefik.docker.network=proxy
+        - traefik.frontend.rule=PathPrefix:/kth-azure-app/
+        - traefik.port=3000
+        - traefik.enable=true 
+
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 300M
+        reservations:
+          cpus: '0.05'
+          memory: 50M
+
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    networks:
+      - proxy
+
+  redis:
+    image: redis:3.2.6-alpine
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 300M
+        reservations:
+          cpus: '0.05'
+          memory: 50M
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "5"
+    ports:
+      - 6379
+
+networks:
+  proxy:
+    external: true
