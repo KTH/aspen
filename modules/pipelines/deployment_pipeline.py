@@ -13,6 +13,7 @@ from modules.steps.calculate_md5 import CalculateMd5
 from modules.steps.cluster_verification import ClusterVerification
 from modules.steps.init_service_pipeline_data import InitServicePipelineData
 from modules.steps.calculate_semantic_version import CalculateSemanticVersion
+from modules.steps.deploy_application import DeployApplication
 from modules.util.exceptions import (UnExpectedApplicationException,
                                      ExpectedApplicationException)
 from modules.util import pipeline, data_defs
@@ -34,7 +35,8 @@ class DeploymentPipeline():
             ParseImageData(),
             ImageHasSemanticVersion(),
             GetSemanticVersions(),
-            CalculateSemanticVersion()
+            CalculateSemanticVersion(),
+            DeployApplication()
         ])
 
     def set_pipeline_data(self, pipeline_data):
@@ -42,7 +44,7 @@ class DeploymentPipeline():
 
     def run_pipeline(self):
         try:
-            stack_file = self.pipeline_data[data_defs.DOCKER_STACK_FILE_PATH]
+            stack_file = self.pipeline_data[data_defs.STACK_FILE_PATH]
             self.log.info('Starting DeploymentPipline for file "%s"', stack_file)
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
         except UnExpectedApplicationException as ueae:

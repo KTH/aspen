@@ -11,10 +11,10 @@ class ParseStackFile(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.DOCKER_STACK_FILE_PATH]
+        return [data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
-        file_path = pipeline_data[data_defs.DOCKER_STACK_FILE_PATH]
+        file_path = pipeline_data[data_defs.STACK_FILE_PATH]
         try:
             with open(file_path, 'r') as content_file:
                 raw_data = content_file.read()

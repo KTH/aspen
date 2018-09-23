@@ -10,11 +10,11 @@ class ParseStackPath(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.DOCKER_STACK_FILE_PATH]
+        return [data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
         # file_path: /bla/deploy/kth-azure-app/stage/docker-stack.yml
-        file_path = pipeline_data[data_defs.DOCKER_STACK_FILE_PATH]
+        file_path = pipeline_data[data_defs.STACK_FILE_PATH]
         # path.dirname: /bla/deploy/kth-azure-app/stage
         # path.split: (/bla/deploy/kth-azure-app, stage)
         split_path = path.split(path.dirname(file_path))

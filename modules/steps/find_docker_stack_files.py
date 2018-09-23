@@ -18,14 +18,14 @@ class FindDockerStackFiles(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         self.registry_root = environment.get_registry_path()
-        pipeline_data[data_defs.DOCKER_STACK_FILES] = self.walk_repository()
+        pipeline_data[data_defs.STACK_FILES] = self.walk_repository()
         return pipeline_data
 
     def walk_repository(self):
-        docker_stack_files = []
+        stack_files = []
         for dirpath, _, files in os.walk(self.registry_root):
             for file in files:
                 if file == 'docker-stack-yml':
-                    docker_stack_files.append(os.path.join(dirpath, file))
-        self.log.debug('Found %s docker stack files', len(docker_stack_files))
-        return docker_stack_files
+                    stack_files.append(os.path.join(dirpath, file))
+        self.log.debug('Found %s docker stack files', len(stack_files))
+        return stack_files

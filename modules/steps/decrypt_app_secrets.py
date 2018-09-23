@@ -13,10 +13,10 @@ class DecryptAppSecrets(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.APPLICATION_PASSWORD, data_defs.DOCKER_STACK_FILE_PATH]
+        return [data_defs.APPLICATION_PASSWORD, data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
-        base_dir = os.path.dirname(pipeline_data[data_defs.DOCKER_STACK_FILE_PATH])
+        base_dir = os.path.dirname(pipeline_data[data_defs.STACK_FILE_PATH])
         self.run_decrypt(base_dir, pipeline_data)
         return pipeline_data
 

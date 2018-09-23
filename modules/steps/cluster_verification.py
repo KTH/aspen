@@ -13,11 +13,10 @@ class ClusterVerification(BasePipelineStep):
         return [environment.CLUSTERS_TO_DEPLOY]
 
     def get_required_data_keys(self):
-        return [data_defs.DOCKER_STACK_OBJECT,
-                data_defs.APPLICATION_CLUSTER]
+        return [data_defs.APPLICATION_CLUSTER, data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
-        application_cluster = pipeline_data[data_defs.DOCKER_STACK_FILE_PATH]
+        application_cluster = pipeline_data[data_defs.STACK_FILE_PATH]
         clusters_to_deploy = environment.get_env_list(environment.CLUSTERS_TO_DEPLOY)
         self.log.debug('App cluster is "%s" and clusters to deploy are "%s"',
                        application_cluster, clusters_to_deploy)

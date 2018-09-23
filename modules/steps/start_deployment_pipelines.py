@@ -13,12 +13,12 @@ class StartDeploymentPipelines(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.DOCKER_STACK_FILES]
+        return [data_defs.STACK_FILES]
 
     def run_step(self, pipeline_data):
-        for file_path in pipeline_data[data_defs.DOCKER_STACK_FILES]:
+        for file_path in pipeline_data[data_defs.STACK_FILES]:
             deployment_pipeline = DeploymentPipeline()
-            pipeline_data = {data_defs.DOCKER_STACK_FILE_PATH: file_path}
+            pipeline_data = {data_defs.STACK_FILE_PATH: file_path}
             deployment_pipeline.set_pipeline_data(pipeline_data)
             deployment_pipeline.run_pipeline()
         return pipeline_data
