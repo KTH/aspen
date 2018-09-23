@@ -14,6 +14,7 @@ from modules.steps.cluster_verification import ClusterVerification
 from modules.steps.init_service_pipeline_data import InitServicePipelineData
 from modules.steps.calculate_semantic_version import CalculateSemanticVersion
 from modules.steps.deploy_application import DeployApplication
+from modules.steps.get_application_password import GetClusterLbIp
 from modules.util.exceptions import (UnExpectedApplicationException,
                                      ExpectedApplicationException)
 from modules.util import pipeline, data_defs
@@ -36,6 +37,7 @@ class DeploymentPipeline():
             ImageHasSemanticVersion(),
             GetSemanticVersions(),
             CalculateSemanticVersion(),
+            GetClusterLbIp(),
             DeployApplication()
         ])
 
