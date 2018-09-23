@@ -1,8 +1,9 @@
 __author__ = 'tinglev@kth.se'
 
+import os
 import yaml
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, data_defs, process
+from modules.util import environment, data_defs, process, exceptions
 
 class DecryptAppPasswords(BasePipelineStep):
 
@@ -16,19 +17,22 @@ class DecryptAppPasswords(BasePipelineStep):
         return [environment.VAULT_KEY_PATH, environment.APP_PWD_FILE_PATH]
 
     def get_required_data_keys(self):
-        return [data_defs.APPLICATION_NAME]
+        return []
 
     def run_step(self, pipeline_data):
         self.vault_key_path = environment.get_env(environment.VAULT_KEY_PATH)
         self.app_pwd_file_path = environment.get_env(environment.APP_PWD_FILE_PATH)
-        self.application_name = pipeline_data[data_defs.APPLICATION_NAME]
+        if not os.path.isfile(self.vault_key_path):
+            raise exceptions.FatalAspenException(f'Vault key path {self.vault_key_path} is not a file')
+        if not os.path.isfile(self.app_pwd_file_path):
+            raise exceptions.FatalAspenException(f'Application pwd path {self.app_pwd_file_path} is not a file')
         vault_output = self.decrypt_app_passwords()
         pipeline_data[data_defs.APPLICATION_PASSWORDS] = yaml.load(vault_output)
         return pipeline_data
 
     def decrypt_app_passwords(self):
         cmd = (f'ansible-vault decrypt '
-               f'--vault-password-file={self.vault_key_path}'
+               f'--vault-password-file={self.vault_key_path} '
                f'--output=- {self.app_pwd_file_path}')
         return process.run_with_output(cmd)
   

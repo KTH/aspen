@@ -25,7 +25,7 @@ class FindDockerStackFiles(BasePipelineStep):
         stack_files = []
         for dirpath, _, files in os.walk(self.registry_root):
             for file in files:
-                if file == 'docker-stack-yml':
+                if file == 'docker-stack.yml':
                     stack_files.append(os.path.join(dirpath, file))
         self.log.debug('Found %s docker stack files', len(stack_files))
         return stack_files

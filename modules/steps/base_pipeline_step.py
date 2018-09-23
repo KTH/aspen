@@ -61,8 +61,12 @@ class BasePipelineStep:
             error_func = self.log.fatal
         self.log_error(error_func, message, ex)
         self.report_error_to_slack(message)
-        if fatal:
-            sys.exit(1)
+        if ex:
+            raise ex
+        else:
+            raise Exception(message)
+        #if fatal:
+            #sys.exit(1)
 
     def log_error(self, error_func, message, ex): #pragma: no cover
         if ex:
