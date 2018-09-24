@@ -2,6 +2,7 @@ __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod
 import os
+import sys
 import logging
 from modules.util import exceptions
 
@@ -64,6 +65,11 @@ class BasePipelineStep:
             de_err.pipeline_data = data
             de_err.step_name = self.get_step_name()
             raise
+        except:
+            de_err = exceptions.DeploymentError(sys.exc_info()[0],
+                                                pipeline_data=data,
+                                                step_name=self.get_step_name())
+            raise de_err
         if self.next_step:
             self.next_step.run_pipeline_step(data)
         return data

@@ -42,7 +42,7 @@ def sort_compare(ver1, ver2):
 def get_major(version):
     return int(version.split('.')[0].replace('~', '').replace('^', ''))
 
-def get_minor(version): # pragma: no cover
+def get_minor(version):
     return int(version.split('.')[1])
 
 def get_build(version):
