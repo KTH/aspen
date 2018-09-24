@@ -20,7 +20,7 @@ class ParseStackPath(BasePipelineStep):
         split_path = path.split(path.dirname(file_path))
         pipeline_data[data_defs.APPLICATION_CLUSTER] = split_path[1]
         # 2nd path.split: (/bla/deploy, kth-azure-app)
-        split_path = path.split(path.dirname(split_path[0]))
+        split_path = path.split(split_path[0])
         pipeline_data[data_defs.APPLICATION_NAME] = split_path[1]
         self.log.debug('Cluster is "%s"', pipeline_data[data_defs.APPLICATION_CLUSTER])
         self.log.debug('Application name is "%s"', pipeline_data[data_defs.APPLICATION_NAME])
