@@ -15,9 +15,7 @@ from modules.steps.init_service_pipeline_data import InitServicePipelineData
 from modules.steps.calculate_semantic_version import CalculateSemanticVersion
 from modules.steps.deploy_application import DeployApplication
 from modules.steps.get_cluster_lb_ip import GetClusterLbIp
-from modules.util.exceptions import (UnExpectedApplicationException,
-                                     ExpectedApplicationException)
-from modules.util import pipeline, data_defs
+from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
 
@@ -49,9 +47,9 @@ class DeploymentPipeline():
             stack_file = self.pipeline_data[data_defs.STACK_FILE_PATH]
             self.log.info('Starting DeploymentPipline for file "%s"', stack_file)
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
-        except UnExpectedApplicationException as ueae:
-            raise
-        except ExpectedApplicationException as eae:
-            raise
-        except Exception as ex:
+        except exceptions.DeploymentError as dep_err:
+            self.log.error(('Deployment error in step "%s" '
+                            'with pipeline_data "%s" '
+                            'and message: "%s"'),
+                           dep_err.step_name, dep_err.pipeline_data, str(dep_err))
             raise

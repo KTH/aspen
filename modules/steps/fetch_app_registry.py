@@ -2,8 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import os
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, process
-from modules.util.exceptions import FatalAspenException
+from modules.util import environment, process, exceptions
 
 class FetchAppRegistry(BasePipelineStep):
 
@@ -22,8 +21,8 @@ class FetchAppRegistry(BasePipelineStep):
     def run_step(self, pipeline_data):
         self.repository_local_path = environment.get_registry_path()
         if not self.repository_path_ok():
-            raise FatalAspenException((f'Local repository path "{self.repository_local_path}" '
-                                       f'is not a valid directory'))
+            raise exceptions.AspenError((f'Local repository path "{self.repository_local_path}" '
+                                         f'is not a valid directory'))
         self.get_latest_changes()
         return pipeline_data
 
@@ -57,5 +56,5 @@ class FetchAppRegistry(BasePipelineStep):
             self.reset()
             self.clean()
         except MemoryError:
-            raise FatalAspenException('Out of memory when fetching lastest git changes')
+            raise exceptions.AspenError('Out of memory when fetching lastest git changes')
   

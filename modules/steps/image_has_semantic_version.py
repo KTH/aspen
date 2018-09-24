@@ -42,4 +42,4 @@ class ImageHasSemanticVersion(BasePipelineStep):
                 for env_var, env_val in service['environment'].items():
                     if env_var == semver_env_key:
                         return env_val
-        raise exceptions.UnExpectedApplicationException('Missing env var value for semver')
+        raise exceptions.DeploymentError('Missing env var value for semver')

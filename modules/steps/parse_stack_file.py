@@ -3,7 +3,7 @@ __author__ = 'tinglev@kth.se'
 import yaml
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs
-from modules.util.exceptions import UnExpectedApplicationException
+from modules.util.exceptions import DeploymentError
 
 class ParseStackFile(BasePipelineStep):
 
@@ -21,7 +21,7 @@ class ParseStackFile(BasePipelineStep):
                 pipeline_data[data_defs.STACK_FILE_RAW_CONTENT] = raw_data
                 pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT] = yaml.load(raw_data)
         except yaml.YAMLError:
-            raise UnExpectedApplicationException('Error when parsing docker-stack.yml')
+            raise DeploymentError('Error when parsing docker-stack.yml')
         except IOError:
-            raise UnExpectedApplicationException('Error when opening docker-stack.yml')
+            raise DeploymentError('Error when opening docker-stack.yml')
         return pipeline_data

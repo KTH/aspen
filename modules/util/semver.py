@@ -22,7 +22,7 @@ def find_best_match(sorted_versions, semver_version):
                     return version
                 if get_build(version) == get_build(semver_version):
                     return version
-    raise exceptions.ExpectedApplicationException('No matching semver version found in tags')
+    raise exceptions.DeploymentError('No matching semver version found in tags')
 
 def is_valid_semver(version_string):
     return re.match(regex.get_semver_env_value_regex(), version_string)

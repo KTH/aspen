@@ -33,4 +33,4 @@ class GetClusterLbIp(BasePipelineStep):
         for cluster in api_response:
             if cluster['status'] == application_cluster:
                 return cluster['lb_ip']
-        raise exceptions.ExpectedApplicationException('Application not targeted for cluster')
+        raise exceptions.DeploymentError('Application not targeted for cluster')

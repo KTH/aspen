@@ -23,9 +23,9 @@ class DecryptAppPasswords(BasePipelineStep):
         self.vault_key_path = environment.get_env(environment.VAULT_KEY_PATH)
         self.app_pwd_file_path = environment.get_env(environment.APP_PWD_FILE_PATH)
         if not os.path.isfile(self.vault_key_path):
-            raise exceptions.FatalAspenException(f'Vault key path {self.vault_key_path} is not a file')
+            raise exceptions.AspenError(f'Vault key path {self.vault_key_path} is not a file')
         if not os.path.isfile(self.app_pwd_file_path):
-            raise exceptions.FatalAspenException(f'Application pwd path {self.app_pwd_file_path} is not a file')
+            raise exceptions.AspenError(f'Application pwd path {self.app_pwd_file_path} is not a file')
         vault_output = self.decrypt_app_passwords()
         pipeline_data[data_defs.APPLICATION_PASSWORDS] = yaml.load(vault_output)
         return pipeline_data

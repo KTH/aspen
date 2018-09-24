@@ -31,6 +31,12 @@ passwords:
 
 * Docker stack files must be named `docker-stack.yml`
 
+* Application registry repository must store docker stack files in the following directory structure (`<cluster status>` is active, stage, ...):
+
+```
+<repository root path>/.../<application name>/<cluster status>
+``` 
+
 * Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file
 
 * The API that is called to fetch cluster statuses must return a json structure according to the following format

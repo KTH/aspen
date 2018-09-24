@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs
-from modules.util.exceptions import ExpectedApplicationException
+from modules.util.exceptions import DeploymentError
 
 class ClusterVerification(BasePipelineStep):
 
@@ -21,5 +21,5 @@ class ClusterVerification(BasePipelineStep):
         self.log.debug('App cluster is "%s" and clusters to deploy are "%s"',
                        application_cluster, clusters_to_deploy)
         if not application_cluster in clusters_to_deploy:
-            raise ExpectedApplicationException('Application uses non deployed cluster')
+            raise DeploymentError('Application uses non deployed cluster')
         return pipeline_data

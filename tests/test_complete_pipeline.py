@@ -5,7 +5,7 @@ import unittest
 import mock
 import responses
 import root_path
-from tests import test_data
+from tests import mock_test_data
 from modules.pipelines.aspen_pipeline import AspenPipeline
 from modules.util import environment
 
@@ -27,10 +27,10 @@ class TestEntirePipeline(unittest.TestCase):
         # Set up API response mocks
         responses.add(responses.GET,
                       f'{os.environ[environment.DOCKER_REGISTRY_URL]}/v2/kth-azure-app/tags/list',
-                      json=test_data.get_tags_response(), status=200)
+                      json=mock_test_data.get_tags_response(), status=200)
         responses.add(responses.GET,
                       f'{os.environ[environment.CLUSTER_STATUS_API_URL]}',
-                      json=test_data.get_cluster_ip_response(), status=200)
+                      json=mock_test_data.get_cluster_ip_response(), status=200)
 
     @responses.activate
     @mock.patch('modules.steps.registry_login.RegistryLogin.run_docker_login')

@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs
-from modules.util.exceptions import ExpectedApplicationException
+from modules.util.exceptions import DeploymentError
 
 class RestartPolicyChecker(BasePipelineStep):
 
@@ -24,10 +24,10 @@ class RestartPolicyChecker(BasePipelineStep):
 
     def has_restart_policy(self, service):
         if not 'deploy' in service or not 'restart_policy' in service['deploy']:
-            raise ExpectedApplicationException('docker-stack.yml missing restart policy')
+            raise DeploymentError('docker-stack.yml missing restart policy')
 
     def verify_restart_policy(self, policy_struct):
         if not ('condition' in policy_struct and
                 'delay' in policy_struct and
                 'max_attempts' in policy_struct):
-            raise ExpectedApplicationException('docker-stack.yml has bad restart policy')
+            raise DeploymentError('docker-stack.yml has bad restart policy')

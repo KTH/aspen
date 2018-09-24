@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs
-from modules.util.exceptions import ExpectedApplicationException
+from modules.util.exceptions import DeploymentError
 
 class LoggingPolicyChecker(BasePipelineStep):
 
@@ -24,10 +24,10 @@ class LoggingPolicyChecker(BasePipelineStep):
 
     def has_logging_policy(self, service):
         if not 'logging' in service:
-            raise ExpectedApplicationException('docker-stack.yml missing logging policy')
+            raise DeploymentError('docker-stack.yml missing logging policy')
 
     def verify_logging_policy(self, policy_struct):
         if not ('options' in policy_struct and
                 'max-size' in policy_struct['options'] and
                 'max-file' in policy_struct['options']):
-            raise ExpectedApplicationException('docker-stack.yml has bad logging policy')
+            raise DeploymentError('docker-stack.yml has bad logging policy')

@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import re
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util.exceptions import ExpectedApplicationException
+from modules.util.exceptions import DeploymentError
 from modules.util import data_defs, regex, service_data
 
 class ParseImageData(BasePipelineStep):
@@ -38,7 +38,7 @@ class ParseImageData(BasePipelineStep):
         match = re.match(regex.get_image_name_regex(), service['image'])
         if match:
             return match.group(2)
-        raise ExpectedApplicationException('Image is missing image name')
+        raise DeploymentError('Image is missing image name')
 
     def parse_registry(self, service):
         match = re.match(regex.get_registry_regex(), service['image'])
@@ -51,8 +51,8 @@ class ParseImageData(BasePipelineStep):
         match = re.match(regex.get_image_version_regex(), service['image'])
         if match:
             return match.group(3)
-        raise ExpectedApplicationException('Image is missing version')
+        raise DeploymentError('Image is missing version')
 
     def has_image(self, service):
         if not 'image' in service:
-            raise ExpectedApplicationException('Service is missing image')
+            raise DeploymentError('Service is missing image')

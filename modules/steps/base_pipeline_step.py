@@ -3,6 +3,7 @@ __author__ = 'tinglev'
 from abc import ABCMeta, abstractmethod
 import os
 import logging
+from modules.util import exceptions
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
@@ -35,52 +36,34 @@ class BasePipelineStep:
     def step_data_is_ok(self, data):
         for key in self.get_required_data_keys():
             if not data or not key in data:
-                step_name = self.get_step_name()
-                err = f'"{step_name}" missing data key "{key}"'
-                self.handle_step_error(err)
                 return False
         return True
 
     def step_environment_ok(self):
         for env in self.get_required_env_variables():
             if not env in os.environ:
-                step_name = self.get_step_name()
-                err = f'"{step_name}" missing env variable "{env}"'
-                self.handle_step_error(err)
                 return False
             if not os.environ.get(env):
                 self.log.warning('Environment variable "%s" exists but is empty', env)
         return True
 
-    def handle_step_error(self, message, ex=None, fatal=True):
-        error_func = self.log.error
-        if fatal:
-            error_func = self.log.fatal
-        self.log_error(error_func, message, ex)
-        self.report_error_to_slack(message)
-        if ex:
-            raise ex
-        else:
-            raise Exception(message)
-
-    def log_error(self, error_func, message, ex): #pragma: no cover
-        if ex:
-            error_func(message, exc_info=True)
-        else:
-            error_func(message)
-
-    def report_error_to_slack(self, message):
-        # Instead of passsing around data, just use env var JOB_NAME here
-        message = ('*{}*: Error building image.\n{}'
-                   .format(os.environ.get('JOB_NAME'), message))
-
     def run_pipeline_step(self, data):
         if not self.step_environment_ok():
-            return data
+            raise exceptions.DeploymentError('Step environment not ok',
+                                             pipeline_data=data,
+                                             step_name=self.get_step_name())
         if not self.step_data_is_ok(data):
-            return data
+            raise exceptions.DeploymentError('Step pipeline_data not ok',
+                                             pipeline_data=data,
+                                             step_name=self.get_step_name())
         self.log.debug('Running "%s"', self.get_step_name())
-        self.run_step(data)
+        try:
+            self.run_step(data)
+        except exceptions.DeploymentError as de_err:
+            # Complement error with step data
+            de_err.pipeline_data = data
+            de_err.step_name = self.get_step_name()
+            raise
         if self.next_step:
             self.next_step.run_pipeline_step(data)
         return data
