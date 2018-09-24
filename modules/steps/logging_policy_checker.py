@@ -23,7 +23,7 @@ class LoggingPolicyChecker(BasePipelineStep):
         return pipeline_data
 
     def has_logging_policy(self, service):
-        if not self.verify_logging_policy(service['logging']):
+        if not 'logging' in service:
             raise ExpectedApplicationException('docker-stack.yml missing logging policy')
 
     def verify_logging_policy(self, policy_struct):

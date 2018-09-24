@@ -1,3 +1,3 @@
 #!/bin/sh
 
-pipenv run green test/*.py
+pipenv run green --debug tests/test_complete_pipeline.py

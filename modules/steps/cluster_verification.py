@@ -18,7 +18,6 @@ class ClusterVerification(BasePipelineStep):
     def run_step(self, pipeline_data):
         application_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]
         clusters_to_deploy = environment.get_env_list(environment.CLUSTERS_TO_DEPLOY)
-        print(f'app {application_cluster} deploy {clusters_to_deploy}')
         self.log.debug('App cluster is "%s" and clusters to deploy are "%s"',
                        application_cluster, clusters_to_deploy)
         if not application_cluster in clusters_to_deploy:

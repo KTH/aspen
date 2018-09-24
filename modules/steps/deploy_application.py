@@ -17,9 +17,12 @@ class DeployApplication(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         application_env = ''
-        for _, service in pipeline_data[data_defs.SERVICES].item():
+        for service in pipeline_data[data_defs.SERVICES]:
             service_env = ' '.join(service[data_defs.S_ENVIRONMENT])
-            application_env = f'{application_env} {service_env}'
+            if application_env:
+                application_env = ' '.join([application_env, service_env])
+            else:
+                application_env = service_env
         self.run_deploy(pipeline_data, application_env)
         return pipeline_data
 
@@ -29,4 +32,7 @@ class DeployApplication(BasePipelineStep):
         cmd = (f'{environment} docker stack deploy '
                f'--with-registry-auth '
                f'--compose-file {stack_file} {name}')
+        self.run_docker_cmd(cmd)
+
+    def run_docker_cmd(self, cmd):
         process.run_with_output(cmd)

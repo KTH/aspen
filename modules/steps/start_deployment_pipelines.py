@@ -6,9 +6,6 @@ from modules.util import data_defs
 
 class StartDeploymentPipelines(BasePipelineStep):
 
-    def __init__(self):
-        BasePipelineStep.__init__(self)
-
     def get_required_env_variables(self):
         return []
 

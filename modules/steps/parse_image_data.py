@@ -44,7 +44,8 @@ class ParseImageData(BasePipelineStep):
         match = re.match(regex.get_registry_regex(), service['image'])
         if match:
             return match.group(1)
-        raise ExpectedApplicationException('Image is missing registry')
+        # handles images like redis:3.2.6-alpine
+        return None
 
     def parse_version(self, service):
         match = re.match(regex.get_image_version_regex(), service['image'])

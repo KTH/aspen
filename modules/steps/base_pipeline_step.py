@@ -2,10 +2,7 @@ __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod
 import os
-import sys
 import logging
-#import modules.util.environment
-#from modules.util.slack import Slack
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
@@ -65,8 +62,6 @@ class BasePipelineStep:
             raise ex
         else:
             raise Exception(message)
-        #if fatal:
-            #sys.exit(1)
 
     def log_error(self, error_func, message, ex): #pragma: no cover
         if ex:
@@ -78,7 +73,6 @@ class BasePipelineStep:
         # Instead of passsing around data, just use env var JOB_NAME here
         message = ('*{}*: Error building image.\n{}'
                    .format(os.environ.get('JOB_NAME'), message))
-        #Slack.send_to_slack(message)
 
     def run_pipeline_step(self, data):
         if not self.step_environment_ok():

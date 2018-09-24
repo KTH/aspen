@@ -24,9 +24,9 @@ class GetClusterLbIp(BasePipelineStep):
 
     def call_cluster_status_api(self):
         url = environment.get_env(environment.CLUSTER_STATUS_API_URL)
-        response = requests.get(url).json()
+        response = requests.get(url)
         response.raise_for_status()
-        return response
+        return response.json()
 
     def get_current_cluster_lb_ip(self, api_response, pipeline_data):
         application_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]
