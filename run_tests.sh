@@ -1,3 +1,4 @@
 #!/bin/sh
 
-pipenv run green --debug "tests"
+# Run with "--debug" to show program logs
+pipenv run green "tests" "$@"
