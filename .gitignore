@@ -99,3 +99,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Integration test assets
+tests/integration/*
+!tests/integration/vault.password.in

@@ -4,6 +4,7 @@ from abc import ABCMeta, abstractmethod
 import os
 import sys
 import logging
+import subprocess
 from modules.util import exceptions
 
 class BasePipelineStep:
@@ -65,8 +66,11 @@ class BasePipelineStep:
             de_err.pipeline_data = data
             de_err.step_name = self.get_step_name()
             raise
-        except:
-            de_err = exceptions.DeploymentError(sys.exc_info()[0],
+        except Exception as ex:
+            msg = str(ex)
+            if isinstance(ex, subprocess.CalledProcessError):
+                msg = str(ex.output) # pylint: disable E1101
+            de_err = exceptions.DeploymentError(msg,
                                                 pipeline_data=data,
                                                 step_name=self.get_step_name())
             raise de_err
@@ -77,3 +81,7 @@ class BasePipelineStep:
     def set_next_step(self, next_step):
         self.next_step = next_step
         return next_step
+
+    def stop_pipeline(self):
+        self.log.info('Stopped pipeline at step "%s"', self.get_step_name())
+        self.next_step = None

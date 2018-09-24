@@ -33,9 +33,9 @@ passwords:
 
 * Application registry repository must store docker stack files in the following directory structure (`<cluster status>` is active, stage, ...):
 
-```
+```bash
 <repository root path>/.../<application name>/<cluster status>
-``` 
+```
 
 * Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file
 

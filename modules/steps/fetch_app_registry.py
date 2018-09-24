@@ -20,18 +20,14 @@ class FetchAppRegistry(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         self.repository_local_path = environment.get_registry_path()
-        if not self.repository_path_ok():
-            raise exceptions.AspenError((f'Local repository path "{self.repository_local_path}" '
-                                         f'is not a valid directory'))
+        self.repository_url = os.environ[environment.REGISTRY_REPOSITORY_URL]
         self.get_latest_changes()
         return pipeline_data
 
-    def repository_path_ok(self):
-        return os.path.isdir(self.repository_local_path)
-
     def clone(self):
-        cmd = f'git clone {self.repository_url} {self.repository_local_path}'
-        return process.run_with_output(cmd)
+        if not os.path.isdir(self.repository_local_path):
+            cmd = f'git clone {self.repository_url} {self.repository_local_path}'
+            return process.run_with_output(cmd)
 
     def reset(self):
         cmd = (f'git --work-tree={self.repository_local_path} '

@@ -21,5 +21,6 @@ class ClusterVerification(BasePipelineStep):
         self.log.debug('App cluster is "%s" and clusters to deploy are "%s"',
                        application_cluster, clusters_to_deploy)
         if not application_cluster in clusters_to_deploy:
-            raise DeploymentError('Application uses non deployed cluster')
+            self.log.debug('Stopping pipeline because of cluster discrepancy')
+            self.stop_pipeline()
         return pipeline_data

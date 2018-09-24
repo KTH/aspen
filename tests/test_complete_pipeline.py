@@ -23,7 +23,7 @@ class TestEntirePipeline(unittest.TestCase):
         os.environ[environment.CLUSTER_STATUS_API_URL] = 'http://localhost/portillo'
         os.environ[environment.REGISTRY_REPOSITORY_URL] = 'http://localhost/cellus-registry'
         os.environ[environment.REGISTRY_SUB_DIRECTORY] = os.path.join(r_path, 'tests/registry_repo')
-        os.environ[environment.VAULT_KEY_PATH] = os.path.join(r_path, 'tests/vault.key')
+        os.environ[environment.VAULT_KEY_PATH] = os.path.join(r_path, 'tests/vault.password')
         # Set up API response mocks
         responses.add(responses.GET,
                       f'{os.environ[environment.DOCKER_REGISTRY_URL]}/v2/kth-azure-app/tags/list',
