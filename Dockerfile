@@ -24,9 +24,6 @@ RUN pipenv run pip install azure-cli
 
 COPY ["modules",  "modules"]
 COPY ["run.py", "run.py"]
-#COPY ["api_v2.py", "api_v2.py"]
-#COPY ["app.passwords.yml", "app.passwords.yml"]
-#COPY ["root_path.py", "root_path.py"]
 
 EXPOSE 3005
 

@@ -8,3 +8,8 @@
 * Skriv unit tests
 * ~~Skriv integration tests~~
 * ~~Support för statiska kluster-ipn~~
+* Bygg API
+* Pusha metrics till prometheus
+    * Öppna port 9090 i service-lbn
+    * Fixa vettiga metrics
+    * Möjlighet till konfigurering av server_url:port via env

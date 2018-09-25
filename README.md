@@ -33,10 +33,16 @@ All program environment access is done through `modules/util/environment.py`
 | VAULT_KEY_PATH | The absolute path to the key used to decrypt the application password file |
 | APP_PWD_FILE_PATH | The absolute path to the application password file |
 | CLUSTER_STATUS_API_URL | The url to use when fetching cluster statuses |
-| CLUSTER_STATUS_URL_IS_FILE | Optional: Indicate that the above URL points to a local file instead |
 | DOCKER_REGISTRY_URL | The base url (protocol://host:port) to the docker image registry to fetch private images from |
 | DOCKER_REGISTRY_USER | The user to use when logging into the docker image registry |
 | DOCKER_REGISTRY_PWD | The password to use when logging into the docker image registry |
+
+## Optional environment
+
+| Name  | Description  |
+|-------|--------------|
+| CLUSTER_STATUS_URL_IS_FILE | Set to anything to indicate that CLUSTER_STATUS_API_URL is a local file path instead |
+| PUSH_TO_PROMETHEUS | Set to anything to indicate that the pipeline should push metrics to prometheus |
 
 ## Hard coded requirements
 
