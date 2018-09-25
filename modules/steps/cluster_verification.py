@@ -2,7 +2,6 @@ __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs
-from modules.util.exceptions import DeploymentError
 
 class ClusterVerification(BasePipelineStep):
 

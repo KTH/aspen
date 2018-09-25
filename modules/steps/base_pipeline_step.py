@@ -2,7 +2,6 @@ __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod
 import os
-import sys
 import logging
 import subprocess
 from modules.util import exceptions
@@ -69,7 +68,7 @@ class BasePipelineStep:
         except Exception as ex:
             msg = str(ex)
             if isinstance(ex, subprocess.CalledProcessError):
-                msg = str(ex.output) # pylint: disable E1101
+                msg = str(ex.output) # pylint: disable=E1101
             de_err = exceptions.DeploymentError(msg,
                                                 pipeline_data=data,
                                                 step_name=self.get_step_name())
