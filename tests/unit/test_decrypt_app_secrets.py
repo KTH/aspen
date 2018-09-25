@@ -29,4 +29,12 @@ class TestDecryptAppSecrets(unittest.TestCase):
         self.assertFalse(os.path.isfile(password_file))
 
     def test_bad_run(self):
-        pass
+        root = root_path.PROJECT_ROOT
+        pipeline_data = {data_defs.APPLICATION_PASSWORD: 'test_password',
+                         data_defs.STACK_FILE_PATH: os.path.join(root, 'tests/docker-stack.yml')}
+        step = DecryptAppSecrets()
+        step.run_command = mock.Mock(side_effect=Exception)
+        self.assertRaises(Exception, step.run_step, pipeline_data)
+        password_file = os.path.join(root, 'tests/app.pwd.tmp')        
+        # Make sure the temporary password file got removed
+        self.assertFalse(os.path.isfile(password_file))
