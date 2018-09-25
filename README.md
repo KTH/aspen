@@ -33,6 +33,7 @@ All program environment access is done through `modules/util/environment.py`
 | VAULT_KEY_PATH | The absolute path to the key used to decrypt the application password file |
 | APP_PWD_FILE_PATH | The absolute path to the application password file |
 | CLUSTER_STATUS_API_URL | The url to use when fetching cluster statuses |
+| CLUSTER_STATUS_URL_IS_FILE | Optional: Indicate that the above URL points to a local file instead |
 | DOCKER_REGISTRY_URL | The base url (protocol://host:port) to the docker image registry to fetch private images from |
 | DOCKER_REGISTRY_USER | The user to use when logging into the docker image registry |
 | DOCKER_REGISTRY_PWD | The password to use when logging into the docker image registry |
@@ -58,7 +59,7 @@ passwords:
 
 * Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file. The file must be encrypted with the application password found in the application password file (see above).
 
-* The API that is called to fetch cluster statuses must return a json structure according to the following format
+* The API that is called to fetch cluster statuses must return a json structure according to the following format. If you prefer static configuration of your load balancer IPs you can set the environment variable `CLUSTER_STATUS_URL_IS_FILE` and let `CLUSTER_STATUS_API_URL` point to a local file path instead. The content of the file must be valid json and adhere to the same format as the api - specified here below:
 
 ```json
 [

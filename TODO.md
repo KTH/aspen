@@ -7,4 +7,4 @@
 * ~~Omarbeta base_pipeline_step~~
 * Skriv unit tests
 * ~~Skriv integration tests~~
-* Support för statiska kluster-ipn
+* ~~Support för statiska kluster-ipn~~
