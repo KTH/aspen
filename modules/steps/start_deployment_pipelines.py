@@ -3,7 +3,7 @@ __author__ = 'tinglev@kth.se'
 import asyncio
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
-from modules.util import data_defs
+from modules.util import data_defs, environment
 
 class StartDeploymentPipelines(BasePipelineStep):
 
@@ -16,8 +16,18 @@ class StartDeploymentPipelines(BasePipelineStep):
     def run_step(self, pipeline_data):
         loop = asyncio.get_event_loop()
         tasks = []
-        for file_path in pipeline_data[data_defs.STACK_FILES]:
+        parallelism = environment.get_parallelism()
+        nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
+        # Loop all stack files
+        for i in range(nr_of_stack_files):
+            file_path = pipeline_data[data_defs.STACK_FILES][i]
+            # Append a deployment pipeline to the work load
             tasks.append(asyncio.ensure_future(self.init_and_run(pipeline_data, file_path)))
+            # If we reach our parallelism max, run the appended tasks
+            if i % parallelism == 0:
+                loop.run_until_complete(asyncio.wait(tasks))
+                tasks = []
+        # Run all tasks that are left in the task array
         loop.run_until_complete(asyncio.wait(tasks))
         loop.close()
         return pipeline_data

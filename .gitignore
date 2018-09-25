@@ -103,3 +103,4 @@ ENV/
 # Integration test assets
 tests/integration/*
 !tests/integration/vault.password.in
+!tests/integration/*.py

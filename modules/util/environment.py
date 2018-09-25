@@ -23,3 +23,11 @@ def get_env_list(env_name):
 def get_registry_path():
     return os.path.join(root_path.PROJECT_ROOT,
                         get_env(REGISTRY_SUB_DIRECTORY))
+
+def get_parallelism():
+    default = 10
+    from_env = os.environ.get('PARALLELISM')
+    if from_env:
+        return int(from_env)
+    else:
+        return default
