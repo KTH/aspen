@@ -1,6 +1,6 @@
 # aspen
 
-Cellus 2.0
+Deployment orchestration tool using git repository driven application configurations and secrets.
 
 ## Required installations (when not running as a docker image)
 
