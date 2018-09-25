@@ -1,5 +1,14 @@
 __author__ = 'tinglev@kth.se'
 
+# IMPORTANT!
+#
+# os.environ[environment.DOCKER_REGISTRY_PWD] and os.environ[environment.DOCKER_REGISTRY_USER]
+# needs to be set outside of test (DOCKER_REGISTRY_PWD=... DOCKER_REGISTRY_USER=... ./run_integration_tests.py)
+#
+# The master key to cellus-registry app.passwords.yml needs to be in the integration directory. The file must
+# be named vault.password and is .gitignored.
+#
+
 import os
 import unittest
 import mock
@@ -32,12 +41,19 @@ class TestIntegrationPipeline(unittest.TestCase):
     @responses.activate
     @mock.patch('modules.steps.deploy_application.DeployApplication.run_docker_cmd')
     def test_integration_pipeline(self, mock_run_docker_cmd):
+        # Allow registry connections to pass through mocked responses
         responses.add_passthru('https://kthregistryv2.sys.kth.se')
         pipeline = AspenPipeline()
         pipeline.run_pipeline()
         # Print all calls made to docker stack deploy
         #for call in mock_run_docker_cmd.call_args_list:
         #    print(call)
+
+    @classmethod
+    def tearDownClass(cls):
+        pass
+        # Uncomment line below to remove registry repository after test complete
+        # os.rmdir(os.environ[environment.REGISTRY_SUB_DIRECTORY])
 
 if __name__ == '__main__':
     unittest.main()
