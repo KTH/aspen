@@ -6,10 +6,12 @@
 * ~~Bygg stöd för att avbryta en pipeline (next_step = None)~~
 * ~~Omarbeta base_pipeline_step~~
 * Skriv unit tests
+* Skriv tests för modules/util
 * ~~Skriv integration tests~~
 * ~~Support för statiska kluster-ipn~~
 * Bygg API
-* Pusha metrics till prometheus
+* Lägg till prometheus endpoint ELLER ...
+* Pusha metrics till prometheus 
     * Öppna port 9090 i service-lbn
     * Fixa vettiga metrics
     * Möjlighet till konfigurering av server_url:port via env
