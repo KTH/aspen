@@ -2,6 +2,25 @@
 
 Cellus 2.0
 
+## Required installations (when not running as a docker image)
+
+* Python 3.6.5 (pyenv is a good tool for this)
+* pipenv >= 2018.7.1 (`pip install pipenv`)
+* git >= 2.15.2
+* docker >= 18.06.1-ce
+
+## To run locally
+
+`pipenv install --dev && ./pipenv run python run.py`
+
+## To run tests
+
+Unit tests: `./run_tests.sh`
+
+Integration tests (uses KTH specifics): `./run_integration_tests.sh`. Requires additional environment settings for docker registry login. See `tests/integration/integration_test.py` for further details.
+
+`--debug` can be appended to the end of both commands to enable logging while running tests
+
 ## Required environment
 
 All program environment access is done through `modules/util/environment.py`
@@ -37,7 +56,7 @@ passwords:
 <repository root path>/.../<application name>/<cluster status>
 ```
 
-* Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file
+* Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file. The file must be encrypted with the application password found in the application password file (see above).
 
 * The API that is called to fetch cluster statuses must return a json structure according to the following format
 
@@ -46,7 +65,8 @@ passwords:
     {
         "name": "active",
         "lb_ip": "XX.YY.ZZ.AA:PORT",
-        "your-own-data-here": "whatever-you-like"
+        "your-own-data-here": "whatever-you-like",
+        ...
     }
 ]
 ```
