@@ -2,7 +2,6 @@ __author__ = 'tinglev@kth.se'
 
 import unittest
 import os
-import subprocess
 import mock
 import root_path
 from modules.steps.decrypt_app_passwords import DecryptAppPasswords

@@ -16,15 +16,19 @@ class DeployApplication(BasePipelineStep):
                 data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
-        application_env = ''
+        application_env = self.set_application_env(pipeline_data)
+        self.run_deploy(pipeline_data, application_env)
+        return pipeline_data
+
+    def set_application_env(self, pipeline_data):
+        application_env = None
         for service in pipeline_data[data_defs.SERVICES]:
             service_env = ' '.join(service[data_defs.S_ENVIRONMENT])
             if application_env:
                 application_env = ' '.join([application_env, service_env])
             else:
                 application_env = service_env
-        self.run_deploy(pipeline_data, application_env)
-        return pipeline_data
+        return application_env
 
     def run_deploy(self, pipeline_data, environment):
         stack_file = pipeline_data[data_defs.STACK_FILE_PATH]
