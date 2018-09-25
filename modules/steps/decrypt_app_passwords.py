@@ -34,5 +34,8 @@ class DecryptAppPasswords(BasePipelineStep):
         cmd = (f'ansible-vault decrypt '
                f'--vault-password-file={self.vault_key_path} '
                f'--output=- {self.app_pwd_file_path}')
+        return self.run_command(cmd)
+
+    def run_command(self, cmd):
         return process.run_with_output(cmd)
   
