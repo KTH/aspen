@@ -24,33 +24,36 @@ class FetchAppRegistry(BasePipelineStep):
         self.get_latest_changes()
         return pipeline_data
 
-    def clone(self):
+    def git_clone(self):
         if not os.path.isdir(self.repository_local_path):
             cmd = f'git clone {self.repository_url} {self.repository_local_path}'
-            return process.run_with_output(cmd)
+            self.run_command(cmd)
 
-    def reset(self):
+    def git_reset(self):
         cmd = (f'git --work-tree={self.repository_local_path} '
                f'--git-dir={self.repository_local_path}/.git reset '
                f'--hard FETCH_HEAD')
-        return process.run_with_output(cmd)
+        self.run_command(cmd)
 
-    def fetch(self):
+    def git_fetch(self):
         cmd = (f'git --work-tree={self.repository_local_path} '
                f'--git-dir={self.repository_local_path}/.git fetch origin master')
-        return process.run_with_output(cmd)
+        self.run_command(cmd)
 
-    def clean(self):
+    def git_clean(self):
         cmd = (f'git --work-tree={self.repository_local_path} '
                f'--git-dir={self.repository_local_path}/.git clean -df')
-        return process.run_with_output(cmd)
+        self.run_command(cmd)
 
+    def run_command(self, cmd):
+        return process.run_with_output(cmd)
+    
     def get_latest_changes(self):
         try:
-            self.clone()
-            self.fetch()
-            self.reset()
-            self.clean()
+            self.git_clone()
+            self.git_fetch()
+            self.git_reset()
+            self.git_clean()
         except MemoryError:
             raise exceptions.AspenError('Out of memory when fetching lastest git changes')
   
