@@ -1,0 +1,12 @@
+[
+    {
+        "status": "active",
+        "name": "everest-white",
+        "lb_ip": "10.28.20.30:2376"
+    },
+    {
+        "status": "stage",
+        "name": "everest-black",
+        "lb_ip": "10.28.21.30:2376"
+    }
+]
