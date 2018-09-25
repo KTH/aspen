@@ -21,5 +21,6 @@ class GetApplicationPassword(BasePipelineStep):
                 break
         else:
             # No hit
+            pipeline_data[data_defs.APPLICATION_PASSWORD] = None
             pass
         return pipeline_data

@@ -11,7 +11,7 @@ class StartDeploymentPipelines(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.STACK_FILES]
+        return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
     def run_step(self, pipeline_data):
         loop = asyncio.get_event_loop()
@@ -35,6 +35,8 @@ class StartDeploymentPipelines(BasePipelineStep):
     @asyncio.coroutine
     def init_and_run(self, pipeline_data, file_path):
         deployment_pipeline = DeploymentPipeline()
-        pipeline_data = {data_defs.STACK_FILE_PATH: file_path}
+        app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
+        pipeline_data = {data_defs.STACK_FILE_PATH: file_path,
+                         data_defs.APPLICATION_PASSWORDS: app_passwords}
         deployment_pipeline.set_pipeline_data(pipeline_data)
         deployment_pipeline.run_pipeline()

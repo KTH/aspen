@@ -15,6 +15,8 @@ from modules.steps.init_service_pipeline_data import InitServicePipelineData
 from modules.steps.calculate_semantic_version import CalculateSemanticVersion
 from modules.steps.deploy_application import DeployApplication
 from modules.steps.get_cluster_lb_ip import GetClusterLbIp
+from modules.steps.secret_verification import SecretVerification
+from modules.steps.get_application_password import GetApplicationPassword
 from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
@@ -26,6 +28,8 @@ class DeploymentPipeline():
             ParseStackPath(),
             ClusterVerification(),
             ParseStackFile(),
+            GetApplicationPassword(),
+            SecretVerification(),
             CalculateMd5(),
             LoggingPolicyChecker(),
             RestartPolicyChecker(),
