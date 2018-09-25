@@ -32,13 +32,14 @@ class ImageHasSemanticVersion(BasePipelineStep):
             self.log.debug('Image data after step is "%s"', image_data)
         return pipeline_data
 
-    def is_semver(self, semver_image):
-        return re.match(regex.get_semver_regex(), semver_image['image_version'])
+    def is_semver(self, image_data):
+        return re.match(regex.get_semver_regex(), image_data['image_version'])
 
     def get_semver_version_from_env(self, pipeline_data, service_name, semver_env_key):
         all_services = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']
         for name, service in all_services.items():
             if name == service_name:
+                # Environment always exists - set in init_service_pipeline_data.py
                 for env_var, env_val in service['environment'].items():
                     if env_var == semver_env_key:
                         return env_val

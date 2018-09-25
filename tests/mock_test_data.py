@@ -1,5 +1,19 @@
 __author__ = 'tinglev@kth.se'
 
+from modules.util import data_defs
+
+def get_parsed_stack_content():
+    return {
+        'services': {
+            'web': {
+                'environment': {
+                    'ENV_KEY_1': 'ENV_VAL_1',
+                    'WEB_VERSION': '~2.1.3_abc123'
+                }
+            }
+        }
+    }
+
 def get_cluster_ip_response():
     return [
         {
