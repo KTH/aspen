@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 from os import path
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs
+from modules.util import data_defs, exceptions
 
 class ParseStackPath(BasePipelineStep):
 
@@ -18,9 +18,13 @@ class ParseStackPath(BasePipelineStep):
         # path.dirname: /bla/deploy/kth-azure-app/stage
         # path.split: (/bla/deploy/kth-azure-app, stage)
         split_path = path.split(path.dirname(file_path))
+        if not split_path[1]:
+            raise exceptions.DeploymentError('Could not parse cluster from stack file path')
         pipeline_data[data_defs.APPLICATION_CLUSTER] = split_path[1]
         # 2nd path.split: (/bla/deploy, kth-azure-app)
         split_path = path.split(split_path[0])
+        if not split_path[1]:
+            raise exceptions.DeploymentError('Could not parse application name from stack file path')
         pipeline_data[data_defs.APPLICATION_NAME] = split_path[1]
         self.log.debug('Cluster is "%s"', pipeline_data[data_defs.APPLICATION_CLUSTER])
         self.log.debug('Application name is "%s"', pipeline_data[data_defs.APPLICATION_NAME])
