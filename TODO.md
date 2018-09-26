@@ -21,6 +21,6 @@
 { 
    "application_name": "KTH Sök",
    "path": "/search/",
-   "stack_file": "{}"
+   "stack_file": {}
 }
 ```
