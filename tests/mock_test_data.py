@@ -14,6 +14,12 @@ def get_parsed_stack_content():
             'api': {
                 'environment': {
                     'API_KEY_1': 'API_VAL_1'
+                },
+                'logging': {
+                    'options': {
+                        'max-size': '10Mb',
+                        'max-file': '10'
+                    }
                 }
             }
         }
