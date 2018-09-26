@@ -18,6 +18,7 @@ from modules.steps.get_cluster_lb_ip import GetClusterLbIp
 from modules.steps.secret_verification import SecretVerification
 from modules.steps.get_application_password import GetApplicationPassword
 from modules.steps.docker_compose_validate import DockerComposeValidate
+from modules.steps.get_cache_entry import GetCacheEntry
 from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
@@ -26,6 +27,7 @@ class DeploymentPipeline():
         self.log = logging.getLogger(__name__)
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
+            GetCacheEntry(),
             DockerComposeValidate(),
             ParseStackPath(),
             ClusterVerification(),

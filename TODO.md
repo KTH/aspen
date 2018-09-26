@@ -4,7 +4,7 @@
 * ~~Skapa struktur för exceptions (flaggor - retryable etc)~~
 * Skapa struktur för caching (för deploys + fel)
   * Bundla ReJSON i compose och använd som cache
-  * Snabba upp semver med pagination mot registry/tags
+  * Snabba upp semver med pagination mot registry/tags - verkar inte funka?
 * ~~Bygg stöd för att avbryta en pipeline (next_step = None)~~
 * ~~Omarbeta base_pipeline_step~~
 * Skriv unit tests för start_deployment_pipelines
