@@ -32,6 +32,11 @@ def get_parsed_stack_content():
                             'cpus': 0.1,
                             'memory': '10M'
                         }
+                    },
+                    'restart_policy': {
+                        'condition': 'on-failure',
+                        'delay': '5s',
+                        'max_attempts': 2
                     }
                 }
             }
