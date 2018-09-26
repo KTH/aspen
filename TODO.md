@@ -24,3 +24,4 @@
    "stack_file": {}
 }
 ```
+* Hantera återkoppling från deployments, om det faktiskt startade några containers.
