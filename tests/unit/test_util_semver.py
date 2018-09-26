@@ -6,5 +6,20 @@ from modules.util import semver
 
 class TestUtilSemver(unittest.TestCase):
 
-    def test_create_pipeline_from_array(self):
+    def test_get_major(self):
+        pass
+
+    def test_get_minor(self):
+        pass
+
+    def test_get_build(self):
+        pass
+
+    def test_sort_compare(self):
+        pass
+
+    def test_is_valid_static(self):
+        pass
+
+    def test_is_valid_semver(self):
         pass

@@ -13,6 +13,7 @@ docker-compose = "==1.22.0"
 pyyaml = "==3.13"
 coloredlogs = "==10.0"
 prometheus_client = "==0.3.1"
+rejson = "==0.2.1"
 
 [dev-packages]
 pylint = "*"
