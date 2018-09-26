@@ -18,6 +18,7 @@ REDIS_URL = 'REDIS_URL'
 # OPTIONAL
 CLUSTER_STATUS_URL_IS_FILE = 'CLUSTER_STATUS_URL_IS_FILE'
 PUSH_TO_PROMETHEUS = 'PUSH_TO_PROMETHEUS'
+PARALLELISM = 'PARALLELISM'
 
 def get_env(env_name):
     return os.environ.get(env_name)
@@ -30,10 +31,16 @@ def get_registry_path():
     return os.path.join(root_path.PROJECT_ROOT,
                         get_env(REGISTRY_SUB_DIRECTORY))
 
-def get_parallelism():
-    default = 10
-    from_env = os.environ.get('PARALLELISM')
-    if from_env:
-        return int(from_env)
+def get_with_default_int(env_key, default):
+    env_value = os.environ.get(env_key)
+    if env_value:
+        return int(env_value)
+    else:
+        return default
+
+def get_with_default_string(env_key, default):
+    env_value = os.environ.get(env_key)
+    if env_value:
+        return str(env_value)
     else:
         return default

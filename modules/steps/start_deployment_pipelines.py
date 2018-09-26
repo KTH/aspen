@@ -16,7 +16,7 @@ class StartDeploymentPipelines(BasePipelineStep):
     def run_step(self, pipeline_data):
         loop = asyncio.get_event_loop()
         tasks = []
-        parallelism = environment.get_parallelism()
+        parallelism = environment.get_with_default_int(environment.PARALLELISM, 10)
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
         # Loop all stack files
         for i in range(nr_of_stack_files):

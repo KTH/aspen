@@ -7,8 +7,8 @@
   * Snabba upp semver med pagination mot registry/tags
 * ~~Bygg stöd för att avbryta en pipeline (next_step = None)~~
 * ~~Omarbeta base_pipeline_step~~
-* Skriv unit tests
-* Skriv tests för modules/util
+* Skriv unit tests för start_deployment_pipelines
+* ~~Skriv tests för modules/util~~
 * ~~Skriv integration tests~~
 * ~~Support för statiska kluster-ipn~~
 * Bygg API

@@ -50,10 +50,14 @@ class BasePipelineStep:
 
     def run_pipeline_step(self, data):
         if not self.step_environment_ok():
+            self.log.error('Step environment not ok for step "%s", and pipeline_data "%s"',
+                           self.get_step_name(), data)
             raise exceptions.DeploymentError('Step environment not ok',
                                              pipeline_data=data,
                                              step_name=self.get_step_name())
         if not self.step_data_is_ok(data):
+            self.log.error('Step data not ok for step "%s", and pipeline_data "%s"',
+                           self.get_step_name(), data)
             raise exceptions.DeploymentError('Step pipeline_data not ok',
                                              pipeline_data=data,
                                              step_name=self.get_step_name())

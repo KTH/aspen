@@ -8,7 +8,6 @@ __author__ = 'tinglev@kth.se'
 # The master key to cellus-registry app.passwords.yml needs to be in the integration directory. The file must
 # be named vault.password and is .gitignored.
 #
-
 import os
 import unittest
 import mock
