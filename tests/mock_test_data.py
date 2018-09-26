@@ -10,6 +10,11 @@ def get_parsed_stack_content():
                     'ENV_KEY_1': 'ENV_VAL_1',
                     'WEB_VERSION': '~2.1.3_abc123'
                 }
+            },
+            'api': {
+                'environment': {
+                    'API_KEY_1': 'API_VAL_1'
+                }
             }
         }
     }
