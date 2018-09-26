@@ -22,6 +22,6 @@ class ParseStackFile(BasePipelineStep):
                 pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT] = yaml.load(raw_data)
         except yaml.YAMLError:
             raise DeploymentError('Error when parsing docker-stack.yml')
-        except IOError:
+        except FileNotFoundError:
             raise DeploymentError('Error when opening docker-stack.yml')
         return pipeline_data
