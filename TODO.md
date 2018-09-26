@@ -3,6 +3,8 @@
 * ~~Skicka med pipeline_data vid exceptions~~
 * ~~Skapa struktur för exceptions (flaggor - retryable etc)~~
 * Skapa struktur för caching (för deploys + fel)
+  * Bundla ReJSON i compose och använd som cache
+  * Snabba upp semver med pagination mot registry/tags
 * ~~Bygg stöd för att avbryta en pipeline (next_step = None)~~
 * ~~Omarbeta base_pipeline_step~~
 * Skriv unit tests
@@ -16,7 +18,7 @@
     * Fixa vettiga metrics
     * Möjlighet till konfigurering av server_url:port via env
     * Se: https://prometheus.io/docs/practices/instrumentation/#how-to-instrument
-* Definiera ett application objekt som kan skickas vidare till Dizin t ex: 
+* Definiera ett application objekt som kan skickas vidare till Dizin. Kanske genom CDCs typ Pact? 
 ```json 
 { 
    "application_name": "KTH Sök",
