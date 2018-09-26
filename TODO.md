@@ -16,3 +16,6 @@
     * Fixa vettiga metrics
     * Möjlighet till konfigurering av server_url:port via env
     * Se: https://prometheus.io/docs/practices/instrumentation/#how-to-instrument
+* Definiera ett application objekt som kan skickas vidare till Dizin t ex: 
+```json 
+{"application_name": "KTH Sök", "path": "/search/", "stack_file": "{}" }    ```
