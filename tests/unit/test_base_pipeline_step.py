@@ -39,3 +39,5 @@ class TestBasePipelineStep(unittest.TestCase):
         ConcreteBPS.get_required_env_variables = mock.MagicMock(return_value=[])
         step.run_step = mock.MagicMock(side_effect=KeyError)
         self.assertRaises(exceptions.DeploymentError, step.run_pipeline_step, {})
+        step.run_step = mock.MagicMock(side_effect=exceptions.DeploymentError)
+        self.assertRaises(exceptions.DeploymentError, step.run_pipeline_step, {})
