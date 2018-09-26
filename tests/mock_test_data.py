@@ -19,7 +19,19 @@ def get_parsed_stack_content():
                 'logging': {
                     'options': {
                         'max-size': '10Mb',
-                        'max-file': '10'
+                        'max-file': 10
+                    }
+                },
+                'deploy': {
+                    'resources': {
+                        'limits': {
+                            'cpus': 0.5,
+                            'memory': '100M'
+                        },
+                        'reservations': {
+                            'cpus': 0.1,
+                            'memory': '10M'
+                        }
                     }
                 }
             }
