@@ -12,6 +12,7 @@ def get_parsed_stack_content():
                 }
             },
             'api': {
+                'image': 'test_registry/test_image:1.2.3_abc456',
                 'environment': {
                     'API_KEY_1': 'API_VAL_1'
                 },

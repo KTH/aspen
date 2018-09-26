@@ -13,7 +13,7 @@ def get_registry_regex():
     return r'^(.+)/(.+):(.+)$'
 
 def get_image_name_regex():
-    return r'^(.+/){0,1}(.+):(.+)$'
+    return r'^(.+/){0,1}([^/:]+):(.+)$'
 
 def get_image_version_regex():
     return r'^(.+/){0,1}(.+):(.+)$'
