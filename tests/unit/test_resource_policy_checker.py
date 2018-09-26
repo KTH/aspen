@@ -28,5 +28,4 @@ class TestResourcePolicyChecker(unittest.TestCase):
             step.has_resource_policy(service)
             step.verify_resource_policy(service['deploy']['resources'])
         except:
-            self.assertFalse(True)  
-
+            self.assertFalse(True)
