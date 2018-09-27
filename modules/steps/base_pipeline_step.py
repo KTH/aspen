@@ -34,30 +34,32 @@ class BasePipelineStep:
     def get_step_name(self):
         return self.__class__.__name__
 
-    def step_data_is_ok(self, data):
+    def has_missing_step_data(self, data):
         for key in self.get_required_data_keys():
             if not data or not key in data:
-                return False
-        return True
+                return key
+        return None
 
-    def step_environment_ok(self):
+    def has_missing_environment_data(self):
         for env in self.get_required_env_variables():
             if not env in os.environ:
-                return False
+                return env
             if not os.environ.get(env):
                 self.log.warning('Environment variable "%s" exists but is empty', env)
-        return True
+        return None
 
     def run_pipeline_step(self, data):
-        if not self.step_environment_ok():
-            self.log.error('Step environment not ok for step "%s", and pipeline_data "%s"',
-                           self.get_step_name(), data)
+        step_data_missing = self.has_missing_step_data(data)
+        environment_missing = self.has_missing_environment_data()
+        if environment_missing:
+            self.log.error('Step environment missing "%s" for step "%s", and pipeline_data "%s"',
+                           environment_missing, self.get_step_name(), data)
             raise exceptions.DeploymentError('Step environment not ok',
                                              pipeline_data=data,
                                              step_name=self.get_step_name())
-        if not self.step_data_is_ok(data):
-            self.log.error('Step data not ok for step "%s", and pipeline_data "%s"',
-                           self.get_step_name(), data)
+        if step_data_missing:
+            self.log.error('Step data "%s" missing for step "%s", and pipeline_data "%s"',
+                           step_data_missing, self.get_step_name(), data)
             raise exceptions.DeploymentError('Step pipeline_data not ok',
                                              pipeline_data=data,
                                              step_name=self.get_step_name())

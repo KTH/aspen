@@ -1,5 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
+import os
 import hashlib
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs
@@ -13,12 +14,18 @@ class CalculateMd5(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.STACK_FILE_RAW_CONTENT]
+        return [data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
-        md5_hash = self.get_md5_hash(pipeline_data[data_defs.STACK_FILE_RAW_CONTENT])
-        pipeline_data[data_defs.STACK_FILE_MD5] = md5_hash
+        md5_hash = self.get_hash_of_all_files(pipeline_data[data_defs.STACK_FILE_PATH])
+        pipeline_data[data_defs.STACK_FILE_DIR_HASH] = md5_hash
         return pipeline_data
 
-    def get_md5_hash(self, raw_file_content):
-        return hashlib.md5(raw_file_content.encode('utf-8')).hexdigest()
+    def get_hash_of_all_files(self, file_path):
+        md5_hash = hashlib.md5(open(file_path, 'r').read().encode('utf-8'))
+        dir_name = os.path.dirname(file_path)
+        all_files_in_dir = [os.path.join(dir_name, f) for f in os.listdir(dir_name)
+                            if os.path.isfile(os.path.join(dir_name, f))]
+        for file in all_files_in_dir:
+            md5_hash.update(open(file, 'r').read().encode('utf-8'))
+        return md5_hash.hexdigest()

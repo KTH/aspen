@@ -23,11 +23,15 @@ class TestBasePipelineStep(unittest.TestCase):
         step = ConcreteBPS()
         ConcreteBPS.get_required_data_keys = mock.MagicMock(return_value=['TEST_KEY_1'])
         ConcreteBPS.get_required_env_variables = mock.MagicMock(return_value=['TEST_ENV_1'])
-        self.assertFalse(step.step_environment_ok())
+        result = step.has_missing_environment_data()
+        self.assertIsNotNone(result)
+        self.assertEqual(result, 'TEST_ENV_1')
         os.environ['TEST_ENV_1'] = 'EXISTS'
-        self.assertTrue(step.step_environment_ok())
-        self.assertFalse(step.step_data_is_ok({}))
-        self.assertTrue(step.step_data_is_ok({'TEST_KEY_1': 'EXISTS'}))
+        self.assertIsNone(step.has_missing_environment_data())
+        result = step.has_missing_step_data({})
+        self.assertIsNotNone(result)
+        self.assertEqual(result, 'TEST_KEY_1')
+        self.assertIsNone(step.has_missing_step_data({'TEST_KEY_1': 'EXISTS'}))
 
     def test_get_step_name(self):
         step = ConcreteBPS()
