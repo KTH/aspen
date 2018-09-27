@@ -39,7 +39,7 @@ class TestIntegrationPipeline(unittest.TestCase):
 
     @responses.activate
     @mock.patch('modules.steps.deploy_application.DeployApplication.run_docker_cmd')
-    def test_integration_pipeline(self, mock_run_docker_cmd):
+    def test_integration_pipeline(self, mock_run_docker_cmd):# pylint: disable=W0613
         # Allow registry connections to pass through mocked responses
         responses.add_passthru('https://kthregistryv2.sys.kth.se')
         pipeline = AspenPipeline()

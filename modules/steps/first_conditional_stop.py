@@ -31,7 +31,8 @@ class FirstConditionalStop(BasePipelineStep):
     def service_uses_semver(self, pipeline_data):
         for service in pipeline_data[data_defs.SERVICES]:
             if service[data_defs.S_IMAGE][data_defs.IMG_IS_SEMVER]:
-                self.log.debug('Image "%s" uses semver', service[data_defs.S_IMAGE][data_defs.IMG_NAME])
+                self.log.debug('Image "%s" uses semver',
+                               service[data_defs.S_IMAGE][data_defs.IMG_NAME])
                 return True
         return False
 

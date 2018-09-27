@@ -2,7 +2,6 @@ __author__ = 'tinglev@kth.se'
 
 import json
 import unittest
-import mock
 from tests import mock_test_data
 from modules.steps.write_cache_entry import WriteCacheEntry
 from modules.util import data_defs, cache_defs
