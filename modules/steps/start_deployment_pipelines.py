@@ -25,10 +25,14 @@ class StartDeploymentPipelines(BasePipelineStep):
             tasks.append(asyncio.ensure_future(self.init_and_run(pipeline_data, file_path)))
             # If we reach our parallelism max, run the appended tasks
             if i % parallelism == 0:
+                self.log.debug('Awaiting "%s" async pipelines', len(tasks))
                 loop.run_until_complete(asyncio.wait(tasks))
+                self.log.debug('Async await done')
                 tasks = []
         # Run all tasks that are left in the task array
+        self.log.debug('Awaiting remaining "%s" async pipelines', len(tasks))
         loop.run_until_complete(asyncio.wait(tasks))
+        self.log.debug('Last async await done')
         loop.close()
         return pipeline_data
 
