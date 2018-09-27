@@ -20,24 +20,40 @@ class WriteCacheEntry(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         redis_url = environment.get_with_default_string('REDIS_URL', 'redis')
-        redis_client = redis.StrictRedis(redis_url)
+        redis_client = self.redis_get_client(redis_url)
         file_path = pipeline_data[data_defs.STACK_FILE_PATH]
-        image_versions = []
-        for service in pipeline_data[data_defs.SERVICES]:
-            image = service[data_defs.S_IMAGE]
-            version = image[data_defs.IMG_VERSION]
-            if image[data_defs.IMG_IS_SEMVER]:
-                version = image[data_defs.IMG_BEST_SEMVER_MATCH]
-            image_version = {
-                data_defs.S_NAME: pipeline_data[data_defs.S_NAME],
-                data_defs.IMG_NAME: image[data_defs.IMG_NAME],
-                data_defs.IMG_VERSION: version
-            }
-            image_versions.append(image_version)
-        cache_entry = json.dumps({
+        image_versions = self.generate_image_versions(pipeline_data)
+        cache_entry = self.generate_cache_entry(pipeline_data, image_versions)
+        self.redis_execute_write(redis_client, file_path, cache_entry)
+        self.log.debug('Wrote cache entry "%s" for key "%s"', cache_entry, file_path)
+        return pipeline_data
+
+    def generate_cache_entry(self, pipeline_data, image_versions):
+        return json.dumps({
             cache_defs.DIRECTORY_MD5: pipeline_data[data_defs.STACK_FILE_DIR_HASH],
             cache_defs.IMAGE_VERSIONS: image_versions
         })
-        redis_client.execute_command('JSON.SET', file_path, '.', cache_entry)
-        self.log.debug('Wrote cache entry "%s" for key "%s"', cache_entry, file_path)
-        return pipeline_data
+
+    def generate_image_versions(self, pipeline_data):
+        image_versions = []
+        for service in pipeline_data[data_defs.SERVICES]:
+            image_data = service[data_defs.S_IMAGE]
+            version = self.get_image_version(image_data)
+            image_version = {
+                data_defs.S_NAME: service[data_defs.S_NAME],
+                data_defs.IMG_NAME: image_data[data_defs.IMG_NAME],
+                data_defs.IMG_VERSION: version
+            }
+            image_versions.append(image_version)
+        return image_versions
+
+    def get_image_version(self, image_data):
+        if image_data[data_defs.IMG_IS_SEMVER]:
+            return image_data[data_defs.IMG_BEST_SEMVER_MATCH]
+        return image_data[data_defs.IMG_VERSION]
+
+    def redis_get_client(self, redis_url):
+        return redis.StrictRedis(redis_url)
+
+    def redis_execute_write(self, client, key, value):
+        client.execute_command('JSON.SET', key, '.', value)
