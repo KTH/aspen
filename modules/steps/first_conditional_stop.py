@@ -21,9 +21,10 @@ class FirstConditionalStop(BasePipelineStep):
         equal_caches = self.caches_are_equal(pipeline_data)
 
         # No service uses semver and local and cache hashes are identical: nothing has changed
-        if not semver_in_use or equal_caches:
-            self.log.debug('Stopping pipeline in pipeline step "%s"', self.get_step_name())
-            self.stop_pipeline()
+        if not semver_in_use:
+            if equal_caches:
+                self.log.debug('Stopping pipeline in pipeline step "%s"', self.get_step_name())
+                self.stop_pipeline()
 
         return pipeline_data
 
