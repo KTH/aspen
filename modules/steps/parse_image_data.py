@@ -25,10 +25,10 @@ class ParseImageData(BasePipelineStep):
             version = self.parse_version(service)
             service_index = service_data.get_service_index(pipeline_data, name)
             image_data = {
-                'image_registry': registry,
-                'image_name': image_name,
-                'image_version': version,
-                'is_semver': False
+                data_defs.IMG_REGISTRY: registry,
+                data_defs.IMG_NAME: image_name,
+                data_defs.IMG_VERSION: version,
+                data_defs.IMG_IS_SEMVER: False
             }
             pipeline_data[data_defs.SERVICES][service_index][data_defs.S_IMAGE] = image_data
             self.log.debug('Image data set to "%s"', image_data)

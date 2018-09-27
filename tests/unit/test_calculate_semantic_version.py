@@ -13,7 +13,7 @@ class TestCalculateSemanticVersion(unittest.TestCase):
     def test_set_semver_environment(self):
         step = CalculateSemanticVersion()
         service_data = {data_defs.S_ENVIRONMENT: []}
-        image_data = {'semver_env_key': 'TEST'}
+        image_data = {data_defs.IMG_SEMVER_ENV_KEY: 'TEST'}
         service = step.set_semver_environment(service_data, image_data, '3.2.1_abc')
         self.assertTrue(service[data_defs.S_ENVIRONMENT], 'TEST=3.2.1_abc')
         service = step.set_semver_environment(service_data, image_data, '3.2.2_abc')

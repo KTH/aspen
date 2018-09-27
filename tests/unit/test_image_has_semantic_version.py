@@ -9,11 +9,11 @@ class TestImageHasSemanticVersion(unittest.TestCase):
 
     def test_is_semver(self):
         step = ImageHasSemanticVersion()
-        image_data = {'image_version': '${TEST_VERSION}'}
+        image_data = {data_defs.IMG_VERSION: '${TEST_VERSION}'}
         match = step.is_semver(image_data)
         self.assertTrue(match)
         self.assertEqual(match.group(1), 'TEST_VERSION')
-        image_data = {'image_version': '2.1.0_abc123'}
+        image_data = {data_defs.IMG_VERSION: '2.1.0_abc123'}
         match = step.is_semver(image_data)
         self.assertFalse(match)
 

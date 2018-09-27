@@ -19,6 +19,7 @@ from modules.steps.secret_verification import SecretVerification
 from modules.steps.get_application_password import GetApplicationPassword
 from modules.steps.docker_compose_validate import DockerComposeValidate
 from modules.steps.get_cache_entry import GetCacheEntry
+from modules.steps.write_cache_entry import WriteCacheEntry
 from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
@@ -44,7 +45,8 @@ class DeploymentPipeline():
             RestartPolicyChecker(),
             ResourcePolicyChecker(),
             GetClusterLbIp(),
-            DeployApplication()
+            DeployApplication(),
+            WriteCacheEntry()
         ])
 
     def set_pipeline_data(self, pipeline_data):

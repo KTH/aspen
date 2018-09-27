@@ -19,15 +19,17 @@ class CalculateSemanticVersion(BasePipelineStep):
         for i, service in enumerate(pipeline_data[data_defs.SERVICES]):
             image_data = service[data_defs.S_IMAGE]
             self.log.debug('Found image data "%s"', image_data)
-            if image_data['is_semver'] and image_data['image_tags']:
-                best_match = max_satisfying(image_data['image_tags'], image_data['semver_version'])
+            if image_data[data_defs.IMG_IS_SEMVER] and image_data[data_defs.IMG_TAGS]:
+                best_match = max_satisfying(image_data[data_defs.IMG_TAGS],
+                                            image_data[data_defs.IMG_SEMVER_VERSION])
                 self.log.debug('Best match was "%s"', best_match)
+                image_data[data_defs.IMG_BEST_SEMVER_MATCH] = best_match
                 service = self.set_semver_environment(service, image_data, best_match)
                 pipeline_data[data_defs.SERVICES][i] = service
         return pipeline_data
 
     def set_semver_environment(self, service, image_data, best_match):
-        semver_env_var = image_data['semver_env_key']
+        semver_env_var = image_data[data_defs.IMG_SEMVER_ENV_KEY]
         service[data_defs.S_ENVIRONMENT].append(f'{semver_env_var}={best_match}')
         self.log.debug('Environment is now "%s"', service[data_defs.S_ENVIRONMENT])
         return service

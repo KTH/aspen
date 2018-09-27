@@ -27,5 +27,6 @@ class CalculateMd5(BasePipelineStep):
         all_files_in_dir = [os.path.join(dir_name, f) for f in os.listdir(dir_name)
                             if os.path.isfile(os.path.join(dir_name, f))]
         for file in all_files_in_dir:
+            self.log.debug('Hashing file "%s" and updating complete hash', file)
             md5_hash.update(open(file, 'r').read().encode('utf-8'))
         return md5_hash.hexdigest()
