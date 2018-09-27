@@ -14,3 +14,6 @@ class TestGetCacheEntry(unittest.TestCase):
         pipeline_data = {data_defs.STACK_FILE_PATH: 'random/path/to/file'}
         pipeline_data = step.run_step(pipeline_data)
         self.assertEqual(pipeline_data[data_defs.CACHE_ENTRY], {'TEST': 'VALUE'})
+        step.redis_execute_cmd = mock.Mock(return_value=None)
+        pipeline_data = step.run_step(pipeline_data)
+        self.assertIsNone(pipeline_data[data_defs.CACHE_ENTRY])

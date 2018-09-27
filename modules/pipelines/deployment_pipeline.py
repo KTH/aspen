@@ -20,6 +20,7 @@ from modules.steps.get_application_password import GetApplicationPassword
 from modules.steps.docker_compose_validate import DockerComposeValidate
 from modules.steps.get_cache_entry import GetCacheEntry
 from modules.steps.write_cache_entry import WriteCacheEntry
+from modules.steps.first_conditional_stop import FirstConditionalStop
 from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
@@ -35,8 +36,11 @@ class DeploymentPipeline():
             InitServicePipelineData(),
             ParseImageData(),
             ImageHasSemanticVersion(),
+            # Stop if is_semver == false and md5_cache == md5_local
+            FirstConditionalStop(),
             GetSemanticVersions(),
             CalculateSemanticVersion(),
+            # Stop if md5_cache == md5_local
             DockerComposeValidate(),
             ClusterVerification(),
             GetApplicationPassword(),
