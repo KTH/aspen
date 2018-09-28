@@ -21,6 +21,7 @@ from modules.steps.docker_compose_validate import DockerComposeValidate
 from modules.steps.get_cache_entry import GetCacheEntry
 from modules.steps.write_cache_entry import WriteCacheEntry
 from modules.steps.first_conditional_stop import FirstConditionalStop
+from modules.steps.decrypt_app_secrets import DecryptAppSecrets
 from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
@@ -48,6 +49,7 @@ class DeploymentPipeline():
             LoggingPolicyChecker(),
             RestartPolicyChecker(),
             ResourcePolicyChecker(),
+            DecryptAppSecrets(),
             GetClusterLbIp(),
             DeployApplication(),
             WriteCacheEntry()
