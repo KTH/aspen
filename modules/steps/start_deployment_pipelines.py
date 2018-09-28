@@ -14,7 +14,7 @@ class StartDeploymentPipelines(BasePipelineStep):
         return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
     def run_step(self, pipeline_data):
-        loop = asyncio.get_event_loop()
+        loop = asyncio.new_event_loop()
         tasks = []
         parallelism = environment.get_with_default_int(environment.PARALLELISM, 10)
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
