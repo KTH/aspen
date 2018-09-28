@@ -11,6 +11,7 @@
 * ~~Skriv tests för modules/util~~
 * ~~Skriv integration tests~~
 * ~~Support för statiska kluster-ipn~~
+* Fixa mockade responses så test_complete_pipeline börjar funka igen
 * Bygg API
 * Lägg till prometheus endpoint ELLER ...
 * Pusha metrics till prometheus 

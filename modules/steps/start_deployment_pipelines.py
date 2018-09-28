@@ -1,6 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
-import asyncio
+from concurrent.futures import ThreadPoolExecutor, wait, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
 from modules.util import data_defs, environment
@@ -14,29 +14,28 @@ class StartDeploymentPipelines(BasePipelineStep):
         return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
     def run_step(self, pipeline_data):
-        loop = asyncio.new_event_loop()
-        tasks = []
         parallelism = environment.get_with_default_int(environment.PARALLELISM, 10)
+        executor = ThreadPoolExecutor(max_workers=parallelism)
+        tasks = []
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
         # Loop all stack files
         for i in range(nr_of_stack_files):
             file_path = pipeline_data[data_defs.STACK_FILES][i]
             # Append a deployment pipeline to the work load
-            tasks.append(asyncio.ensure_future(self.init_and_run(pipeline_data, file_path)))
+            tasks.append(executor.submit(self.init_and_run, pipeline_data, file_path))
             # If we reach our parallelism max, run the appended tasks
             if i % parallelism == 0:
                 self.log.debug('Awaiting "%s" async pipelines', len(tasks))
-                loop.run_until_complete(asyncio.wait(tasks))
+                as_completed(tasks)
+                executor = ThreadPoolExecutor(max_workers=parallelism)
                 self.log.debug('Async await done')
                 tasks = []
         # Run all tasks that are left in the task array
         self.log.debug('Awaiting remaining "%s" async pipelines', len(tasks))
-        loop.run_until_complete(asyncio.wait(tasks))
+        as_completed(tasks)
         self.log.debug('Last async await done')
-        loop.close()
         return pipeline_data
 
-    @asyncio.coroutine
     def init_and_run(self, pipeline_data, file_path):
         deployment_pipeline = DeploymentPipeline()
         app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
