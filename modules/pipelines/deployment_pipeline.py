@@ -33,6 +33,7 @@ class DeploymentPipeline():
             CalculateMd5(),
             ParseStackPath(),
             ParseStackFile(),
+            ClusterVerification(),
             InitServicePipelineData(),
             ParseImageData(),
             ImageHasSemanticVersion(),
@@ -42,7 +43,6 @@ class DeploymentPipeline():
             CalculateSemanticVersion(),
             # Stop if md5_cache == md5_local
             DockerComposeValidate(),
-            ClusterVerification(),
             GetApplicationPassword(),
             SecretVerification(),
             LoggingPolicyChecker(),

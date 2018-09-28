@@ -24,6 +24,7 @@ RUN pipenv run pip install azure-cli
 
 COPY ["modules",  "modules"]
 COPY ["run.py", "run.py"]
+COPY ["root_path.py", "root_path.py"]
 
 EXPOSE 3005
 
