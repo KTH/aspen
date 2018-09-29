@@ -29,4 +29,6 @@
 }
 ```
 * Hantera återkoppling från deployments, om det faktiskt startade några containers.
+    * ~~Lägg till steg för verifiering av körning~~
+    * Återkoppla
 * Ta bort KTH specifika grejor i Dockerfile.
