@@ -15,4 +15,4 @@ class TestCalculateMd5Step(unittest.TestCase):
         pipeline_data = {data_defs.STACK_FILE_PATH: file_path}
         pipeline_data = step.run_step(pipeline_data)
         self.assertEqual(pipeline_data[data_defs.STACK_FILE_DIR_HASH],
-                         'c7c18e2daa2bd0cc9a98e5a752becdfc')
+                         '111894b68a6bdbb4d3b50b3393941cc2')

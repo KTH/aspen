@@ -22,6 +22,7 @@ from modules.steps.get_cache_entry import GetCacheEntry
 from modules.steps.write_cache_entry import WriteCacheEntry
 from modules.steps.first_conditional_stop import FirstConditionalStop
 from modules.steps.decrypt_app_secrets import DecryptAppSecrets
+from modules.steps.verify_deploy_success import VerifyDeploySuccess
 from modules.util import pipeline, data_defs, exceptions
 
 class DeploymentPipeline():
@@ -52,6 +53,8 @@ class DeploymentPipeline():
             DecryptAppSecrets(),
             GetClusterLbIp(),
             DeployApplication(),
+            # Run when tests are added to test_complete_pipeline and integration_tests
+            # VerifyDeploySuccess(),
             WriteCacheEntry()
         ])
 
