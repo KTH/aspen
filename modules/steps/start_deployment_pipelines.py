@@ -26,13 +26,13 @@ class StartDeploymentPipelines(BasePipelineStep):
             # If we reach our parallelism max, run the appended tasks
             if i % parallelism == 0:
                 self.log.debug('Awaiting "%s" async pipelines', len(tasks))
-                as_completed(tasks)
+                wait(tasks)
                 executor = ThreadPoolExecutor(max_workers=parallelism)
                 self.log.debug('Async await done')
                 tasks = []
         # Run all tasks that are left in the task array
         self.log.debug('Awaiting remaining "%s" async pipelines', len(tasks))
-        as_completed(tasks)
+        wait(tasks)
         self.log.debug('Last async await done')
         return pipeline_data
 
@@ -42,4 +42,4 @@ class StartDeploymentPipelines(BasePipelineStep):
         pipeline_data = {data_defs.STACK_FILE_PATH: file_path,
                          data_defs.APPLICATION_PASSWORDS: app_passwords}
         deployment_pipeline.set_pipeline_data(pipeline_data)
-        deployment_pipeline.run_pipeline()
+        return deployment_pipeline.run_pipeline()

@@ -3,9 +3,7 @@ __author__ = 'tinglev@kth.se'
 import os
 import unittest
 import mock
-import responses
 import root_path
-from tests import mock_test_data
 from modules.pipelines.aspen_pipeline import AspenPipeline
 from modules.util import environment
 
@@ -19,20 +17,12 @@ class TestEntirePipeline(unittest.TestCase):
         os.environ[environment.CLUSTERS_TO_DEPLOY] = 'active,stage'
         os.environ[environment.DOCKER_REGISTRY_PWD] = 'will_be_mocked'
         os.environ[environment.DOCKER_REGISTRY_USER] = 'will_be_mocked'
-        os.environ[environment.DOCKER_REGISTRY_URL] = 'http://localhost/registry'
-        os.environ[environment.CLUSTER_STATUS_API_URL] = 'http://localhost/portillo'
+        os.environ[environment.DOCKER_REGISTRY_URL] = 'http://localhost:5000/tags'
+        os.environ[environment.CLUSTER_STATUS_API_URL] = 'http://localhost:5000/clusters'
         os.environ[environment.REGISTRY_REPOSITORY_URL] = 'http://localhost/cellus-registry'
         os.environ[environment.REGISTRY_SUB_DIRECTORY] = os.path.join(r_path, 'tests/registry_repo')
         os.environ[environment.VAULT_KEY_PATH] = os.path.join(r_path, 'tests/vault.password')
-        # Set up API response mocks
-        responses.add(responses.GET,
-                      f'{os.environ[environment.DOCKER_REGISTRY_URL]}/v2/kth-azure-app/tags/list',
-                      json=mock_test_data.get_tags_response(), status=200)
-        responses.add(responses.GET,
-                      f'{os.environ[environment.CLUSTER_STATUS_API_URL]}',
-                      json=mock_test_data.get_cluster_ip_response(), status=200)
 
-    @responses.activate
     @mock.patch('modules.steps.registry_login.RegistryLogin.run_docker_login')
     @mock.patch('modules.steps.fetch_app_registry.FetchAppRegistry.get_latest_changes')
     @mock.patch('modules.steps.deploy_application.DeployApplication.run_docker_cmd')

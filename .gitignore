@@ -104,3 +104,4 @@ ENV/
 tests/integration/*
 !tests/integration/vault.password.in
 !tests/integration/*.py
+tests/**/secrets.decrypted.env
