@@ -3,15 +3,16 @@
 * ~~Skicka med pipeline_data vid exceptions~~
 * ~~Skapa struktur för exceptions (flaggor - retryable etc)~~
 * Skapa struktur för caching (för deploys + fel)
-  * Bundla ReJSON i compose och använd som cache
-  * Snabba upp semver med pagination mot registry/tags - verkar inte funka?
+  * ~~Bundla ReJSON i compose och använd som cache~~
+  * Snabba upp semver med pagination mot registry/tags - verkar inte funka? Byta registry?
 * ~~Bygg stöd för att avbryta en pipeline (next_step = None)~~
 * ~~Omarbeta base_pipeline_step~~
-* Skriv unit tests för start_deployment_pipelines
+* ~~Skriv unit tests för start_deployment_pipelines~~
 * ~~Skriv tests för modules/util~~
 * ~~Skriv integration tests~~
 * ~~Support för statiska kluster-ipn~~
-* Fixa mockade responses så test_complete_pipeline börjar funka igen
+* ~~Fixa mockade responses så test_complete_pipeline börjar funka igen~~
+* Felhantering; retryable, fatal, aspen
 * Bygg API
 * Lägg till prometheus endpoint ELLER ...
 * Pusha metrics till prometheus 
