@@ -20,6 +20,26 @@ class TestVerifyDeploySuccess(unittest.TestCase):
         self.assertEqual(result[0], 'test_app')
         self.assertEqual(result[1], 'test_db')
 
+    def test_get_running_replicas(self):
+        step = VerifyDeploySuccess()
+        output = ('ID     NAME    MODE      REPLICAS  IMAGE   PORTS\n'
+                  'm7h75hnflmpd   test-app       replicated     1/1  redis:latest ')
+        step.run_service_ls = mock.Mock(return_value=output)
+        match = step.get_running_replicas({}, 'test-app')
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), '1')
+        self.assertEqual(match.group(2), '1')
+        output = ('ID     NAME    MODE      REPLICAS  IMAGE   PORTS\n'
+                  'm7h75hnflmpd   test-app       replicated     0/12 redis:latest ')
+        step.run_service_ls = mock.Mock(return_value=output)
+        match = step.get_running_replicas({}, 'test-app')
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), '0')
+        self.assertEqual(match.group(2), '12')
+        output = 'ID     NAME    MODE      REPLICAS  IMAGE   PORTS'
+        step.run_service_ls = mock.Mock(return_value=output)
+        self.assertRaises(exceptions.DeploymentError, step.get_running_replicas, {}, 'test-app')
+
     def test_wait_for_service_replication(self):
         step = VerifyDeploySuccess()
         output = ('ID     NAME    MODE      REPLICAS  IMAGE   PORTS\n'

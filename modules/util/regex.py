@@ -28,4 +28,4 @@ def get_service_name_from_deploy():
     return r'^Creating service (.+)$'
 
 def get_nr_of_replicas():
-    return r'^.+([0-9])+/([0-9]).*$'
+    return r'^.+([0-9]+)/([0-9]+).*$'

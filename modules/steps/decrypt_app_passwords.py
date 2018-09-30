@@ -2,6 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import os
 import yaml
+import subprocess
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs, process, exceptions
 
@@ -37,5 +38,9 @@ class DecryptAppPasswords(BasePipelineStep):
         return self.run_command(cmd)
 
     def run_command(self, cmd):
-        return process.run_with_output(cmd)
+        try:
+            return process.run_with_output(cmd)
+        except subprocess.CalledProcessError as cpe:
+            raise exceptions.AspenError(f'Command error when decrypting application passwords. '
+                                        f'Error was: "{cpe.output}"')
   

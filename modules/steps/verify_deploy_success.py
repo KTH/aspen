@@ -9,6 +9,8 @@ class VerifyDeploySuccess(BasePipelineStep):
 
     def __init__(self):
         BasePipelineStep.__init__(self)
+        self.wait_seconds = 5
+        self.wait_times = 5
 
     def get_required_env_variables(self):
         return []
@@ -23,25 +25,27 @@ class VerifyDeploySuccess(BasePipelineStep):
         return pipeline_data
 
     def wait_for_service_replication(self, pipeline_data, service):
-        for _ in range(5):
-            self.log.debug('Checking if service "%s" has all replicas', service)
-            service_ls = self.run_service_ls(pipeline_data, service).split('\n')
-            for line in service_ls:
-                match = re.match(regex.get_nr_of_replicas(), line)
-                if match:
-                    break
-            else:
-                raise exceptions.DeploymentError('Could not find any service when running ls')
+        for i in range(self.wait_times):
+            self.log.debug('Checking if service "%s" has all replicas (attempt #%s)',
+                           service, i+1)
+            match = self.get_running_replicas(pipeline_data, service)
             if match.group(1) == match.group(2):
-                # All replicas up
-                self.log.debug('Service "%s" has %s/%s replicas, continuing',
-                                service, match.group(1), match.group(2))
+                self.log.debug('Service "%s" has %s/%s replicas. All clear.',
+                               service, match.group(1), match.group(2))
                 break
-            self.log.debug('Service "%s" only at %s/%s replicas, waiting 5 secs',
-                            service, match.group(1), match.group(2))
-            time.sleep(5)
+            self.log.debug('Service "%s" only at %s/%s replicas, waiting %s secs',
+                           service, match.group(1), match.group(2), self.wait_seconds)
+            time.sleep(self.wait_seconds)
         else:
-            raise exceptions.DeploymentError('Missing at least one service replica')
+            raise exceptions.DeploymentError('Application didnt start correctly')
+
+    def get_running_replicas(self, pipeline_data, service):
+        service_ls = self.run_service_ls(pipeline_data, service).split('\n')
+        for line in service_ls:
+            match = re.match(regex.get_nr_of_replicas(), line)
+            if match:
+                return match
+        raise exceptions.DeploymentError('Could not find any service when running ls')
 
     def get_all_service_names(self, pipeline_data):
         output_rows = pipeline_data[data_defs.DEPLOY_OUTPUT].split('\n')

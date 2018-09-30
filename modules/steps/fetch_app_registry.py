@@ -1,6 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import os
+import subprocess
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, process, exceptions
 
@@ -56,4 +57,7 @@ class FetchAppRegistry(BasePipelineStep):
             self.git_clean()
         except MemoryError:
             raise exceptions.AspenError('Out of memory when fetching lastest git changes')
+        except subprocess.CalledProcessError as cpe:
+            raise exceptions.AspenError(f'Command error when trying to fetch latest git changes. '
+                                        f'Error was: "{cpe.output}"')
   

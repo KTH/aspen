@@ -1,7 +1,8 @@
 __author__ = 'tinglev@kth.se'
 
+import subprocess
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, process
+from modules.util import environment, process, exceptions
 
 class RegistryLogin(BasePipelineStep):
 
@@ -24,5 +25,9 @@ class RegistryLogin(BasePipelineStep):
         return pipeline_data
 
     def run_docker_login(self, url, user, password):
-        cmd = f'docker login {url} --password {password} --username {user}'
-        process.run_with_output(cmd)
+        try:
+            cmd = f'docker login {url} --password {password} --username {user}'
+            process.run_with_output(cmd)
+        except subprocess.CalledProcessError as cpe:
+            raise exceptions.AspenError(f'Could not login to docker registry. '
+                                        f'Error was: "{cpe.output}"')
