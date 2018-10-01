@@ -1,9 +1,8 @@
 __author__ = 'tinglev@kth.se'
 
 import json
-import redis
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, environment, cache_defs
+from modules.util import data_defs, environment, cache_defs, redis
 
 class WriteCacheEntry(BasePipelineStep):
 
@@ -11,7 +10,7 @@ class WriteCacheEntry(BasePipelineStep):
         BasePipelineStep.__init__(self)
 
     def get_required_env_variables(self):
-        return []
+        return [environment.REDIS_URL]
 
     def get_required_data_keys(self):
         return [data_defs.STACK_FILE_PATH,
@@ -19,12 +18,12 @@ class WriteCacheEntry(BasePipelineStep):
                 data_defs.SERVICES]
 
     def run_step(self, pipeline_data):
-        redis_url = environment.get_with_default_string('REDIS_URL', 'redis')
-        redis_client = self.redis_get_client(redis_url)
+        redis_url = environment.get_with_default_string(environment.REDIS_URL, 'redis')
+        redis_client = redis.get_client(redis_url)
         file_path = pipeline_data[data_defs.STACK_FILE_PATH]
         image_versions = self.generate_image_versions(pipeline_data)
         cache_entry = self.generate_cache_entry(pipeline_data, image_versions)
-        self.redis_execute_write(redis_client, file_path, cache_entry)
+        redis.execute_json_set(redis_client, file_path, cache_entry)
         self.log.debug('Wrote cache entry "%s" for key "%s"', cache_entry, file_path)
         return pipeline_data
 
@@ -51,9 +50,3 @@ class WriteCacheEntry(BasePipelineStep):
         if image_data[data_defs.IMG_IS_SEMVER]:
             return image_data[data_defs.IMG_BEST_SEMVER_MATCH]
         return image_data[data_defs.IMG_VERSION]
-
-    def redis_get_client(self, redis_url):
-        return redis.StrictRedis(redis_url)
-
-    def redis_execute_write(self, client, key, value):
-        client.execute_command('JSON.SET', key, '.', value)
