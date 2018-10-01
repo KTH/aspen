@@ -7,7 +7,7 @@ import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment, exceptions
 
-class GetClusterLbIp(BasePipelineStep):
+class GetDockerHostIp(BasePipelineStep):
 
     def __init__(self):
         BasePipelineStep.__init__(self)
@@ -17,12 +17,12 @@ class GetClusterLbIp(BasePipelineStep):
 
     def get_required_data_keys(self):
         return [data_defs.APPLICATION_CLUSTER,
-                data_defs.CLUSTER_LB_IPS]
+                data_defs.DOCKER_HOST_IPS]
 
     def run_step(self, pipeline_data):
-        cluster_data = pipeline_data[data_defs.CLUSTER_LB_IPS]
+        cluster_data = pipeline_data[data_defs.DOCKER_HOST_IPS]
         cluster_lb_ip = self.get_current_cluster_lb_ip(cluster_data, pipeline_data)
-        pipeline_data[data_defs.CLUSTER_LB_IP] = cluster_lb_ip
+        pipeline_data[data_defs.DOCKER_HOST_IP] = cluster_lb_ip
         return pipeline_data
 
     def get_current_cluster_lb_ip(self, cluster_data, pipeline_data):

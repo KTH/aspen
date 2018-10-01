@@ -7,7 +7,7 @@ import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment, exceptions
 
-class LoadClusterLbIps(BasePipelineStep):
+class LoadDockerHostIps(BasePipelineStep):
 
     def __init__(self):
         BasePipelineStep.__init__(self)
@@ -23,7 +23,7 @@ class LoadClusterLbIps(BasePipelineStep):
             cluster_data = self.load_cluster_status_from_file()
         else:
             cluster_data = self.call_cluster_status_api()
-        pipeline_data[data_defs.CLUSTER_LB_IPS] = cluster_data
+        pipeline_data[data_defs.DOCKER_HOST_IPS] = cluster_data
         return pipeline_data
 
     def load_cluster_status_from_file(self):

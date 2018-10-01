@@ -44,10 +44,10 @@ class StartDeploymentPipelines(BasePipelineStep):
 
     def init_deploy_pipeline_data(self, pipeline_data, file_path):
         app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
-        cluster_lb_ips = pipeline_data[data_defs.CLUSTER_LB_IPS]
+        cluster_lb_ips = pipeline_data[data_defs.DOCKER_HOST_IPS]
         pipeline_data = {
             data_defs.STACK_FILE_PATH: file_path,
             data_defs.APPLICATION_PASSWORDS: app_passwords,
-            data_defs.CLUSTER_LB_IPS: cluster_lb_ips
+            data_defs.DOCKER_HOST_IPS: cluster_lb_ips
         }
         return pipeline_data

@@ -14,7 +14,7 @@ from modules.steps.cluster_verification import ClusterVerification
 from modules.steps.init_service_pipeline_data import InitServicePipelineData
 from modules.steps.calculate_semantic_version import CalculateSemanticVersion
 from modules.steps.deploy_application import DeployApplication
-from modules.steps.get_cluster_lb_ip import GetClusterLbIp
+from modules.steps.get_docker_host_ip import GetDockerHostIp
 from modules.steps.secret_verification import SecretVerification
 from modules.steps.get_application_password import GetApplicationPassword
 from modules.steps.docker_compose_validate import DockerComposeValidate
@@ -23,7 +23,7 @@ from modules.steps.write_cache_entry import WriteCacheEntry
 from modules.steps.first_conditional_stop import FirstConditionalStop
 from modules.steps.decrypt_app_secrets import DecryptAppSecrets
 from modules.steps.verify_deploy_success import VerifyDeploySuccess
-from modules.util import pipeline, data_defs, exceptions
+from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
 
@@ -51,7 +51,7 @@ class DeploymentPipeline():
             RestartPolicyChecker(),
             ResourcePolicyChecker(),
             DecryptAppSecrets(),
-            GetClusterLbIp(),
+            GetDockerHostIp(),
             DeployApplication(),
             # Run when tests are added to test_complete_pipeline and integration_tests
             VerifyDeploySuccess(),
@@ -71,4 +71,4 @@ class DeploymentPipeline():
                             'with pipeline_data "%s" '
                             'and message: "%s"'),
                            dep_err.step_name, dep_err.pipeline_data, str(dep_err))
-            raise
+            reporter_service.handle_error(dep_err)

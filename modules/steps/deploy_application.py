@@ -13,7 +13,7 @@ class DeployApplication(BasePipelineStep):
 
     def get_required_data_keys(self):
         return [data_defs.SERVICES, data_defs.APPLICATION_NAME,
-                data_defs.STACK_FILE_PATH, data_defs.CLUSTER_LB_IP]
+                data_defs.STACK_FILE_PATH, data_defs.DOCKER_HOST_IP]
 
     def run_step(self, pipeline_data):
         application_env = self.set_application_env(pipeline_data)
@@ -33,7 +33,7 @@ class DeployApplication(BasePipelineStep):
     def run_deploy(self, pipeline_data, environment):
         stack_file = pipeline_data[data_defs.STACK_FILE_PATH]
         name = pipeline_data[data_defs.APPLICATION_NAME]
-        cluster_lb_ip = pipeline_data[data_defs.CLUSTER_LB_IP]
+        cluster_lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
         cmd = (f'{environment} docker '
                f'-H {cluster_lb_ip} stack deploy '
                f'--with-registry-auth '

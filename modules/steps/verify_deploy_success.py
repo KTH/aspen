@@ -16,7 +16,7 @@ class VerifyDeploySuccess(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.DEPLOY_OUTPUT, data_defs.CLUSTER_LB_IP]
+        return [data_defs.DEPLOY_OUTPUT, data_defs.DOCKER_HOST_IP]
 
     def run_step(self, pipeline_data):
         service_names = self.get_all_service_names(pipeline_data)
@@ -58,6 +58,6 @@ class VerifyDeploySuccess(BasePipelineStep):
         return service_names
 
     def run_service_ls(self, pipeline_data, service):
-        cluster_lb_ip = pipeline_data[data_defs.CLUSTER_LB_IP]
+        cluster_lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
         return process.run_with_output(f'docker -H {cluster_lb_ip} '
                                        f'service ls --filter name={service}')

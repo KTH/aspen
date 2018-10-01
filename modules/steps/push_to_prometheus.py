@@ -13,12 +13,12 @@ class PushToPrometheus(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.CLUSTER_LB_IP]
+        return [data_defs.DOCKER_HOST_IP]
 
     def run_step(self, pipeline_data):
         if environment.get_env(environment.PUSH_TO_PROMETHEUS):
             registry = CollectorRegistry()
-            lb_ip = pipeline_data[data_defs.CLUSTER_LB_IP]
+            lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
             gauge = Gauge('job_last_successful_deploy',
                           'Last time deployment successfully finished',
                           registry=registry)

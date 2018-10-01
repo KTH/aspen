@@ -6,7 +6,7 @@ from modules.steps.decrypt_app_passwords import DecryptAppPasswords
 from modules.steps.find_docker_stack_files import FindDockerStackFiles
 from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
 from modules.steps.registry_login import RegistryLogin
-from modules.steps.load_cluster_lb_ips import LoadClusterLbIps
+from modules.steps.load_docker_host_ips import LoadDockerHostIps
 from modules.util import pipeline, exceptions
 
 class AspenPipeline():
@@ -19,7 +19,7 @@ class AspenPipeline():
             FetchAppRegistry(),
             DecryptAppPasswords(),
             FindDockerStackFiles(),
-            LoadClusterLbIps(),
+            LoadDockerHostIps(),
             StartDeploymentPipelines()
         ])
 
