@@ -38,8 +38,16 @@ class StartDeploymentPipelines(BasePipelineStep):
 
     def init_and_run(self, pipeline_data, file_path):
         deployment_pipeline = DeploymentPipeline()
-        app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
-        pipeline_data = {data_defs.STACK_FILE_PATH: file_path,
-                         data_defs.APPLICATION_PASSWORDS: app_passwords}
+        pipeline_data = self.init_deploy_pipeline_data(pipeline_data, file_path)
         deployment_pipeline.set_pipeline_data(pipeline_data)
         return deployment_pipeline.run_pipeline()
+
+    def init_deploy_pipeline_data(self, pipeline_data, file_path):
+        app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
+        cluster_lb_ips = pipeline_data[data_defs.CLUSTER_LB_IPS]
+        pipeline_data = {
+            data_defs.STACK_FILE_PATH: file_path,
+            data_defs.APPLICATION_PASSWORDS: app_passwords,
+            data_defs.CLUSTER_LB_IPS: cluster_lb_ips
+        }
+        return pipeline_data
