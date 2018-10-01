@@ -54,7 +54,7 @@ class DeploymentPipeline():
             GetClusterLbIp(),
             DeployApplication(),
             # Run when tests are added to test_complete_pipeline and integration_tests
-            # VerifyDeploySuccess(),
+            VerifyDeploySuccess(),
             WriteCacheEntry()
         ])
 

@@ -25,3 +25,12 @@
     * Send to dizin
     * Send recommendations
     * Information on deployment status/success
+
+# Exception handling
+
+* AspenPipeline: Handles aspen errors and fatals
+  * StartDeploymentPipelines: Evaluates flags
+    * BasePipeline: Adds info and raises
+      * DeploymentPipeline: Sets flags and message
+
+* Reporting: done by report service

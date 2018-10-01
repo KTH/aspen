@@ -1,6 +1,7 @@
 __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod
+import time
 import os
 import logging
 import subprocess
@@ -48,40 +49,47 @@ class BasePipelineStep:
                 self.log.warning('Environment variable "%s" exists but is empty', env)
         return None
 
-    def run_pipeline_step(self, data):
-        step_data_missing = self.has_missing_step_data(data)
+    def run_pipeline_step(self, pipeline_data):
+        step_data_missing = self.has_missing_step_data(pipeline_data)
         environment_missing = self.has_missing_environment_data()
         if environment_missing:
             self.log.error('Step environment missing "%s" for step "%s", and pipeline_data "%s"',
-                           environment_missing, self.get_step_name(), data)
+                           environment_missing, self.get_step_name(), pipeline_data)
             raise exceptions.DeploymentError('Step environment not ok',
-                                             pipeline_data=data,
+                                             pipeline_data=pipeline_data,
                                              step_name=self.get_step_name())
         if step_data_missing:
             self.log.error('Step data "%s" missing for step "%s", and pipeline_data "%s"',
-                           step_data_missing, self.get_step_name(), data)
+                           step_data_missing, self.get_step_name(), pipeline_data)
             raise exceptions.DeploymentError('Step pipeline_data not ok',
-                                             pipeline_data=data,
+                                             pipeline_data=pipeline_data,
                                              step_name=self.get_step_name())
         self.log.debug('Running "%s"', self.get_step_name())
         try:
-            self.run_step(data)
-        except exceptions.DeploymentError as de_err:
-            # Complement error with step data
-            de_err.pipeline_data = data
-            de_err.step_name = self.get_step_name()
-            raise
-        except Exception as ex:
-            msg = str(ex)
-            if isinstance(ex, subprocess.CalledProcessError):
-                msg = str(ex.output) # pylint: disable=E1101
-            de_err = exceptions.DeploymentError(msg,
-                                                pipeline_data=data,
-                                                step_name=self.get_step_name())
-            raise de_err
+            self.run_step(pipeline_data)
+        except Exception as ex: # pylint: disable=W0703
+            self.handle_pipeline_error(ex, pipeline_data)
         if self.next_step:
-            self.next_step.run_pipeline_step(data)
-        return data
+            self.next_step.run_pipeline_step(pipeline_data)
+        return pipeline_data
+
+    def handle_pipeline_error(self, error, pipeline_data):
+        msg = str(error)
+        if isinstance(error, subprocess.CalledProcessError):
+            msg = str(error.output) # pylint: disable=E1101
+        if not isinstance(error, exceptions.DeploymentError):
+            # Convert all exceptions to deployment errors
+            error = exceptions.DeploymentError(msg)
+        # Complement error with step data
+        error = self.add_error_data(error, pipeline_data)
+        raise error
+
+    def add_error_data(self, deployment_error, pipeline_data):
+        deployment_error.pipeline_data = pipeline_data
+        deployment_error.step_name = self.get_step_name()
+        if deployment_error.retryable:
+            deployment_error.timestamp = time.time()
+        return deployment_error
 
     def set_next_step(self, next_step):
         self.next_step = next_step

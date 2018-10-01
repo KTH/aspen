@@ -6,9 +6,11 @@ class BaseError(Exception):
                  retryable=False,
                  step_name=None,
                  reportable=False,
-                 pipeline_data=None):
+                 pipeline_data=None,
+                 timestamp=None):
         super().__init__(message)
         self.retryable = retryable
+        self.timestamp = timestamp
         self.step_name = step_name
         self.reportable = reportable
         self.pipeline_data = pipeline_data
