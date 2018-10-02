@@ -52,18 +52,8 @@ class BasePipelineStep:
     def run_pipeline_step(self, pipeline_data):
         step_data_missing = self.has_missing_step_data(pipeline_data)
         environment_missing = self.has_missing_environment_data()
-        if environment_missing:
-            self.log.error('Step environment missing "%s" for step "%s", and pipeline_data "%s"',
-                           environment_missing, self.get_step_name(), pipeline_data)
-            raise exceptions.DeploymentError('Step environment not ok',
-                                             pipeline_data=pipeline_data,
-                                             step_name=self.get_step_name())
-        if step_data_missing:
-            self.log.error('Step data "%s" missing for step "%s", and pipeline_data "%s"',
-                           step_data_missing, self.get_step_name(), pipeline_data)
-            raise exceptions.DeploymentError('Step pipeline_data not ok',
-                                             pipeline_data=pipeline_data,
-                                             step_name=self.get_step_name())
+        self.check_environment_missing(pipeline_data, environment_missing)
+        self.check_step_data_missing(pipeline_data, step_data_missing)
         self.log.debug('Running "%s"', self.get_step_name())
         try:
             self.run_step(pipeline_data)
@@ -73,6 +63,22 @@ class BasePipelineStep:
             self.next_step.run_pipeline_step(pipeline_data)
         return pipeline_data
 
+    def check_environment_missing(self, pipeline_data, environment_missing):
+        if environment_missing:
+            self.log.error('Step environment missing "%s" for step "%s", and pipeline_data "%s"',
+                           environment_missing, self.get_step_name(), pipeline_data)
+            raise exceptions.DeploymentError('Step environment not ok',
+                                             pipeline_data=pipeline_data,
+                                             step_name=self.get_step_name())
+
+    def check_step_data_missing(self, pipeline_data, step_data_missing):
+        if step_data_missing:
+            self.log.error('Step data "%s" missing for step "%s", and pipeline_data "%s"',
+                           step_data_missing, self.get_step_name(), pipeline_data)
+            raise exceptions.DeploymentError('Step pipeline_data not ok',
+                                             pipeline_data=pipeline_data,
+                                             step_name=self.get_step_name())
+
     def handle_pipeline_error(self, error, pipeline_data):
         msg = str(error)
         if isinstance(error, subprocess.CalledProcessError):
@@ -80,6 +86,8 @@ class BasePipelineStep:
         if not isinstance(error, exceptions.DeploymentError):
             # Convert all exceptions to deployment errors
             error = exceptions.DeploymentError(msg)
+            # Mark them as unexpected
+            error.expected = False
         # Complement error with step data
         error = self.add_error_data(error, pipeline_data)
         raise error
