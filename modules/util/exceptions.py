@@ -7,13 +7,15 @@ class BaseError(Exception):
                  step_name=None,
                  reportable=False,
                  pipeline_data=None,
-                 timestamp=None):
+                 timestamp=None,
+                 expected=True):
         super().__init__(message)
         self.retryable = retryable
         self.timestamp = timestamp
         self.step_name = step_name
         self.reportable = reportable
         self.pipeline_data = pipeline_data
+        self.expected = expected
 
 class AspenError(BaseError):
     pass
