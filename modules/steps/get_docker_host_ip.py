@@ -1,11 +1,8 @@
 
 __author__ = 'tinglev@kth.se'
 
-import os
-import json
-import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, environment, exceptions
+from modules.util import data_defs, exceptions
 
 class GetDockerHostIp(BasePipelineStep):
 
