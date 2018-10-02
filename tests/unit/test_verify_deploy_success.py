@@ -48,7 +48,7 @@ class TestVerifyDeploySuccess(unittest.TestCase):
         try:
             step.wait_for_service_replication({}, 'test-app')
         except:
-            self.assertTrue(False)
+            self.fail()
         output = ('ID     NAME    MODE      REPLICAS  IMAGE   PORTS\n'
                   'm7h75hnflmpd   test-app       replicated     0/1  redis:latest ')
         step.run_service_ls = mock.Mock(return_value=output)

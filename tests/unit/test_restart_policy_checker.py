@@ -28,4 +28,4 @@ class TestRestartPolicyChecker(unittest.TestCase):
             step.has_restart_policy(service)
             step.verify_restart_policy(service['deploy']['restart_policy'])
         except:
-            self.assertFalse(True)    
+            self.fail()    

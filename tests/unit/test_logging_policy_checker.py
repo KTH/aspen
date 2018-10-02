@@ -26,4 +26,4 @@ class TestLoggingPolicyChecker(unittest.TestCase):
             step.has_logging_policy(service)
             step.verify_logging_policy(service['logging'])
         except:
-            self.assertFalse(True)       
+            self.fail()       

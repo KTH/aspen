@@ -28,7 +28,7 @@ class TestDecryptAppPasswords(unittest.TestCase):
                                                  f'--output=- {os.environ[environment.APP_PWD_FILE_PATH]}'))
             self.assertEqual(pipeline_data[data_defs.APPLICATION_PASSWORDS], {'passwords': {'test': '123abc', 'test2': 'abc123'}})
         except:
-            self.assertFalse(True)
+            self.fail()
 
     def test_error_in_command(self):
         root = root_path.PROJECT_ROOT

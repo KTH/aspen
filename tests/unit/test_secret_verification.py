@@ -33,4 +33,4 @@ class TestSecretVerification(unittest.TestCase):
         try:
             step.raise_for_exception(has_password, has_secret_file, has_env_file)
         except:
-            self.assertFalse(True)
+            self.fail()

@@ -16,7 +16,7 @@ class TestParseImageData(unittest.TestCase):
         try:
             step.has_image(service)
         except:
-            self.assertTrue(False)
+            self.fail()
     
     def test_parse_registry(self):
         test_data = mock_test_data.get_parsed_stack_content()
