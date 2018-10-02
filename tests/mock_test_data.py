@@ -54,6 +54,9 @@ def get_parsed_stack_content():
                         'max-file': 10
                     }
                 },
+                'labels': {
+                    'se.kth.slackChannels': '#team-pipeline,#ita-ops'
+                },
                 'deploy': {
                     'resources': {
                         'limits': {
@@ -69,6 +72,9 @@ def get_parsed_stack_content():
                         'condition': 'on-failure',
                         'delay': '5s',
                         'max_attempts': 2
+                    },
+                    'labels': {
+                        'traefik.deploy': 'true'
                     }
                 }
             }
