@@ -14,4 +14,8 @@ class TestInitServicePipelineData(unittest.TestCase):
         result = step.run_step(pipeline_data)
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_ENVIRONMENT], [])
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_NAME], 'web')
+        self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_DEPLOY_LABELS], {})
+        self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_LABELS], {})
         self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_NAME], 'api')
+        self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_DEPLOY_LABELS]['traefik.deploy'], 'true')
+        self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_LABELS]['se.kth.slackChannels'], '#team-pipeline,#ita-ops')
