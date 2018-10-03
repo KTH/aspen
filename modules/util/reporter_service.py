@@ -12,7 +12,8 @@ def handle_deployment_success(deployment_json):
     if deployment_url:
         LOG.info('Reporting successful deployment')
         LOG.debug('Deployment data was: "%s"', deployment_json)
-        requests.post(deployment_url, deployment_json)
+        response = requests.put(deployment_url, deployment_json)
+        response.raise_for_status()
     else:
         LOG.debug('Slack integration not enabled, skipping report')
 
@@ -31,7 +32,8 @@ def handle_deployment_error(error: exceptions.DeploymentError):
         error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
         if error_url:
             error_json = create_error_object(error, combined_labels)
-            requests.post(error_url, error_json)
+            response = requests.put(error_url, error_json)
+            response.raise_for_status()
             write_to_error_cache(error)
         else:
             LOG.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
