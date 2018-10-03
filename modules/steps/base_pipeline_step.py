@@ -5,7 +5,7 @@ import time
 import os
 import logging
 import subprocess
-from modules.util import exceptions
+from modules.util import exceptions, reporter_service
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
@@ -90,7 +90,8 @@ class BasePipelineStep:
             error.expected = False
         # Complement error with step data
         error = self.add_error_data(error, pipeline_data)
-        raise error
+        reporter_service.handle_deployment_error(error)
+        self.stop_pipeline()
 
     def add_error_data(self, deployment_error, pipeline_data):
         deployment_error.pipeline_data = pipeline_data

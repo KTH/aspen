@@ -6,6 +6,8 @@ def get_image_data():
     return {
         data_defs.STACK_FILE_PATH: 'test/path/for/real/docker-stack.yml',
         data_defs.STACK_FILE_DIR_HASH: 'alejfbabovudbasepvbsoev',
+        data_defs.APPLICATION_CLUSTER: 'stage',
+        data_defs.APPLICATION_NAME: 'kth-azure-app',
         data_defs.SERVICES: [{
             data_defs.S_NAME: 'web',
             data_defs.S_IMAGE: {
@@ -17,6 +19,13 @@ def get_image_data():
                 data_defs.IMG_SEMVER_VERSION: None,
                 data_defs.IMG_TAGS: None,
                 data_defs.IMG_VERSION: '2.0.1_abc123'
+            },
+            data_defs.S_LABELS: {
+                'label1': 'value1,value11',
+                'label2': 'value2'
+            },
+            data_defs.S_DEPLOY_LABELS: {
+                'traefik.frontend.rule': 'PathPrefix:/kth-azure-app'
             }
         },
         {
@@ -30,6 +39,10 @@ def get_image_data():
                 data_defs.IMG_SEMVER_VERSION: '~0.1.4',
                 data_defs.IMG_TAGS: ['0.1.4_abc123', '0.1.3_123abc'],
                 data_defs.IMG_VERSION: '${API_VERSION}'
+            },
+            data_defs.S_LABELS: {
+                'label1': 'value12,value13',
+                'label3': 'value3'
             }
         }]
     }
@@ -41,6 +54,10 @@ def get_parsed_stack_content():
                 'environment': {
                     'ENV_KEY_1': 'ENV_VAL_1',
                     'WEB_VERSION': '~2.1.3_abc123'
+                },
+                'labels':{
+                    'se.kth.slackChannels': '#pipeline',
+                    'se.kth.importance': 'high'
                 }
             },
             'api': {

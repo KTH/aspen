@@ -5,6 +5,7 @@ import subprocess
 import unittest
 import mock
 from modules.steps.base_pipeline_step import BasePipelineStep
+from modules.steps import base_pipeline_step 
 from modules.util import exceptions
 
 class ConcreteBPS(BasePipelineStep):
@@ -60,13 +61,16 @@ class TestBasePipelineStep(unittest.TestCase):
     
     def test_handle_pipeline_error(self):
         step = ConcreteBPS()
+        base_pipeline_step.reporter_service.handle_deployment_error = mock.Mock()
         error = Exception('Test message')
-        with self.assertRaises(exceptions.DeploymentError) as de_err:
-            step.handle_pipeline_error(error, {})
-            self.assertTrue(isinstance(de_err, exceptions.DeploymentError))
-            self.assertEqual(str(de_err), 'Test message')
+        step.handle_pipeline_error(error, {})
+        args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
+        print(args[0])
+        self.assertTrue(isinstance(args[0], exceptions.DeploymentError))
+        self.assertEqual(str(args[0]), 'Test message')
         error = subprocess.CalledProcessError(-1, 'Test cmd')
         error.output = 'Test output'
-        with self.assertRaises(exceptions.DeploymentError) as de_err:
-            step.handle_pipeline_error(error, {})
-            self.assertEqual(str(de_err), 'Test output')
+        base_pipeline_step.reporter_service.handle_deployment_error.reset_mock()
+        step.handle_pipeline_error(error, {})
+        args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
+        self.assertEqual(str(args[0]), 'Test output')
