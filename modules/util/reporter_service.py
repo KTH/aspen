@@ -10,7 +10,8 @@ LOG = logging.getLogger(__name__)
 def handle_deployment_success(deployment_json):
     deployment_url = environment.get_env(environment.SLACK_DEPLOYMENT_POST_URL)
     if deployment_url:
-        LOG.debug('Reporting successful deployment with data: "%s"', deployment_json)
+        LOG.info('Reporting successful deployment')
+        LOG.debug('Deployment data was: "%s"', deployment_json)
         requests.post(deployment_url, deployment_json)
     else:
         LOG.debug('Slack integration not enabled, skipping report')

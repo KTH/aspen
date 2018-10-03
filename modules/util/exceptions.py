@@ -5,7 +5,7 @@ class BaseError(Exception):
                  message,
                  retryable=False,
                  step_name=None,
-                 reportable=False,
+                 reportable=True,
                  pipeline_data=None,
                  timestamp=None,
                  expected=True):
