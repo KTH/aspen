@@ -13,8 +13,11 @@ def handle_deployment_success(deployment_json):
         LOG.info('Reporting successful deployment')
         LOG.debug('Deployment data was: "%s"', deployment_json)
         LOG.debug('Calling "%s" with "%s"', deployment_url, deployment_json)
-        response = requests.put(deployment_url, json=deployment_json)
-        response.raise_for_status()
+        try:
+            response = requests.put(deployment_url, json=deployment_json, timeout=2)
+            response.raise_for_status()
+        except Exception as ex:
+            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
         LOG.debug('Response was: "%s"', response)
     else:
         LOG.debug('Slack integration not enabled, skipping report')
@@ -35,8 +38,11 @@ def handle_deployment_error(error: exceptions.DeploymentError):
         if error_url:
             error_json = create_error_object(error, combined_labels)
             LOG.debug('Calling "%s" with "%s"', error_url, error_json)
-            response = requests.put(error_url, json=error_json)
-            response.raise_for_status()
+            try:
+                response = requests.put(error_url, json=error_json, timeout=2)
+                response.raise_for_status()
+            except Exception as ex:
+                LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
             LOG.debug('Response was: "%s"', response)
             write_to_error_cache(error)
         else:
