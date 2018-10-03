@@ -15,6 +15,7 @@ def handle_deployment_success(deployment_json):
         LOG.debug('Calling "%s" with "%s"', deployment_url, deployment_json)
         response = requests.put(deployment_url, json=deployment_json)
         response.raise_for_status()
+        LOG.debug('Response was: "%s"', response)
     else:
         LOG.debug('Slack integration not enabled, skipping report')
 
@@ -36,6 +37,7 @@ def handle_deployment_error(error: exceptions.DeploymentError):
             LOG.debug('Calling "%s" with "%s"', error_url, error_json)
             response = requests.put(error_url, json=error_json)
             response.raise_for_status()
+            LOG.debug('Response was: "%s"', response)
             write_to_error_cache(error)
         else:
             LOG.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')

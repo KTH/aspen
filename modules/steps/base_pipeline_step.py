@@ -90,6 +90,7 @@ class BasePipelineStep:
             error.expected = False
         # Complement error with step data
         error = self.add_error_data(error, pipeline_data)
+        self.log.debug('An error occured: "%s"', str(error))
         reporter_service.handle_deployment_error(error)
         self.stop_pipeline()
 
