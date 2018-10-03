@@ -23,7 +23,10 @@ def execute_json_set(client, key, value):
 def execute_json_get(client, key):
     try:
         LOG.debug('Getting key "%s"', key)
-        return json.loads(client.execute_command('JSON.GET', key))
+        value = client.execute_command('JSON.GET', key)
+        if value:
+            return json.loads(value)
+        return value
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt execute redis get cmd. Error was: "{str(redis_err)}"')
 

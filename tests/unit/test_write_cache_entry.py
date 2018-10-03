@@ -23,7 +23,7 @@ class TestWriteCacheEntry(unittest.TestCase):
         pipeline_data = mock_test_data.get_image_data()
         image_versions = step.generate_image_versions(pipeline_data)
         result = step.generate_cache_entry(pipeline_data, image_versions)
-        self.assertEqual(result, json.dumps({
+        self.assertEqual(result, {
             cache_defs.DIRECTORY_MD5: 'alejfbabovudbasepvbsoev',
             cache_defs.IMAGE_VERSIONS: image_versions
-        }))
+        })

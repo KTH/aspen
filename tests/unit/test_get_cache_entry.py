@@ -10,7 +10,7 @@ class TestGetCacheEntry(unittest.TestCase):
     def test_run_step(self):
         step = GetCacheEntry()
         redis.get_client = mock.Mock()
-        redis.execute_json_get = mock.Mock(return_value='{"TEST": "VALUE"}')
+        redis.execute_json_get = mock.Mock(return_value={'TEST': 'VALUE'})
         pipeline_data = {data_defs.STACK_FILE_PATH: 'random/path/to/file'}
         pipeline_data = step.run_step(pipeline_data)
         self.assertEqual(pipeline_data[data_defs.CACHE_ENTRY], {'TEST': 'VALUE'})

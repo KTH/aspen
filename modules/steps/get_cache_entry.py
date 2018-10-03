@@ -22,6 +22,6 @@ class GetCacheEntry(BasePipelineStep):
         cache_entry = redis.execute_json_get(redis_client, file_path)
         self.log.debug('Got cache entry "%s"', cache_entry)
         if cache_entry:
-            cache_entry = json.loads(cache_entry)
+            cache_entry = cache_entry
         pipeline_data[data_defs.CACHE_ENTRY] = cache_entry
         return pipeline_data

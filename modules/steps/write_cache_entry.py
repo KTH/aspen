@@ -28,10 +28,10 @@ class WriteCacheEntry(BasePipelineStep):
         return pipeline_data
 
     def generate_cache_entry(self, pipeline_data, image_versions):
-        return json.dumps({
+        return {
             cache_defs.DIRECTORY_MD5: pipeline_data[data_defs.STACK_FILE_DIR_HASH],
             cache_defs.IMAGE_VERSIONS: image_versions
-        })
+        }
 
     def generate_image_versions(self, pipeline_data):
         image_versions = []
