@@ -12,6 +12,7 @@ def handle_deployment_success(deployment_json):
     if deployment_url:
         LOG.info('Reporting successful deployment')
         LOG.debug('Deployment data was: "%s"', deployment_json)
+        LOG.debug('Calling "%s" with "%s"', deployment_url, deployment_json)
         response = requests.put(deployment_url, deployment_json)
         response.raise_for_status()
     else:
@@ -32,6 +33,7 @@ def handle_deployment_error(error: exceptions.DeploymentError):
         error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
         if error_url:
             error_json = create_error_object(error, combined_labels)
+            LOG.debug('Calling "%s" with "%s"', error_url, error_json)
             response = requests.put(error_url, error_json)
             response.raise_for_status()
             write_to_error_cache(error)
