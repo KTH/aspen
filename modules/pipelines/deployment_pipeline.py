@@ -24,6 +24,7 @@ from modules.steps.first_conditional_stop import FirstConditionalStop
 from modules.steps.decrypt_app_secrets import DecryptAppSecrets
 from modules.steps.verify_deploy_success import VerifyDeploySuccess
 from modules.steps.remove_error_cache_entry import RemoveErrorCacheEntry
+from modules.steps.report_success import ReportSuccess
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -57,8 +58,8 @@ class DeploymentPipeline():
             # Run when tests are added to test_complete_pipeline and integration_tests
             VerifyDeploySuccess(),
             WriteCacheEntry(),
-            RemoveErrorCacheEntry()
-
+            RemoveErrorCacheEntry(),
+            ReportSuccess()
         ])
 
     def set_pipeline_data(self, pipeline_data):
