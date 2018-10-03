@@ -61,5 +61,5 @@ class VerifyDeploySuccess(BasePipelineStep):
 
     def run_service_ls(self, pipeline_data, service):
         cluster_lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
-        return process.run_with_output(f'docker -H {cluster_lb_ip} '
+        return process.run_with_output(f'DOCKER_TLS_VERIFY=1 docker -H {cluster_lb_ip} '
                                        f'service ls --filter name={service}')
