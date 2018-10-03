@@ -1,0 +1,35 @@
+{
+  "consumer": {
+    "name": "deployment_poster"
+  },
+  "provider": {
+    "name": "reporting_provider"
+  },
+  "interactions": [
+    {
+      "description": "a request for a deployment",
+      "providerState": "Reporter is running",
+      "request": {
+        "method": "PUT",
+        "path": "/api/v1/deployment",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+        }
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+        },
+        "body": {
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  }
+}
