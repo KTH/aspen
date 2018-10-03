@@ -7,13 +7,13 @@ from modules.util import data_defs, exceptions
 
 class TestSecretVerification(unittest.TestCase):
 
-    def test_has_env_file(self):
+    def test_has_secrets_env_file(self):
         pipeline_data = {data_defs.STACK_FILE_PARSED_CONTENT:
                          mock_test_data.get_parsed_stack_content()}
         test = SecretVerification()
-        self.assertFalse(test.has_env_file(pipeline_data))
+        self.assertFalse(test.has_secrets_env_file(pipeline_data))
         pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']['api']['env_file'] = ['secrets.decrypted.env']
-        self.assertTrue(test.has_env_file(pipeline_data))
+        self.assertTrue(test.has_secrets_env_file(pipeline_data))
 
     def test_raise_for_exception(self):
         step = SecretVerification()

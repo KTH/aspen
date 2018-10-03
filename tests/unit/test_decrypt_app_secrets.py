@@ -14,7 +14,8 @@ class TestDecryptAppSecrets(unittest.TestCase):
     def test_good_run(self):
         root = root_path.PROJECT_ROOT
         pipeline_data = {data_defs.APPLICATION_PASSWORD: 'test_password',
-                         data_defs.STACK_FILE_PATH: os.path.join(root, 'tests/docker-stack.yml')}
+                         data_defs.STACK_FILE_PATH: os.path.join(root, 'tests/docker-stack.yml'),
+                         data_defs.USES_SECRETS: True}
         step = DecryptAppSecrets()
         step.run_command = mock.Mock()
         step.run_step(pipeline_data)
@@ -30,7 +31,8 @@ class TestDecryptAppSecrets(unittest.TestCase):
     def test_bad_run(self):
         root = root_path.PROJECT_ROOT
         pipeline_data = {data_defs.APPLICATION_PASSWORD: 'test_password',
-                         data_defs.STACK_FILE_PATH: os.path.join(root, 'tests/docker-stack.yml')}
+                         data_defs.STACK_FILE_PATH: os.path.join(root, 'tests/docker-stack.yml'),
+                         data_defs.USES_SECRETS: True}
         step = DecryptAppSecrets()
         step.run_command = mock.Mock(side_effect=Exception)
         self.assertRaises(Exception, step.run_step, pipeline_data)
