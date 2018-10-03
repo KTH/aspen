@@ -1,5 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
+import json
 import logging
 import redis
 from modules.util import exceptions
@@ -15,14 +16,14 @@ def get_client(redis_url):
 def execute_json_set(client, key, value):
     try:
         LOG.debug('Writing key "%s" and value "%s"', key, value)
-        client.execute_command('JSON.SET', key, '.', value)
+        client.execute_command('JSON.SET', key, '.', json.dumps(value))
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt execute redis set cmd. Error was: "{str(redis_err)}"')
 
 def execute_json_get(client, key):
     try:
         LOG.debug('Getting key "%s"', key)
-        return client.execute_command('JSON.GET', key)
+        return json.loads(client.execute_command('JSON.GET', key))
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt execute redis get cmd. Error was: "{str(redis_err)}"')
 
