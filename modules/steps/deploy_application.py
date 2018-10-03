@@ -39,7 +39,7 @@ class DeployApplication(BasePipelineStep):
                f'--with-registry-auth '
                f'--compose-file {stack_file} {name}')
         deploy_output = self.run_docker_cmd(cmd)
-        pipeline_data[data_defs.DEPLOY_OUTPUT] = deploy_output
+        pipeline_data[data_defs.DEPLOY_OUTPUT] = deploy_output.decode('utf-8')
         self.log.debug('Deployment output was: "%s"', deploy_output)
         return pipeline_data
 

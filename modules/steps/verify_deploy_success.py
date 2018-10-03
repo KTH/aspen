@@ -51,7 +51,9 @@ class VerifyDeploySuccess(BasePipelineStep):
         output_rows = pipeline_data[data_defs.DEPLOY_OUTPUT].split('\n')
         service_names = []
         for row in output_rows:
-            match = re.match(regex.get_service_name_from_deploy(), row)
+            match = re.match(regex.get_service_name_from_create_deploy(), row)
+            if not match:
+                match = re.match(regex.get_service_name_from_update_deploy(), row)
             if match:
                 self.log.debug('Got service "%s" for deployment', match.group(1))
                 service_names.append(match.group(1))

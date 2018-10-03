@@ -24,8 +24,11 @@ def get_semver_env_value_regex():
 def get_static_version_regex():
     return r'^(0|[1-9][0-9]*)\.([0-9]+)\.([0-9]+)((_.*){0,1})$'
 
-def get_service_name_from_deploy():
+def get_service_name_from_create_deploy():
     return r'^Creating service (.+)$'
+
+def get_service_name_from_update_deploy():
+    return r'^Updating service (.+) \(id: (.+)\)$'
 
 def get_nr_of_replicas():
     return r'^.+([0-9]+)/([0-9]+).*$'
