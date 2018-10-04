@@ -7,6 +7,25 @@ from modules.util import environment, exceptions, data_defs, redis
 
 LOG = logging.getLogger(__name__)
 
+def handle_recommendation(pipeline_data, application_name, recommendation_text):
+    recommendation_url = environment.get_env(environment.SLACK_RECOMMENDATION_POST_URL)
+    if recommendation_url:
+        combined_labels = get_combined_service_labels(pipeline_data)
+        slack_channels = get_slack_channels(combined_labels)
+        payload = {
+            "message": "{}: {}".format(application_name, recommendation_text),
+            "slack_channels": slack_channels
+        }
+        try:
+            response = requests.put(recommendation_url, json=payload, timeout=2)
+            response.raise_for_status()
+        except Exception as ex:
+            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))        
+    else:
+        LOG.debug('Slack recommendation integration not enabled, skipping report')
+
+
+
 def handle_deployment_success(deployment_json):
     deployment_url = environment.get_env(environment.SLACK_DEPLOYMENT_POST_URL)
     if deployment_url:
