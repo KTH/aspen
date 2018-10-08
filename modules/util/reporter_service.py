@@ -25,9 +25,8 @@ def handle_deployment_success(deployment_json):
     deployment_url = environment.get_env(environment.SLACK_DEPLOYMENT_POST_URL)
     if deployment_url:
         LOG.info('Reporting successful deployment')
-        LOG.debug('Deployment data was: "%s"', deployment_json)
-        LOG.debug('Calling "%s" with "%s"', deployment_url, deployment_json)
         try:
+            LOG.debug('Calling "%s" with "%s"', deployment_url, deployment_json)
             response = requests.put(deployment_url, json=deployment_json, timeout=2)
             response.raise_for_status()
         except Exception as ex:
@@ -92,7 +91,7 @@ def get_error_cache(error_cache_key):
 
 def create_error_object(error, combined_labels):
     error_json = {'message': str(error), 'slackChannels': None, 'stackTrace': None}
-    if error.expected:
+    if hasattr(error, 'expected') and error.expected:
         error_json['slackChannels'] = get_slack_channels(combined_labels)
     else:
         error_json['stackTrace'] = traceback.format_exc().rstrip('\n')
@@ -104,9 +103,12 @@ def get_combined_service_labels(pipeline_data):
         if 'labels' in service:
             for label, value in service['labels'].items():
                 if not label in labels:
-                    labels[label] = []
-                labels[label].extend([v.strip() for v in value.split(',')])
-    # labels = {'label1':['value1', 'value2', ...]}
+                    labels[label] = {}
+                if labels[label]:
+                    labels[label] = f'{labels[label]},{value}'
+                else:
+                    labels[label] = f'{value}'
+    # labels = {'label1':'value1','value2',...}
     return labels
 
 def get_slack_channels(combined_labels):

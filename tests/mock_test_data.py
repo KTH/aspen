@@ -1,6 +1,9 @@
 __author__ = 'tinglev@kth.se'
 
-from modules.util import data_defs
+from modules.util import data_defs, exceptions
+
+def get_mock_deployment_error(expected=True):
+    return exceptions.DeploymentError('This is a deployment error', expected=expected)
 
 def get_image_data():
     return {
