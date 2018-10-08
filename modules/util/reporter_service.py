@@ -12,10 +12,7 @@ def handle_recommendation(pipeline_data, application_name, recommendation_text):
     if recommendation_url:
         combined_labels = get_combined_service_labels(pipeline_data)
         slack_channels = get_slack_channels(combined_labels)
-        payload = {
-            "message": "{}: {}".format(application_name, recommendation_text),
-            "slack_channels": slack_channels
-        }
+        payload = create_recommedation_object(application_name, recommendation_text, slack_channels)
         try:
             response = requests.put(recommendation_url, json=payload, timeout=2)
             response.raise_for_status()
@@ -23,8 +20,6 @@ def handle_recommendation(pipeline_data, application_name, recommendation_text):
             LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))        
     else:
         LOG.debug('Slack recommendation integration not enabled, skipping report')
-
-
 
 def handle_deployment_success(deployment_json):
     deployment_url = environment.get_env(environment.SLACK_DEPLOYMENT_POST_URL)
@@ -67,6 +62,12 @@ def handle_deployment_error(error: exceptions.DeploymentError):
         else:
             LOG.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
 
+def create_recommedation_object(application_name, recommendation_text, slack_channels):
+    return {
+            "message": "{}: {}".format(application_name, recommendation_text),
+            "slackChannels": slack_channels
+           }
+
 def write_to_error_cache(error):
     pipeline_data = error.pipeline_data
     application_name = pipeline_data[data_defs.APPLICATION_NAME]
@@ -90,11 +91,11 @@ def get_error_cache(error_cache_key):
     return redis.execute_json_get(redis_client, error_cache_key)
 
 def create_error_object(error, combined_labels):
-    error_json = {'message': str(error)}
+    error_json = {'message': str(error), 'slackChannels': None, 'stackTrace': None}
     if error.expected:
-        error_json['slack_channels'] = get_slack_channels(combined_labels)
+        error_json['slackChannels'] = get_slack_channels(combined_labels)
     else:
-        error_json['stack_trace'] = traceback.format_exc().rstrip('\n')
+        error_json['stackTrace'] = traceback.format_exc().rstrip('\n')
     return error_json
 
 def get_combined_service_labels(pipeline_data):

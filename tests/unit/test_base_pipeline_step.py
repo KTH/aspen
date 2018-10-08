@@ -65,7 +65,6 @@ class TestBasePipelineStep(unittest.TestCase):
         error = Exception('Test message')
         step.handle_pipeline_error(error, {})
         args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
-        print(args[0])
         self.assertTrue(isinstance(args[0], exceptions.DeploymentError))
         self.assertEqual(str(args[0]), 'Test message')
         error = subprocess.CalledProcessError(-1, 'Test cmd')
