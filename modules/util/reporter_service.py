@@ -91,12 +91,27 @@ def get_error_cache(error_cache_key):
     return redis.execute_json_get(redis_client, error_cache_key)
 
 def create_error_object(error, combined_labels):
-    error_json = {'message': str(error), 'slackChannels': None, 'stackTrace': None}
+    error_json = {
+        'message': create_error_message(error),
+        'slackChannels': None,
+        'stackTrace': None
+    }
     if hasattr(error, 'expected') and error.expected:
         error_json['slackChannels'] = get_slack_channels(combined_labels)
     else:
         error_json['stackTrace'] = traceback.format_exc().rstrip('\n')
     return error_json
+
+def create_error_message(error):
+    step, application, cluster = '', '', ''
+    if hasattr(error, 'step_name') and error.step_name:
+        step = error.step_name
+    if hasattr(error, 'pipeline_data') and error.pipeline_data:
+        if data_defs.APPLICATION_NAME in error.pipeline_data:
+            application = error.pipeline_data[data_defs.APPLICATION_NAME]
+        if data_defs.APPLICATION_CLUSTER in error.pipeline_data:
+            cluster = error.pipeline_data[data_defs.APPLICATION_CLUSTER]
+    return f'Cluster: {cluster}, Application: {application}, Step: {step}, Error: {str(error)}'
 
 def get_combined_service_labels(pipeline_data):
     labels = {}

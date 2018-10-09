@@ -3,7 +3,9 @@ __author__ = 'tinglev@kth.se'
 from modules.util import data_defs, exceptions
 
 def get_mock_deployment_error(expected=True):
-    return exceptions.DeploymentError('This is a deployment error', expected=expected)
+    return exceptions.DeploymentError('This is a deployment error',
+                                      expected=expected,
+                                      step_name='ParseStackFile')
 
 def get_image_data():
     return {
