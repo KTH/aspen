@@ -45,10 +45,14 @@ class TestSendRecommendations(unittest.TestCase):
         send_recommendations.reporter_service.handle_recommendation = mock.Mock()
         step.get_random_emoji = mock.Mock(return_value=':emoji:')
         step.get_random_flavor_text = mock.Mock(return_value='Flavor text')
-        parsed_data = mock_test_data.get_parsed_stack_content()
-        step.send_label_recommendations('kth-azure-app',
-                                        {data_defs.STACK_FILE_PARSED_CONTENT: parsed_data})
+        pipeline_data = {
+            data_defs.APPLICATION_NAME: 'kth-azure-app',
+            data_defs.STACK_FILE_PARSED_CONTENT: mock_test_data.get_parsed_stack_content()
+        }
+        step.send_label_recommendations(pipeline_data)
         send_recommendations.reporter_service.handle_recommendation.assert_any_call(
-            'kth-azure-app', ':emoji: Flavor text\n `se.kth.importance="medium"`'
+            pipeline_data,
+            'kth-azure-app',
+            ':emoji: Flavor text\n `se.kth.description.swedish="Kort beskrivning av applikationen"`'
         )
         

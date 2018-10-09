@@ -18,18 +18,18 @@ class SendRecommendations(BasePipelineStep):
                 data_defs.APPLICATION_NAME]
 
     def run_step(self, pipeline_data):
-        parsed_data = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
-        application_name = pipeline_data[data_defs.APPLICATION_NAME]
-        self.send_label_recommendations(application_name, parsed_data)
+        self.send_label_recommendations(pipeline_data)
         return pipeline_data
 
-    def send_label_recommendations(self, application_name, parsed_data):
+    def send_label_recommendations(self, pipeline_data):
+        parsed_data = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
+        application_name = pipeline_data[data_defs.APPLICATION_NAME]
         labels = [
-            ('se.kth.publicName.english', 'My app name'),
-            ('se.kth.publicName.swedish', 'Min apps namn'),
+            ('se.kth.publicName.english', 'This apps name'),
+            ('se.kth.publicName.swedish', 'Denna applikations namn'),
             ('se.kth.description.english', 'Short app description'),
-            ('se.kth.description.swedish', 'Kort beskrivning av appen'),
-            ('se.kth.importance', 'medium'),
+            ('se.kth.description.swedish', 'Kort beskrivning av applikationen'),
+            ('se.kth.importance', 'Övervakningsvikt. Värden: low, medium eller high.'),
             ('se.kth.detectify.profileToken', 'Profile token från Detectify')
         ]
         for label in labels:
@@ -37,7 +37,9 @@ class SendRecommendations(BasePipelineStep):
             example_text = label[1]
             if not self.has_service_label(parsed_data, label_name):
                 recommendation_text = self.create_recommendation_text(label_name, example_text)
-                reporter_service.handle_recommendation(application_name, recommendation_text)
+                reporter_service.handle_recommendation(pipeline_data,
+                                                       application_name,
+                                                       recommendation_text)
 
     def create_recommendation_text(self, label_name, example_value):
         return (f'{self.get_random_emoji()} {self.get_random_flavor_text()}\n '

@@ -13,6 +13,7 @@ def handle_recommendation(pipeline_data, application_name, recommendation_text):
         combined_labels = get_combined_service_labels(pipeline_data)
         slack_channels = get_slack_channels(combined_labels)
         payload = create_recommedation_object(application_name, recommendation_text, slack_channels)
+        print(payload)
         try:
             response = requests.put(recommendation_url, json=payload, timeout=2)
             response.raise_for_status()

@@ -27,7 +27,6 @@ class TestSchemaValidation(unittest.TestCase):
         # Expected error (with slack channels)
         error = mock_test_data.get_mock_deployment_error()
         error_object = reporter_service.create_error_object(error, combined_labels)
-        print(json.dumps(error_object))
         result = requests.post(schema_url, json=error_object)
         self.assertEqual(result.status_code, 200)
         # Unexpected error (with stack trace)
