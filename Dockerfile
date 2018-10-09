@@ -8,6 +8,7 @@ RUN mkdir /repo && \
 WORKDIR /repo
 
 RUN apk update && \
+    apk upgrade && \
     apk add bash && \
     apk add py-pip && \
     # installs gcc + deps
@@ -15,11 +16,12 @@ RUN apk update && \
     echo "gita.sys.kth.se,130.237.48.166 ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAQqv0JwwDnWh7mUfr8mFhtWVjprXAoxPcNAvCtgeB5VqHSO+MRdeBoknpBgQMJ1OCmNndeKJhNcunk4jfxxVUA=" >> /root/.ssh/known_hosts && \
     apk add docker --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/latest-stable/community --allow-untrusted && \
     pip install --upgrade pip && \
-    pip install pipenv
+    # Workaround for https://github.com/pypa/pipenv/issues/2924
+    pip install git+https://github.com/pypa/pipenv.git
 
 COPY Pipfile Pipfile
 
-RUN pipenv install
+RUN pipenv install pip
 RUN pipenv run pip install azure-cli
 
 COPY ["modules",  "modules"]
