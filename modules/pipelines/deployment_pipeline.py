@@ -25,6 +25,7 @@ from modules.steps.decrypt_app_secrets import DecryptAppSecrets
 from modules.steps.verify_deploy_success import VerifyDeploySuccess
 from modules.steps.remove_error_cache_entry import RemoveErrorCacheEntry
 from modules.steps.report_success import ReportSuccess
+from modules.steps.second_conditional_stop import SecondConditionalStop
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -45,7 +46,8 @@ class DeploymentPipeline():
             FirstConditionalStop(),
             GetSemanticVersions(),
             CalculateSemanticVersion(),
-            # Stop if md5_cache == md5_local
+            # Stop if local best match == cache best match
+            SecondConditionalStop(),
             DockerComposeValidate(),
             GetApplicationPassword(),
             SecretVerification(),
