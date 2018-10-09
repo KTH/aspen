@@ -1,8 +1,8 @@
 __author__ = 'tinglev@kth.se'
 
-import requests
+import time
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, reporter_service, environment
+from modules.util import data_defs, reporter_service
 
 class ReportSuccess(BasePipelineStep):
 
@@ -13,56 +13,64 @@ class ReportSuccess(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.SERVICES]
+        return [data_defs.STACK_FILE_PARSED_CONTENT,
+                data_defs.APPLICATION_NAME]
 
     def run_step(self, pipeline_data):
-        application_data = self.get_application_data(pipeline_data)
-        reporter_service.handle_deployment_success(application_data)
+        deployment_json = self.create_deployment_json(pipeline_data)
+        reporter_service.handle_deployment_success(deployment_json)
         return pipeline_data
 
     def create_deployment_json(self, pipeline_data):
-        application = self.get_application_data(pipeline_data)
-        application['services'] = self.get_service_data(pipeline_data)
-        application['labels'] = self.get_combined_labels(pipeline_data)
-        return application
+        deployment_json = {}
+        app_name = pipeline_data[data_defs.APPLICATION_NAME]
+        app_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]
+        deployment_json['applicationName'] = app_name
+        deployment_json['cluster'] = app_cluster
+        deployment_json = self.get_service_values(deployment_json, pipeline_data)
+        return deployment_json
 
-    def get_combined_labels(self, pipeline_data):
-        labels = {}
+    def get_service_values(self, deployment_json, pipeline_data):
         for service in pipeline_data[data_defs.SERVICES]:
-            for name, label in service[data_defs.S_LABELS].items():
-                if not name in labels:
-                    labels[name] = label
-                else:
-                    labels[name] = ','.join([labels[name], label])
-        return labels
+            deployment_json['version'] = self.get_version(service)
+            deployment_json['imageName'] = self.get_image_name(service)
+            deployment_json['publishedUrl'] = self.get_published_url(service)
+            deployment_json['created'] = str(time.time())
+            deployment_json = self.get_service_labels(deployment_json, service)
+            # Monitorurl and servicepath?
+            break
+        return deployment_json
 
-    def get_service_data(self, pipeline_data):
-        services = []
-        for service in pipeline_data[data_defs.SERVICES]:
-            service_json = {}
-            service_json['service'] = service[data_defs.S_NAME]
-            if service[data_defs.S_IMAGE][data_defs.IMG_IS_SEMVER]:
-                service_json['version'] = service[data_defs.S_IMAGE][data_defs.IMG_BEST_SEMVER_MATCH]
-            else:
-                service_json['version'] = service[data_defs.S_IMAGE][data_defs.IMG_VERSION]
-            published_url = self.get_published_url(service)
-            if published_url:
-                service_json['published_url'] = published_url
-            services.append(service_json)
-        return services
+    def get_service_labels(self, deployment_json, service):
+        for name, value in service[data_defs.S_LABELS].items():
+            if name == 'se.kth.slackChannels':
+                deployment_json['slackChannels'] = value
+            elif name == 'se.kth.publicNameSwedish':
+                deployment_json['publicNameSwedish'] = value
+            elif name == 'se.kth.publicNameEnglish':
+                deployment_json['publicNameEnglish'] = value
+            elif name == 'se.kth.descriptionSwedish':
+                deployment_json['descriptionSwedish'] = value
+            elif name == 'se.kth.descriptionEnglish':
+                deployment_json['descriptionEnglish'] = value
+            elif name == 'se.kth.importance':
+                deployment_json['importance'] = value
+            elif name == 'se.kth.detectify.profileToken':
+                deployment_json['detectifyProfileTokens'] = value
+        return deployment_json
 
     def get_published_url(self, service):
-        # traefik.frontend.rule=PathPrefix:/kth-azure-app/
-        if (data_defs.S_DEPLOY_LABELS in service and
-            'traefik.frontend.rule' in service[data_defs.S_DEPLOY_LABELS]):
-            url = service[data_defs.S_DEPLOY_LABELS]['traefik.frontend.rule'].split(':')[1]
-            return url
+        if data_defs.S_DEPLOY_LABELS in service:
+            for name, value in service[data_defs.S_DEPLOY_LABELS].items():
+                if name == 'traefik.frontend.rule':
+                    return value.split(':')[1]
         return None
 
-    def get_application_data(self, pipeline_data):
-        return {
-            'application': pipeline_data[data_defs.APPLICATION_NAME],
-            'cluster': pipeline_data[data_defs.APPLICATION_CLUSTER],
-            'service_file_md5': pipeline_data[data_defs.STACK_FILE_DIR_HASH],
-            'services': {}
-        }
+    def get_image_name(self, service):
+        return service[data_defs.S_IMAGE][data_defs.IMG_NAME]
+
+    def get_version(self, service):
+        if service[data_defs.S_IMAGE][data_defs.IMG_IS_SEMVER]:
+            return service[data_defs.S_IMAGE][data_defs.IMG_BEST_SEMVER_MATCH]
+        else:
+            return service[data_defs.S_IMAGE][data_defs.IMG_VERSION]

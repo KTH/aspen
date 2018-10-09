@@ -2,6 +2,25 @@ __author__ = 'tinglev@kth.se'
 
 from modules.util import data_defs, exceptions
 
+def get_mock_deployment_json():
+    return {
+        "applicationName": "kth-azure-app",
+        "cluster": "stage",
+        "version": "1.3.4_abc123",
+        "imageName": "kth-azure-app",
+        "publishedUrl": "/kth-azure-app",
+        "slackChannels": "#team-pipeline,#pipeline-logs",
+        "publicNameSwedish": "Referensapplikation för våra kluster",
+        "publicNameEnglish": "Reference application for our clusters",
+        "descriptionSwedish": "En liten beskrivning",
+        "descriptionEnglish": "A little description",
+        "monitorUrl": "https://app-r.referens.sys.kth.se/_monitor",
+        "created": "12519836591",
+        "importance": "medium",
+        "servicePath": "https://app-r.referens.sys.kth.se/kth-azure-app",
+        "detectifyProfileTokens": "abc123,def456"
+    }
+
 def get_mock_deployment_error(expected=True):
     return exceptions.DeploymentError('This is a deployment error', expected=expected)
 
