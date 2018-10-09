@@ -21,9 +21,9 @@ class TestSchemaValidation(unittest.TestCase):
         step = ReportSuccess()
         pipeline_data = mock_test_data.get_image_data()
         deployment_json = step.create_deployment_json(pipeline_data)
-        result = requests.post(validation_url, json=deployment_json)
-        self.assertEqual(result.json(), {})
+        result = requests.post(validation_url, json=deployment_json, allow_redirects=False)
         self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {})
 
     @unittest.skipIf(environment.get_env(environment.SKIP_VALIDATION_TESTS),
                      'SKIP_VALIDATION_TESTS set')
@@ -37,9 +37,9 @@ class TestSchemaValidation(unittest.TestCase):
             'The recommendation',
             '#channel1,#channel2'
         )
-        result = requests.post(validation_url, json=rec_obj)
-        self.assertEqual(result.json(), {})
+        result = requests.post(validation_url, json=rec_obj, allow_redirects=False)
         self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {})
 
     @unittest.skipIf(environment.get_env(environment.SKIP_VALIDATION_TESTS),
                      'SKIP_VALIDATION_TESTS set')
@@ -53,13 +53,13 @@ class TestSchemaValidation(unittest.TestCase):
         # Expected error (with slack channels)
         error = mock_test_data.get_mock_deployment_error()
         error_object = reporter_service.create_error_object(error, combined_labels)
-        result = requests.post(validation_url, json=error_object)
-        self.assertEqual(result.json(), {})
+        result = requests.post(validation_url, json=error_object, allow_redirects=False)
         self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {})
         # Unexpected error (with stack trace)
         traceback.format_exc = mock.Mock(return_value='Stack\ntrace')
         error = mock_test_data.get_mock_deployment_error(expected=False)
         error_object = reporter_service.create_error_object(error, combined_labels)
-        result = requests.post(validation_url, json=error_object)
-        self.assertEqual(result.json(), {})
+        result = requests.post(validation_url, json=error_object, allow_redirects=False)
         self.assertEqual(result.status_code, 200)
+        self.assertEqual(result.json(), {})
