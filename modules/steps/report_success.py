@@ -13,8 +13,9 @@ class ReportSuccess(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.STACK_FILE_PARSED_CONTENT,
-                data_defs.APPLICATION_NAME]
+        return [data_defs.SERVICES,
+                data_defs.APPLICATION_NAME,
+                data_defs.APPLICATION_CLUSTER]
 
     def run_step(self, pipeline_data):
         deployment_json = self.create_deployment_json(pipeline_data)

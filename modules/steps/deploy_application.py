@@ -23,7 +23,9 @@ class DeployApplication(BasePipelineStep):
     def set_application_env(self, pipeline_data):
         application_env = None
         for service in pipeline_data[data_defs.SERVICES]:
-            service_env = ' '.join(service[data_defs.S_ENVIRONMENT])
+            env_as_string = [f'{key}={value}' for key, value in
+                             service[data_defs.S_ENVIRONMENT].items()]
+            service_env = ' '.join(env_as_string)
             if application_env:
                 application_env = f'{application_env} {service_env}'
             else:

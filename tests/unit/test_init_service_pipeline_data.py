@@ -12,7 +12,7 @@ class TestInitServicePipelineData(unittest.TestCase):
         pipeline_data = {data_defs.STACK_FILE_PARSED_CONTENT: test_data}
         step = InitServicePipelineData()
         result = step.run_step(pipeline_data)
-        self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_ENVIRONMENT], [])
+        self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_ENVIRONMENT], {})
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_NAME], 'web')
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_DEPLOY_LABELS], {})
         self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_NAME], 'api')

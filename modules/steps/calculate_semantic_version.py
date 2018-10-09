@@ -30,6 +30,6 @@ class CalculateSemanticVersion(BasePipelineStep):
 
     def set_semver_environment(self, service, image_data, best_match):
         semver_env_var = image_data[data_defs.IMG_SEMVER_ENV_KEY]
-        service[data_defs.S_ENVIRONMENT].append(f'{semver_env_var}={best_match}')
+        service[data_defs.S_ENVIRONMENT][semver_env_var] = best_match
         self.log.debug('Environment is now "%s"', service[data_defs.S_ENVIRONMENT])
         return service
