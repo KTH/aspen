@@ -32,6 +32,7 @@ def handle_deployment_success(deployment_json):
             response.raise_for_status()
         except Exception as ex:
             LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
+            return
         LOG.debug('Response was: "%s"', response)
     else:
         LOG.debug('Slack integration not enabled, skipping report')
@@ -57,6 +58,7 @@ def handle_deployment_error(error: exceptions.DeploymentError):
                 response.raise_for_status()
             except Exception as ex:
                 LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
+                return
             LOG.debug('Response was: "%s"', response)
             write_to_error_cache(error)
         else:
