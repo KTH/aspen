@@ -3,14 +3,18 @@ __author__ = 'tinglev@kth.se'
 import re
 import time
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, regex, process, exceptions
+from modules.util import data_defs, regex, process, exceptions, environment
 
 class VerifyDeploySuccess(BasePipelineStep):
 
     def __init__(self):
         BasePipelineStep.__init__(self)
-        self.wait_seconds = 5
-        self.wait_times = 5
+        self.wait_seconds = environment.get_with_default_int(
+            environment.VERIFY_START_DELAY_SECS, 5
+            )
+        self.wait_times = environment.get_with_default_int(
+            environment.VERIFY_START_RETRY_TIMES, 5
+            )
 
     def get_required_env_variables(self):
         return []

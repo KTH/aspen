@@ -35,10 +35,9 @@ class ReportSuccess(BasePipelineStep):
         for service in pipeline_data[data_defs.SERVICES]:
             deployment_json['version'] = self.get_version(service)
             deployment_json['imageName'] = self.get_image_name(service)
-            deployment_json['publishedUrl'] = self.get_published_url(service)
+            deployment_json['servicePath'] = self.get_service_path(service)
             deployment_json['created'] = str(time.time())
             deployment_json = self.get_service_labels(deployment_json, service)
-            # Monitorurl and servicepath?
             break
         return deployment_json
 
@@ -60,7 +59,7 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['detectifyProfileTokens'] = value
         return deployment_json
 
-    def get_published_url(self, service):
+    def get_service_path(self, service):
         if data_defs.S_DEPLOY_LABELS in service:
             for name, value in service[data_defs.S_DEPLOY_LABELS].items():
                 if name == 'traefik.frontend.rule':
