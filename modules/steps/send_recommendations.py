@@ -49,7 +49,7 @@ class SendRecommendations(BasePipelineStep):
         if 'services' in parsed_data:
             for _, service in parsed_data['services'].items():
                 if 'labels' in service:
-                    return label_name in service['labels']
+                    return label_name in [label.split('=')[0] for label in service['labels']]
                 # Only try the first service
                 return False
             return False

@@ -16,5 +16,15 @@ class TestInitServicePipelineData(unittest.TestCase):
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_NAME], 'web')
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_DEPLOY_LABELS], [])
         self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_NAME], 'api')
-        self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_DEPLOY_LABELS]['traefik.deploy'], 'true')
-        self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_LABELS]['se.kth.slackChannels'], '#team-pipeline,#ita-ops')
+        deploy_labels = [label.split('=') for label in result[data_defs.SERVICES][1][data_defs.S_DEPLOY_LABELS]]
+        for name, value in deploy_labels:
+            if name == 'traefik.deploy' and value == 'true':
+                break
+        else:
+            self.fail('Couldnt find traefik.deploy deploy label')
+        labels = [label.split('=') for label in result[data_defs.SERVICES][1][data_defs.S_LABELS]]
+        for name, value in labels:
+            if name == 'se.kth.slackChannels' and value == '#team-pipeline,#ita-ops':
+                break
+        else:
+            self.fail('Couldnt find se.kth.slackChannels label')

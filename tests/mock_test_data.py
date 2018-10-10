@@ -77,10 +77,10 @@ def get_parsed_stack_content():
                     'ENV_KEY_1': 'ENV_VAL_1',
                     'WEB_VERSION': '~2.1.3_abc123'
                 },
-                'labels':{
-                    'se.kth.slackChannels': '#pipeline',
-                    'se.kth.importance': 'high'
-                }
+                'labels': [
+                    'se.kth.slackChannels=#pipeline',
+                    'se.kth.importance=high'
+                ]
             },
             'api': {
                 'image': 'test_registry/test_image:1.2.3_abc456',
@@ -93,9 +93,9 @@ def get_parsed_stack_content():
                         'max-file': 10
                     }
                 },
-                'labels': {
-                    'se.kth.slackChannels': '#team-pipeline,#ita-ops'
-                },
+                'labels': [
+                    'se.kth.slackChannels=#team-pipeline,#ita-ops'
+                ],
                 'deploy': {
                     'resources': {
                         'limits': {
@@ -112,9 +112,9 @@ def get_parsed_stack_content():
                         'delay': '5s',
                         'max_attempts': 2
                     },
-                    'labels': {
-                        'traefik.deploy': 'true'
-                    }
+                    'labels': [
+                        'traefik.deploy=true'
+                    ]
                 }
             }
         }
