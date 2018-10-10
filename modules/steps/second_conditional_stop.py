@@ -16,13 +16,13 @@ class SecondConditionalStop(BasePipelineStep):
                 data_defs.CACHE_ENTRY]
 
     def run_step(self, pipeline_data):
-        equal_caches = self.caches_are_equal(pipeline_data)
+        equal_caches = self.cached_versions_are_equal(pipeline_data)
         if equal_caches:
             self.log.debug('Stopping pipeline in pipeline step "%s"', self.get_step_name())
             self.stop_pipeline()
         return pipeline_data
 
-    def caches_are_equal(self, pipeline_data):
+    def cached_versions_are_equal(self, pipeline_data):
         local_services = pipeline_data[data_defs.SERVICES]
         cache_entry = pipeline_data[data_defs.CACHE_ENTRY]
         if not cache_entry:
@@ -31,10 +31,13 @@ class SecondConditionalStop(BasePipelineStep):
         for cache_version in cache_entry[cache_defs.IMAGE_VERSIONS]:
             for local_service in local_services:
                 if self.is_same_service(cache_version, local_service):
-                    if self.is_same_image(cache_version, local_service):
-                        if not self.is_same_version(cache_version, local_service):
-                            return False
+                    if not self.if_same_version_and_name(cache_version, local_service):
+                        return False
         return True
+
+    def if_same_version_and_name(self, cache, service):
+        return (self.is_same_image(cache, service) and
+                self.is_same_version(cache, service))
 
     def is_same_version(self, cache, service):
         return cache[data_defs.IMG_VERSION] == self.get_service_image_version(service)

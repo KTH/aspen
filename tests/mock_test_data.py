@@ -1,6 +1,23 @@
 __author__ = 'tinglev@kth.se'
 
-from modules.util import data_defs, exceptions
+from modules.util import data_defs, exceptions, cache_defs
+
+def get_mock_cache_entry():
+    return {
+        cache_defs.DIRECTORY_MD5: 'abc',
+        cache_defs.IMAGE_VERSIONS: [
+            {
+                data_defs.S_NAME: 'web',
+                data_defs.IMG_NAME: 'kth-azure-app',
+                data_defs.IMG_VERSION: '2.0.1_abc123'
+            },
+            {
+                data_defs.S_NAME: 'api',
+                data_defs.IMG_NAME: 'redis',
+                data_defs.IMG_VERSION: '0.1.4_abc123' 
+            }
+        ]
+    }
 
 def get_mock_deployment_error(expected=True):
     return exceptions.DeploymentError('This is a deployment error',
