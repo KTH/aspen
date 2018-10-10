@@ -113,7 +113,10 @@ def create_error_message(error):
             application = error.pipeline_data[data_defs.APPLICATION_NAME]
         if data_defs.APPLICATION_CLUSTER in error.pipeline_data:
             cluster = error.pipeline_data[data_defs.APPLICATION_CLUSTER]
-    return f'Cluster: {cluster}, Application: {application}, Step: {step}, Error: {str(error)}'
+    return (f'Cluster: `{cluster}`, '
+            f'Application: `{application}`, '
+            f'Step: `{step}`, '
+            f'Error: `{str(error)}`')
 
 def get_combined_service_labels(pipeline_data):
     labels = {}
