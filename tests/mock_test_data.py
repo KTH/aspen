@@ -42,13 +42,13 @@ def get_image_data():
                 data_defs.IMG_TAGS: None,
                 data_defs.IMG_VERSION: '2.0.1_abc123'
             },
-            data_defs.S_LABELS: {
-                'label1': 'value1,value11',
-                'label2': 'value2'
-            },
-            data_defs.S_DEPLOY_LABELS: {
-                'traefik.frontend.rule': 'PathPrefix:/kth-azure-app'
-            }
+            data_defs.S_LABELS: [
+                'label1=value1,value11',
+                'label2=value2'
+            ],
+            data_defs.S_DEPLOY_LABELS: [
+                'traefik.frontend.rule=PathPrefix:/kth-azure-app'
+            ]
         },
         {
             data_defs.S_NAME: 'api',
@@ -62,10 +62,10 @@ def get_image_data():
                 data_defs.IMG_TAGS: ['0.1.4_abc123', '0.1.3_123abc'],
                 data_defs.IMG_VERSION: '${API_VERSION}'
             },
-            data_defs.S_LABELS: {
-                'label1': 'value12,value13',
-                'label3': 'value3'
-            }
+            data_defs.S_LABELS: [
+                'label1=value12,value13',
+                'label3=value3'
+            ]
         }]
     }
 

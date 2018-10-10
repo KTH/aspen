@@ -42,7 +42,8 @@ class ReportSuccess(BasePipelineStep):
         return deployment_json
 
     def get_service_labels(self, deployment_json, service):
-        for name, value in service[data_defs.S_LABELS].items():
+        for label in service[data_defs.S_LABELS]:
+            name, value = label.split('=')[0], label.split('=')[1]
             if name == 'se.kth.slackChannels':
                 deployment_json['slackChannels'] = value
             elif name == 'se.kth.publicNameSwedish':
@@ -61,7 +62,8 @@ class ReportSuccess(BasePipelineStep):
 
     def get_service_path(self, service):
         if data_defs.S_DEPLOY_LABELS in service:
-            for name, value in service[data_defs.S_DEPLOY_LABELS].items():
+            for label in service[data_defs.S_DEPLOY_LABELS]:
+                name, value = label.split('=')[0], label.split('=')[1]
                 if name == 'traefik.frontend.rule':
                     return value.split(':')[1]
         return None

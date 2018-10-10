@@ -22,8 +22,8 @@ class InitServicePipelineData(BasePipelineStep):
                 data_defs.S_NAME: name,
                 data_defs.S_IMAGE: {},
                 data_defs.S_ENVIRONMENT: {},
-                data_defs.S_LABELS: {},
-                data_defs.S_DEPLOY_LABELS: {}
+                data_defs.S_LABELS: [],
+                data_defs.S_DEPLOY_LABELS: []
             }
             if 'labels' in service:
                 service_json[data_defs.S_LABELS] = service['labels']

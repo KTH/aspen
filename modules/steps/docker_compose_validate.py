@@ -34,6 +34,7 @@ class DockerComposeValidate(BasePipelineStep):
         temp_secrets_file = os.path.join(directory, 'secrets.decrypted.env')
         with open(temp_secrets_file, 'w+') as tmp_file:
             tmp_file.write('')
+        self.log.debug('Wrote temp secrets file: "%s"', temp_secrets_file)
         return temp_secrets_file
 
     def run_command(self, cmd):
