@@ -1,8 +1,12 @@
+"""DecryptAppPasswords
+
+Decrypts the master app password file using the vault master password"""
+
 __author__ = 'tinglev@kth.se'
 
 import os
-import yaml
 import subprocess
+import yaml
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs, process, exceptions
 

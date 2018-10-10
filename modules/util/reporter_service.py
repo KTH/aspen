@@ -18,7 +18,7 @@ def handle_recommendation(pipeline_data, application_name, recommendation_text):
             response = requests.put(recommendation_url, json=payload, timeout=2)
             response.raise_for_status()
         except Exception as ex:
-            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))        
+            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
     else:
         LOG.debug('Slack recommendation integration not enabled, skipping report')
 
@@ -66,9 +66,9 @@ def handle_deployment_error(error: exceptions.DeploymentError):
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):
     return {
-            "message": "{}: {}".format(application_name, recommendation_text),
-            "slackChannels": slack_channels
-           }
+        "message": "{}: {}".format(application_name, recommendation_text),
+        "slackChannels": slack_channels
+        }
 
 def write_to_error_cache(error):
     pipeline_data = error.pipeline_data

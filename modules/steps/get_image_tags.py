@@ -1,10 +1,14 @@
+"""GetImageTags
+
+Gets all tags from a docker registry for the given service images"""
+
 __author__ = 'tinglev@kth.se'
 
 import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment
 
-class GetSemanticVersions(BasePipelineStep):
+class GetImageTags(BasePipelineStep):
 
     def __init__(self):
         BasePipelineStep.__init__(self)

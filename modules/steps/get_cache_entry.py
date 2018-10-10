@@ -1,8 +1,12 @@
+"""GetCacheEntry
+
+Uses the docker-stack.yml path of this deployment to fetch
+any deployment cache entry that exists in our redis instance"""
+
 __author__ = 'tinglev@kth.se'
 
-import json
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, data_defs, exceptions, redis
+from modules.util import environment, data_defs, redis
 
 class GetCacheEntry(BasePipelineStep):
 

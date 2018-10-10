@@ -1,3 +1,9 @@
+"""ClusterVerification
+
+Compares the applications cluster to the clusters this instance of
+aspen is run to deploy to. If there is a cluster mismatch, the pipeline
+is stopped"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

@@ -1,3 +1,8 @@
+"""RegistryLogin
+
+Performs a docker login against the private docker registry
+used by aspen"""
+
 __author__ = 'tinglev@kth.se'
 
 import subprocess

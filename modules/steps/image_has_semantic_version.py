@@ -1,3 +1,8 @@
+"""ImageHasSemanticVersion
+
+Parses application service data to find out if the image uses
+semantic versioning"""
+
 __author__ = 'tinglev@kth.se'
 
 import re

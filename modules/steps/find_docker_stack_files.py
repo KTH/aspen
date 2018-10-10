@@ -1,3 +1,8 @@
+"""FindDockerStackFiles
+
+Crawls the fetched application registry directory (from FetchAppRegistry)
+and locates all docker-stack.yml files"""
+
 __author__ = 'tinglev@kth.se'
 
 import os

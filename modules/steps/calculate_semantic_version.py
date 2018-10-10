@@ -1,3 +1,8 @@
+"""CalculateSemanticVersion
+
+If an image uses semantic versioning, this step calculates the best match
+for the image given a list of tags fetched from the registry for the image"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

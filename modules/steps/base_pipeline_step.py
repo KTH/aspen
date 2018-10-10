@@ -1,3 +1,9 @@
+"""BasePipelineStep
+
+Base class for all other pipeline steps. Wraps step running,
+environment and step data verification, step chaining and
+handles logging and exceptions"""
+
 __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod

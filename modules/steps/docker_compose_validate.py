@@ -1,3 +1,10 @@
+"""DockerComposeValidate
+
+Runs the built in docker compose validation to validate the correctness
+of the given docker stack file. If the application uses a secrets.decrypted.env
+as an env_file, a temporary file with this name is created (and then removed)
+to avoid the validation failing on the absent file"""
+
 __author__ = 'tinglev@kth.se'
 
 import os

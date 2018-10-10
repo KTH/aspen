@@ -1,3 +1,7 @@
+"""GetDockerHostIp
+
+Gets the current deployments docker host ip to run commands against.
+The cluster ips are preloaded in the LoadDockerHostIPs step"""
 
 __author__ = 'tinglev@kth.se'
 

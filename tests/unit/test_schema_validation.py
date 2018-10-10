@@ -1,12 +1,11 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-import json
 import traceback
 import mock
 import requests
-from modules.steps.report_success import ReportSuccess
 from tests import mock_test_data
+from modules.steps.report_success import ReportSuccess
 from modules.util import data_defs, reporter_service, environment
 
 class TestSchemaValidation(unittest.TestCase):

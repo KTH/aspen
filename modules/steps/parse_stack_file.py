@@ -1,3 +1,7 @@
+"""ParseStackFile
+
+Reads the deployment docker stack file and parses it to a python object"""
+
 __author__ = 'tinglev@kth.se'
 
 import yaml

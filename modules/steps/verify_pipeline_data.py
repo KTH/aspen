@@ -1,7 +1,12 @@
+"""VerifyPipelineData
+
+Performs checks that pipeline data parsed/created in earlier
+steps is ok"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, process
+from modules.util import data_defs
 from modules.util.exceptions import DeploymentError
 
 class VerifyPipelineData(BasePipelineStep):

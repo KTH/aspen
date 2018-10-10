@@ -1,3 +1,8 @@
+"""FetchAppRegistry
+
+Uses git to fetch the registry application, which holds all
+application configuration (cluster, application, docker-stack and secrets)"""
+
 __author__ = 'tinglev@kth.se'
 
 import os
@@ -48,7 +53,7 @@ class FetchAppRegistry(BasePipelineStep):
 
     def run_command(self, cmd):
         return process.run_with_output(cmd)
-    
+
     def get_latest_changes(self):
         try:
             self.git_clone()

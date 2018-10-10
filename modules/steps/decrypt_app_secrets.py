@@ -1,3 +1,9 @@
+"""DecryptAppSecrets
+
+If an application uses a secrets.decrypted.env file for secret environment
+settings, this step uses the app password retrived in DecryptAppPasswords
+to decrypt the secrets.env file (to secrets.decrypted.env) for the application"""
+
 __author__ = 'tinglev@kth.se'
 
 import os

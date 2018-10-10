@@ -8,7 +8,7 @@ from modules.steps.restart_policy_checker import RestartPolicyChecker
 from modules.steps.resource_policy_checker import ResourcePolicyChecker
 from modules.steps.parse_image_data import ParseImageData
 from modules.steps.image_has_semantic_version import ImageHasSemanticVersion
-from modules.steps.get_semantic_versions import GetSemanticVersions
+from modules.steps.get_image_tags import GetImageTags
 from modules.steps.calculate_md5 import CalculateMd5
 from modules.steps.cluster_verification import ClusterVerification
 from modules.steps.init_service_pipeline_data import InitServicePipelineData
@@ -46,7 +46,7 @@ class DeploymentPipeline():
             ImageHasSemanticVersion(),
             # Stop if is_semver == false and md5_cache == md5_local
             FirstConditionalStop(),
-            GetSemanticVersions(),
+            GetImageTags(),
             CalculateSemanticVersion(),
             # Stop if local best match == cache best match and md5_cache == md5_local
             SecondConditionalStop(),

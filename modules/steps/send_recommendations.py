@@ -1,9 +1,8 @@
 __author__ = 'tinglev@kth.se'
 
 import random
-import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, reporter_service, environment
+from modules.util import data_defs, reporter_service
 
 class SendRecommendations(BasePipelineStep):
 
@@ -86,5 +85,5 @@ class SendRecommendations(BasePipelineStep):
             ":ingemar:",
             ":first_place_medal:"
         ]
-        
+
         return emojis[random.randint(0, (len(emojis) -1))]

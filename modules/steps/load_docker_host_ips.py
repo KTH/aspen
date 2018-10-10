@@ -1,3 +1,7 @@
+"""LoadDockerHostIps
+
+Calls the cluster status api endpoint to fetch all active clusters
+and their respective docker host ips"""
 
 __author__ = 'tinglev@kth.se'
 

@@ -1,3 +1,10 @@
+"""SecondConditionalStop
+
+This conditional stop is used when atleast one service in the deployment
+is using semantic versioning. After checking the best matching version, this
+check then matches this (and the md5) against the cache to see if we
+can stop the pipeline, or if there are changes to be deployed"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

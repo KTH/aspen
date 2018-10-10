@@ -1,3 +1,8 @@
+"""GetApplicationPasswords
+
+Parses the application passwords fetch in DecryptAppPasswords and sets
+the password that is relevant for this specific deployment"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

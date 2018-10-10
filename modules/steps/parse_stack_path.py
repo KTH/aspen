@@ -1,3 +1,8 @@
+"""ParseStackPath
+
+Parses the path to the docker stack file for the target cluster and
+application name of the deployment"""
+
 __author__ = 'tinglev@kth.se'
 
 from os import path

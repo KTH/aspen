@@ -1,3 +1,7 @@
+"""ParseImageData
+
+Parses service image data, such as image name, registry and version"""
+
 __author__ = 'tinglev@kth.se'
 
 import re

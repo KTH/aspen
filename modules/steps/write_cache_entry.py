@@ -1,6 +1,11 @@
+"""WriteCacheEntry
+
+Writes a cache entry in the redis cache for this deployment. Is used
+in subsequent runs to determine if the application should be redeployed
+or not"""
+
 __author__ = 'tinglev@kth.se'
 
-import json
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment, cache_defs, redis
 

@@ -1,3 +1,10 @@
+"""FirstConditionalStop
+
+To avoid unnecessary pipeline steps, this step checks if no semver is
+used and if the md5 for the current deployment has changes compared to
+the cached version. If the static version matches and the md5 is the same
+we can safely stop the pipeline"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

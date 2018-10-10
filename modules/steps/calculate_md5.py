@@ -1,3 +1,8 @@
+"""CalculateMd5
+
+Calculates a joined md5 hash of all the files in the directory of a
+docker stack file"""
+
 __author__ = 'tinglev@kth.se'
 
 import os

@@ -1,3 +1,8 @@
+"""RemoveErrorCacheEntry
+
+Removes the (if any) cached error entry created by reporter_service.py
+when reporting a raised error during pipline execution"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

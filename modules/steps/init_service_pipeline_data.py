@@ -1,3 +1,7 @@
+"""InitServicePipelineData
+
+Initializes required pipeline data for services"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

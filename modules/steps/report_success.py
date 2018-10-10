@@ -1,3 +1,8 @@
+"""ReportSuccess
+
+Creates and sends a valid json object to reporting_service.py to
+be further sent to a message processing application"""
+
 __author__ = 'tinglev@kth.se'
 
 import time

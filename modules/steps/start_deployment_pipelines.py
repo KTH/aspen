@@ -1,6 +1,11 @@
+"""StartDeploymentPipelines
+
+Uses a ThreadPoolExecutor and a given parallelism level to start
+several deployment pipelines in parallell"""
+
 __author__ = 'tinglev@kth.se'
 
-from concurrent.futures import ThreadPoolExecutor, wait, as_completed
+from concurrent.futures import ThreadPoolExecutor, wait
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
 from modules.util import data_defs, environment

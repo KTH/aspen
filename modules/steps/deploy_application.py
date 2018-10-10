@@ -1,3 +1,8 @@
+"""DeployApplication
+
+Runs the actual docker stack deploy command. Also sets the application runtime
+environment (for instance semver versioning)"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

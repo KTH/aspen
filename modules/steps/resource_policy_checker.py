@@ -1,3 +1,8 @@
+"""ResourcePolicyChecker
+
+Checks the docker stack file content to make sure that resource
+policies are in effect and adhere to certain demands"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep

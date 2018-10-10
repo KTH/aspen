@@ -1,3 +1,10 @@
+"""VerifyDeploymentSuccess
+
+After deploying a docker stack, this step performs docker service ls commands
+for a configurable amount of times with a configurable amount of delay in between
+to see that all replicas of the services have been deployed. In case of a timeout
+the step will report an error with the output from a docker ps command"""
+
 __author__ = 'tinglev@kth.se'
 
 import re
@@ -74,5 +81,5 @@ class VerifyDeploySuccess(BasePipelineStep):
     def run_service_ls(self, pipeline_data, service):
         cluster_lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
         output = process.run_with_output(f'DOCKER_TLS_VERIFY=1 docker -H {cluster_lb_ip} '
-                                       f'service ls --filter name={service}')
+                                         f'service ls --filter name={service}')
         return output.decode('utf-8')
