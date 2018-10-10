@@ -26,6 +26,7 @@ from modules.steps.verify_deploy_success import VerifyDeploySuccess
 from modules.steps.remove_error_cache_entry import RemoveErrorCacheEntry
 from modules.steps.report_success import ReportSuccess
 from modules.steps.second_conditional_stop import SecondConditionalStop
+from modules.steps.verify_pipeline_data import VerifyPipelineData
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -41,6 +42,7 @@ class DeploymentPipeline():
             ClusterVerification(),
             InitServicePipelineData(),
             ParseImageData(),
+            VerifyPipelineData(),
             ImageHasSemanticVersion(),
             # Stop if is_semver == false and md5_cache == md5_local
             FirstConditionalStop(),

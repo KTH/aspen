@@ -42,6 +42,8 @@ class TestCompletePipeline(unittest.TestCase):
             mock.call(f'WEB_VERSION=2.9.202_3b01b96 DOCKER_TLS_VERIFY=1 docker -H 10.28.21.30:2376 stack deploy --with-registry-auth --compose-file {r_path}/tests/registry_repo/test_app_2/stage/docker-stack.yml test_app_2'),
             mock.call(f'WEB_VERSION=2.9.202_3b01b96 DOCKER_TLS_VERIFY=1 docker -H 10.28.20.30:2376 stack deploy --with-registry-auth --compose-file {r_path}/tests/registry_repo/test_app_2/active/docker-stack.yml test_app_2'),
         ]
+        for call in mock_run_docker_cmd.call_args_list:
+            print(call)
         mock_run_docker_cmd.assert_has_calls(docker_deploy_calls, any_order=True)
 
 if __name__ == '__main__':
