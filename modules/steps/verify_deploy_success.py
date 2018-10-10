@@ -28,6 +28,12 @@ class VerifyDeploySuccess(BasePipelineStep):
             self.wait_for_service_replication(pipeline_data, service)
         return pipeline_data
 
+    def get_ps_output(self, pipeline_data, service):
+        cluster_lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
+        output = process.run_with_output(f'DOCKER_TLS_VERIFY=1 docker -H {cluster_lb_ip} '
+                                         f'service ps --no-trunc {service}')
+        return output.decode('utf-8')
+
     def wait_for_service_replication(self, pipeline_data, service):
         for i in range(self.wait_times):
             self.log.debug('Checking if service "%s" has all replicas (attempt #%s)',
@@ -41,7 +47,9 @@ class VerifyDeploySuccess(BasePipelineStep):
                            service, match.group(1), match.group(2), self.wait_seconds)
             time.sleep(self.wait_seconds)
         else:
-            raise exceptions.DeploymentError('Application didnt start correctly')
+            msg = (f'Application didnt start correctly. Service ps output is: '
+                   f'{self.get_ps_output(pipeline_data, service)}')
+            raise exceptions.DeploymentError(msg)
 
     def get_running_replicas(self, pipeline_data, service):
         service_ls = self.run_service_ls(pipeline_data, service).split('\n')
