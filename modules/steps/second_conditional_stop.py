@@ -16,8 +16,9 @@ class SecondConditionalStop(BasePipelineStep):
                 data_defs.CACHE_ENTRY]
 
     def run_step(self, pipeline_data):
-        equal_caches = self.cached_versions_are_equal(pipeline_data)
-        if equal_caches:
+        equal_versions = self.cached_versions_are_equal(pipeline_data)
+        equal_hashes = self.cached_hashes_are_equal(pipeline_data)
+        if equal_versions and equal_hashes:
             self.log.debug('Stopping pipeline in pipeline step "%s"', self.get_step_name())
             self.stop_pipeline()
         return pipeline_data
@@ -55,3 +56,15 @@ class SecondConditionalStop(BasePipelineStep):
         if service[data_defs.S_IMAGE][data_defs.IMG_IS_SEMVER]:
             return service[data_defs.S_IMAGE][data_defs.IMG_BEST_SEMVER_MATCH]
         return service[data_defs.S_IMAGE][data_defs.IMG_VERSION]
+
+    def cached_hashes_are_equal(self, pipeline_data):
+        local_hash = pipeline_data[data_defs.STACK_FILE_DIR_HASH]
+        cache_entry = pipeline_data[data_defs.CACHE_ENTRY]
+        if not cache_entry:
+            self.log.debug('Cache entry is empty')
+            return False
+        cache_hash = cache_entry[cache_defs.DIRECTORY_MD5]
+        self.log.debug('Local hash is "%s", cache hash is "%s"', local_hash, cache_hash)
+        if local_hash != cache_hash:
+            return False
+        return True

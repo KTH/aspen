@@ -48,7 +48,7 @@ class DeploymentPipeline():
             FirstConditionalStop(),
             GetSemanticVersions(),
             CalculateSemanticVersion(),
-            # Stop if local best match == cache best match
+            # Stop if local best match == cache best match and md5_cache == md5_local
             SecondConditionalStop(),
             DockerComposeValidate(),
             GetApplicationPassword(),
