@@ -31,8 +31,11 @@ from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
 
-    def __init__(self):
-        self.log = logging.getLogger(__name__)
+    def __init__(self, application_name=None):
+        if application_name:
+            self.log = logging.getLogger(f'{application_name} - {__name__}')
+        else:
+            self.log = logging.getLogger(__name__)
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             GetCacheEntry(),
@@ -72,7 +75,7 @@ class DeploymentPipeline():
     def run_pipeline(self):
         try:
             stack_file = self.pipeline_data[data_defs.STACK_FILE_PATH]
-            self.log.info('Starting DeploymentPipline for file "%s"', stack_file)
+            self.log.debug('Starting DeploymentPipline for file "%s"', stack_file)
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
         except exceptions.DeploymentError as dep_err:
             self.log.error(('Deployment error in step "%s" '

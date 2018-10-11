@@ -18,7 +18,8 @@ def handle_recommendation(pipeline_data, application_name, recommendation_text):
             response = requests.put(recommendation_url, json=payload, timeout=2)
             response.raise_for_status()
         except Exception as ex:
-            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
+            LOG.error('Could not call slack recommendation reporting service. Error was: "%s"',
+                      str(ex))
     else:
         LOG.debug('Slack recommendation integration not enabled, skipping report')
 
@@ -31,7 +32,8 @@ def handle_deployment_success(deployment_json):
             response = requests.put(deployment_url, json=deployment_json, timeout=2)
             response.raise_for_status()
         except Exception as ex:
-            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
+            LOG.error('Could not call slack deployment reporting service. Error was: "%s"',
+                      str(ex))
             return
         LOG.debug('Response was: "%s"', response)
     else:
@@ -56,7 +58,8 @@ def handle_deployment_error(error: exceptions.DeploymentError):
             response = requests.put(error_url, json=error_json, timeout=2)
             response.raise_for_status()
         except Exception as ex:
-            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
+            LOG.error('Could not call slack error reporting service. Error was: "%s"',
+                      str(ex))
             return
         LOG.debug('Response was: "%s"', response)
         write_to_error_cache(error)

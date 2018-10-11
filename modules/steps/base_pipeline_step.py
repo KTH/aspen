@@ -112,5 +112,5 @@ class BasePipelineStep:
         return next_step
 
     def stop_pipeline(self):
-        self.log.info('Stopped pipeline at step "%s"', self.get_step_name())
+        self.log.debug('Stopped pipeline at step "%s"', self.get_step_name())
         self.next_step = None
