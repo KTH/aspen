@@ -43,7 +43,7 @@ class BasePipelineStep:
     def get_step_name(self):
         step_name = self.__class__.__name__
         if self.application_name and self.cluster_name:
-            return f'{self.cluster_name}/{self.application_name} - {step_name}'
+            return f'{self.cluster_name}.{self.application_name}.{step_name}'
         return step_name
 
     def configure_logger(self):
@@ -64,9 +64,9 @@ class BasePipelineStep:
         return None
 
     def set_app_and_cluster_name(self, pipeline_data):
-        if hasattr(pipeline_data, data_defs.APPLICATION_NAME):
+        if data_defs.APPLICATION_NAME in pipeline_data:
             self.application_name = pipeline_data[data_defs.APPLICATION_NAME]
-        if hasattr(pipeline_data, data_defs.APPLICATION_CLUSTER):
+        if data_defs.APPLICATION_CLUSTER in pipeline_data:
             self.cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
 
     def run_pipeline_step(self, pipeline_data):

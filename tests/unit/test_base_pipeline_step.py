@@ -5,8 +5,8 @@ import subprocess
 import unittest
 import mock
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.steps import base_pipeline_step 
-from modules.util import exceptions
+from modules.steps import base_pipeline_step
+from modules.util import exceptions, data_defs
 
 class ConcreteBPS(BasePipelineStep):
 
@@ -38,15 +38,23 @@ class TestBasePipelineStep(unittest.TestCase):
     def test_get_step_name(self):
         step = ConcreteBPS()
         self.assertEqual(step.get_step_name(), 'ConcreteBPS')
+        step.application_name = 'kth-azure-app'
+        step.cluster_name = 'stage'
+        self.assertEqual(step.get_step_name(), 'stage.kth-azure-app.ConcreteBPS')
 
-    # def test_error_handling(self):
-    #     step = ConcreteBPS()
-    #     ConcreteBPS.get_required_data_keys = mock.MagicMock(return_value=[])
-    #     ConcreteBPS.get_required_env_variables = mock.MagicMock(return_value=[])
-    #     step.run_step = mock.MagicMock(side_effect=KeyError)
-    #     self.assertRaises(exceptions.DeploymentError, step.run_pipeline_step, {})
-    #     step.run_step = mock.MagicMock(side_effect=exceptions.DeploymentError)
-    #     self.assertRaises(exceptions.DeploymentError, step.run_pipeline_step, {})
+    def test_set_app_and_cluster_name(self):
+        step = ConcreteBPS()
+        pipeline_data = {}
+        step.set_app_and_cluster_name(pipeline_data)
+        self.assertIsNone(step.application_name)
+        self.assertIsNone(step.cluster_name)
+        pipeline_data = {
+            data_defs.APPLICATION_NAME: 'kth-azure-app',
+            data_defs.APPLICATION_CLUSTER: 'stage'
+            }
+        step.set_app_and_cluster_name(pipeline_data)
+        self.assertEqual(step.application_name, 'kth-azure-app')
+        self.assertEqual(step.cluster_name, 'stage')
 
     def test_add_error_data(self):
         step = ConcreteBPS()
