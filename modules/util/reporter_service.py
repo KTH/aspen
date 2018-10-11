@@ -3,68 +3,75 @@ __author__ = 'tinglev@kth.se'
 import logging
 import traceback
 import requests
+from requests.exceptions import Timeout, HTTPError
 from modules.util import environment, exceptions, data_defs, redis
 
-LOG = logging.getLogger(__name__)
-
 def handle_recommendation(pipeline_data, application_name, recommendation_text):
+    logger = logging.getLogger(__name__)
     recommendation_url = environment.get_env(environment.SLACK_RECOMMENDATION_POST_URL)
     if recommendation_url:
         combined_labels = get_combined_service_labels(pipeline_data)
         slack_channels = get_slack_channels(combined_labels)
         payload = create_recommedation_object(application_name, recommendation_text, slack_channels)
-        print(payload)
-        try:
-            response = requests.put(recommendation_url, json=payload, timeout=2)
-            response.raise_for_status()
-        except Exception as ex:
-            LOG.error('Could not call slack recommendation reporting service. Error was: "%s"',
-                      str(ex))
+        response = call_with_payload(recommendation_url, payload)
+        if response:
+            logger.debug('Response was: "%s"', response)
     else:
-        LOG.debug('Slack recommendation integration not enabled, skipping report')
+        logger.debug('Slack recommendation integration not enabled, skipping report')
 
 def handle_deployment_success(deployment_json):
+    logger = logging.getLogger(__name__)
     deployment_url = environment.get_env(environment.SLACK_DEPLOYMENT_POST_URL)
     if deployment_url:
-        LOG.info('Reporting successful deployment')
-        try:
-            LOG.debug('Calling "%s" with "%s"', deployment_url, deployment_json)
-            response = requests.put(deployment_url, json=deployment_json, timeout=2)
-            response.raise_for_status()
-        except Exception as ex:
-            LOG.error('Could not call slack deployment reporting service. Error was: "%s"',
-                      str(ex))
-            return
-        LOG.debug('Response was: "%s"', response)
+        logger.info('Reporting successful deployment')
+        response = call_with_payload(deployment_url, deployment_json)
+        if response:
+            logger.debug('Response was: "%s"', response)
     else:
-        LOG.debug('Slack integration not enabled, skipping report')
+        logger.debug('Slack integration not enabled, skipping report')
 
 def handle_deployment_error(error: exceptions.DeploymentError):
+    logger = logging.getLogger(__name__)
     if not error.reportable:
-        LOG.debug('Error.reportable is set to False: skipping')
+        logger.debug('Error.reportable is set to False: skipping')
         return
     is_already_reported = has_cached_error(error)
     if is_already_reported:
         # This error has already been reported
-        LOG.debug('Error has already been reported: skipping')
+        logger.debug('Error has already been reported: skipping')
         return
-    LOG.debug('Found new reportable error: reporting to Slack')
+    logger.debug('Found new reportable error: reporting to Slack')
     combined_labels = get_combined_service_labels(error.pipeline_data)
     error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
     if error_url:
         error_json = create_error_object(error, combined_labels)
-        LOG.debug('Calling "%s" with "%s"', error_url, error_json)
-        try:
-            response = requests.put(error_url, json=error_json, timeout=2)
-            response.raise_for_status()
-        except Exception as ex:
-            LOG.error('Could not call slack error reporting service. Error was: "%s"',
-                      str(ex))
-            return
-        LOG.debug('Response was: "%s"', response)
-        write_to_error_cache(error)
+        logger.debug('Calling "%s" with "%s"', error_url, error_json)
+        response = call_with_payload(error_url, error_json)
+        if response:
+            logger.debug('Response was: "%s"', response)
+            write_to_error_cache(error)
     else:
-        LOG.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
+        logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
+
+def call_with_payload(url, payload):
+    try:
+        logger = logging.getLogger(__name__)
+        logger.debug('Calling "%s" with "%s"', url, payload)
+        response = requests.put(url, json=payload, timeout=2)
+        response.raise_for_status()
+        return response
+    except ConnectionError as conn_err:
+        logger.error('Connection error while calling slack reporting service. Error was: "%s"',
+                  str(conn_err))
+        return None
+    except Timeout as timeout_err:
+        logger.error('Timeout while calling slack reporting service. Error was: "%s"',
+                  str(timeout_err))
+        return None
+    except HTTPError as http_err:
+        logger.error('Http error while calling slack reporting service. Error was: "%s"',
+                  str(http_err))
+        return None
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):
     return {
@@ -113,6 +120,9 @@ def create_error_message(error):
             application = error.pipeline_data[data_defs.APPLICATION_NAME]
         if data_defs.APPLICATION_CLUSTER in error.pipeline_data:
             cluster = error.pipeline_data[data_defs.APPLICATION_CLUSTER]
+    return format_error_message(cluster, application, step, error)
+
+def format_error_message(cluster, application, step, error):
     return (f'Cluster: `{cluster}`, '
             f'Application: `{application}`, '
             f'Step: `{step}`, '
@@ -135,4 +145,3 @@ def get_combined_service_labels(pipeline_data):
 def get_slack_channels(combined_labels):
     if 'se.kth.slackChannels' in combined_labels:
         return combined_labels['se.kth.slackChannels']
-    LOG.warning('Could not get label se.kth.slackChannels for application.')
