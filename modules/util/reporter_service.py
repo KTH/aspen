@@ -58,11 +58,7 @@ def handle_fatal_error(error: exceptions.DeploymentError):
     logger.debug('Found new reportable error: reporting to Slack')
     error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
     if error_url:
-        error_json = {
-            'message': str(error),
-            'slackChannels': None,
-            'stackTrace': None
-        }
+        error_json = create_error_object(error, None)
         logger.debug('Calling "%s" with "%s"', error_url, error_json)
         response = call_with_payload(error_url, error_json)
         if response:

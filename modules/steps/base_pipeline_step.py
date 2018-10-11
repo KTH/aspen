@@ -107,7 +107,7 @@ class BasePipelineStep:
         msg = str(error)
         if isinstance(error, exceptions.AspenError):
             msg = str(error)
-            error = exceptions.DeploymentError(msg, fatal=True)
+            error = exceptions.DeploymentError(msg, fatal=True, expected=False)
         if isinstance(error, subprocess.CalledProcessError):
             msg = str(error.output) # pylint: disable=E1101
         if not isinstance(error, exceptions.DeploymentError):
