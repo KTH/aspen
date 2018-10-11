@@ -20,7 +20,7 @@ class BasePipelineStep:
         self.application_name = None
         self.cluster_name = None
         self.next_step = None
-        self.log = logging.getLogger(self.get_step_name())
+        self.configure_logger()
 
     @abstractmethod
     def run_step(self, pipeline_data): #pragma: no cover
@@ -46,6 +46,9 @@ class BasePipelineStep:
             return f'{self.cluster_name}/{self.application_name} - {step_name}'
         return step_name
 
+    def configure_logger(self):
+        self.log = logging.getLogger(self.get_step_name())
+
     def has_missing_step_data(self, data):
         for key in self.get_required_data_keys():
             if not data or not key in data:
@@ -68,6 +71,8 @@ class BasePipelineStep:
 
     def run_pipeline_step(self, pipeline_data):
         self.set_app_and_cluster_name(pipeline_data)
+        # Update logger in case we now have app and cluster
+        self.configure_logger()
         step_data_missing = self.has_missing_step_data(pipeline_data)
         environment_missing = self.has_missing_environment_data()
         self.check_environment_missing(pipeline_data, environment_missing)
