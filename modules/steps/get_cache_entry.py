@@ -14,14 +14,13 @@ class GetCacheEntry(BasePipelineStep):
         BasePipelineStep.__init__(self)
 
     def get_required_env_variables(self):
-        return [environment.REDIS_URL]
+        return []
 
     def get_required_data_keys(self):
         return [data_defs.STACK_FILE_PATH]
 
     def run_step(self, pipeline_data):
-        redis_url = environment.get_with_default_string(environment.REDIS_URL, 'redis')
-        redis_client = redis.get_client(redis_url)
+        redis_client = redis.get_client()
         file_path = pipeline_data[data_defs.STACK_FILE_PATH]
         cache_entry = redis.execute_json_get(redis_client, file_path)
         self.log.debug('Got cache entry "%s"', cache_entry)

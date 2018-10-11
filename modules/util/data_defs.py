@@ -1,7 +1,10 @@
+"""data_defs.py
+
+Data definitions used when getting data from the pipeline_data object"""
+
 __author__ = 'tinglev@kth.se'
 
 STACK_FILE_PATH = 'STACK_FILE_PATH'
-#DOCKER_STACK_OBJECT = 'DOCKER_STACK_OBJECT'
 APPLICATION_CLUSTER = 'APPLICATION_CLUSTER'
 APPLICATION_NAME = 'APPLICATION_NAME'
 APPLICATION_PASSWORDS = 'APPLICATION_PASSWORDS'

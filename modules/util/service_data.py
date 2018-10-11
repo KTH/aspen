@@ -1,3 +1,7 @@
+"""service_data.py
+
+Util module for working with service data"""
+
 __author__ = 'tinglev@kth.se'
 
 from modules.util import data_defs

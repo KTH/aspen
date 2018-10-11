@@ -1,3 +1,7 @@
+"""regex.py
+
+Regular expression patterns used in aspen"""
+
 __author__ = 'tinglev@kth.se'
 
 def get_label_and_env_regex():

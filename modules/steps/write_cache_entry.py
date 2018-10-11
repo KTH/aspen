@@ -15,7 +15,7 @@ class WriteCacheEntry(BasePipelineStep):
         BasePipelineStep.__init__(self)
 
     def get_required_env_variables(self):
-        return [environment.REDIS_URL]
+        return []
 
     def get_required_data_keys(self):
         return [data_defs.STACK_FILE_PATH,
@@ -23,8 +23,7 @@ class WriteCacheEntry(BasePipelineStep):
                 data_defs.SERVICES]
 
     def run_step(self, pipeline_data):
-        redis_url = environment.get_with_default_string(environment.REDIS_URL, 'redis')
-        redis_client = redis.get_client(redis_url)
+        redis_client = redis.get_client()
         file_path = pipeline_data[data_defs.STACK_FILE_PATH]
         image_versions = self.generate_image_versions(pipeline_data)
         cache_entry = self.generate_cache_entry(pipeline_data, image_versions)

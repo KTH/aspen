@@ -1,3 +1,7 @@
+"""environment.py
+
+Helper module and data definition names for the os environment"""
+
 __author__ = 'tinglev@kth.se'
 
 import os

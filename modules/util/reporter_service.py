@@ -46,23 +46,22 @@ def handle_deployment_error(error: exceptions.DeploymentError):
         # This error has already been reported
         LOG.debug('Error has already been reported: skipping')
         return
+    LOG.debug('Found new reportable error: reporting to Slack')
+    combined_labels = get_combined_service_labels(error.pipeline_data)
+    error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
+    if error_url:
+        error_json = create_error_object(error, combined_labels)
+        LOG.debug('Calling "%s" with "%s"', error_url, error_json)
+        try:
+            response = requests.put(error_url, json=error_json, timeout=2)
+            response.raise_for_status()
+        except Exception as ex:
+            LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
+            return
+        LOG.debug('Response was: "%s"', response)
+        write_to_error_cache(error)
     else:
-        LOG.debug('Found new reportable error: reporting to Slack')
-        combined_labels = get_combined_service_labels(error.pipeline_data)
-        error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
-        if error_url:
-            error_json = create_error_object(error, combined_labels)
-            LOG.debug('Calling "%s" with "%s"', error_url, error_json)
-            try:
-                response = requests.put(error_url, json=error_json, timeout=2)
-                response.raise_for_status()
-            except Exception as ex:
-                LOG.error('Could not call slack reporting service. Error was: "%s"', str(ex))
-                return
-            LOG.debug('Response was: "%s"', response)
-            write_to_error_cache(error)
-        else:
-            LOG.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
+        LOG.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):
     return {
@@ -75,8 +74,7 @@ def write_to_error_cache(error):
     application_name = pipeline_data[data_defs.APPLICATION_NAME]
     cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
     error_cache_key = f'{cluster_name}.{application_name}'
-    redis_url = environment.get_with_default_string('REDIS_URL', 'redis')
-    redis_client = redis.get_client(redis_url)
+    redis_client = redis.get_client()
     redis.execute_json_set(redis_client, error_cache_key, {'step_name': error.step_name})
 
 def has_cached_error(error):
@@ -88,8 +86,7 @@ def has_cached_error(error):
     return result and result['step_name'] == error.step_name
 
 def get_error_cache(error_cache_key):
-    redis_url = environment.get_with_default_string('REDIS_URL', 'redis')
-    redis_client = redis.get_client(redis_url)
+    redis_client = redis.get_client()
     return redis.execute_json_get(redis_client, error_cache_key)
 
 def create_error_object(error, combined_labels):

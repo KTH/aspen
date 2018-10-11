@@ -1,14 +1,19 @@
+"""redis.py
+
+Util module for working with the redis cache"""
+
 __author__ = 'tinglev@kth.se'
 
 import json
 import logging
 import redis
-from modules.util import exceptions
+from modules.util import exceptions, environment
 
 LOG = logging.getLogger(__name__)
 
-def get_client(redis_url):
+def get_client():
     try:
+        redis_url = environment.get_with_default_string(environment.REDIS_URL, 'redis')
         return redis.StrictRedis(redis_url)
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt create redis client. Error was: "{str(redis_err)}"')

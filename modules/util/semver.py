@@ -1,3 +1,7 @@
+"""semver.py
+
+Util module for working with semantic versioning"""
+
 __author__ = 'tinglev@kth.se'
 
 import re

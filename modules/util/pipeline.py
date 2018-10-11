@@ -1,3 +1,7 @@
+"""pipeline.py
+
+Util functions for working with pipelines"""
+
 __author__ = 'tinglev@kth.se'
 
 def create_pipeline_from_array(array_of_steps):

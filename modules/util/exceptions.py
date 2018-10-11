@@ -1,3 +1,7 @@
+"""exceptions.py
+
+Custom exceptions used through out aspen"""
+
 __author__ = 'tinglev@kth.se'
 
 class BaseError(Exception):

@@ -1,3 +1,7 @@
+"""log.py
+
+Initializes logging"""
+
 __author__ = 'tinglev'
 
 import os

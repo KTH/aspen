@@ -1,3 +1,7 @@
+"""process.py
+
+Util functions for working with command line calls"""
+
 __author__ = 'tinglev@kth.se'
 
 import subprocess
