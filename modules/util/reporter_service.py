@@ -53,6 +53,23 @@ def handle_deployment_error(error: exceptions.DeploymentError):
     else:
         logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
 
+def handle_fatal_error(error: exceptions.DeploymentError):
+    logger = logging.getLogger(__name__)
+    logger.debug('Found new reportable error: reporting to Slack')
+    error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
+    if error_url:
+        error_json = {
+            'message': str(error),
+            'slackChannels': None,
+            'stackTrace': None
+        }
+        logger.debug('Calling "%s" with "%s"', error_url, error_json)
+        response = call_with_payload(error_url, error_json)
+        if response:
+            logger.debug('Response was: "%s"', response)
+    else:
+        logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')    
+
 def call_with_payload(url, payload):
     try:
         logger = logging.getLogger(__name__)

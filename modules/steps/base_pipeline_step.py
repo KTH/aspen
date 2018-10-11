@@ -119,6 +119,7 @@ class BasePipelineStep:
         error = self.add_error_data(error, pipeline_data)
         self.log.debug('An error occured: "%s"', str(error))
         if error.fatal:
+            reporter_service.handle_fatal_error(error)
             sys.exit()
         else:
             reporter_service.handle_deployment_error(error)
