@@ -62,15 +62,15 @@ def call_with_payload(url, payload):
         return response
     except ConnectionError as conn_err:
         logger.error('Connection error while calling slack reporting service. Error was: "%s"',
-                  str(conn_err))
+                     str(conn_err))
         return None
     except Timeout as timeout_err:
         logger.error('Timeout while calling slack reporting service. Error was: "%s"',
-                  str(timeout_err))
+                     str(timeout_err))
         return None
     except HTTPError as http_err:
         logger.error('Http error while calling slack reporting service. Error was: "%s"',
-                  str(http_err))
+                     str(http_err))
         return None
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):

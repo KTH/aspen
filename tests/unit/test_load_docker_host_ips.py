@@ -23,7 +23,7 @@ class TestLoadDockerHostIps(unittest.TestCase):
         try:
             os.environ[environment.CLUSTERS_TO_DEPLOY] = 'stage'
             step.verify_cluster_to_deploy_has_ip(cluster_data)
-        except:
+        except Exception:
             self.fail('No entry for stage')
         os.environ[environment.CLUSTERS_TO_DEPLOY] = 'nope'
         self.assertRaises(exceptions.AspenError, step.verify_cluster_to_deploy_has_ip, cluster_data)

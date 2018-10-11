@@ -67,7 +67,7 @@ class TestBasePipelineStep(unittest.TestCase):
         error = exceptions.DeploymentError('Test message', retryable=True)
         error = step.add_error_data(error, {'test': 'testv'})
         self.assertIsNotNone(error.timestamp)
-    
+
     def test_handle_pipeline_error(self):
         step = ConcreteBPS()
         sys.exit = mock.Mock()

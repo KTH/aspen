@@ -8,7 +8,7 @@ __author__ = 'tinglev@kth.se'
 from concurrent.futures import ThreadPoolExecutor, wait
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
-from modules.util import data_defs, environment, path
+from modules.util import data_defs, environment
 
 class StartDeploymentPipelines(BasePipelineStep):
 
