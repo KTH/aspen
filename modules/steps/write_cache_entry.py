@@ -7,7 +7,7 @@ or not"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, environment, cache_defs, redis
+from modules.util import data_defs, cache_defs, redis
 
 class WriteCacheEntry(BasePipelineStep):
 

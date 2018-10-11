@@ -6,7 +6,7 @@ any deployment cache entry that exists in our redis instance"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, data_defs, redis
+from modules.util import data_defs, redis
 
 class GetCacheEntry(BasePipelineStep):
 
