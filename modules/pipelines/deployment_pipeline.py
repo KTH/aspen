@@ -31,16 +31,13 @@ from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
 
-    def __init__(self, application_name=None):
-        if application_name:
-            self.log = logging.getLogger(f'{application_name} - {__name__}')
-        else:
-            self.log = logging.getLogger(__name__)
+    def __init__(self):
+        self.log = logging.getLogger(__name__)
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
+            ParseStackPath(),
             GetCacheEntry(),
             CalculateMd5(),
-            ParseStackPath(),
             ParseStackFile(),
             ClusterVerification(),
             InitServicePipelineData(),

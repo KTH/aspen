@@ -42,10 +42,7 @@ class StartDeploymentPipelines(BasePipelineStep):
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
-        app_name = path.get_app_name_from_file_path(file_path)
-        cluster_name = path.get_app_cluster_from_file_path(file_path)
-        full_name = f'{cluster_name}/{app_name}'
-        deployment_pipeline = DeploymentPipeline(full_name)
+        deployment_pipeline = DeploymentPipeline()
         pipeline_data = self.init_deploy_pipeline_data(pipeline_data, file_path)
         deployment_pipeline.set_pipeline_data(pipeline_data)
         return deployment_pipeline.run_pipeline()

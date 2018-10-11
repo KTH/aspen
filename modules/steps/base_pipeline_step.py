@@ -11,14 +11,16 @@ import time
 import os
 import logging
 import subprocess
-from modules.util import exceptions, reporter_service
+from modules.util import exceptions, reporter_service, data_defs
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
 
     def __init__(self):
-        self.log = logging.getLogger(self.get_step_name())
+        self.application_name = None
+        self.cluster_name = None
         self.next_step = None
+        self.log = logging.getLogger(self.get_step_name())
 
     @abstractmethod
     def run_step(self, pipeline_data): #pragma: no cover
@@ -39,7 +41,10 @@ class BasePipelineStep:
         pass
 
     def get_step_name(self):
-        return self.__class__.__name__
+        step_name = self.__class__.__name__
+        if self.application_name and self.cluster_name:
+            return f'{self.cluster_name}/{self.application_name} - {step_name}'
+        return step_name
 
     def has_missing_step_data(self, data):
         for key in self.get_required_data_keys():
@@ -55,7 +60,14 @@ class BasePipelineStep:
                 self.log.warning('Environment variable "%s" exists but is empty', env)
         return None
 
+    def set_app_and_cluster_name(self, pipeline_data):
+        if hasattr(pipeline_data, data_defs.APPLICATION_NAME):
+            self.application_name = pipeline_data[data_defs.APPLICATION_NAME]
+        if hasattr(pipeline_data, data_defs.APPLICATION_CLUSTER):
+            self.cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
+
     def run_pipeline_step(self, pipeline_data):
+        self.set_app_and_cluster_name(pipeline_data)
         step_data_missing = self.has_missing_step_data(pipeline_data)
         environment_missing = self.has_missing_environment_data()
         self.check_environment_missing(pipeline_data, environment_missing)
