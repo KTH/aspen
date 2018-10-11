@@ -1,5 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
+import sys
 import os
 import subprocess
 import unittest
@@ -69,15 +70,21 @@ class TestBasePipelineStep(unittest.TestCase):
     
     def test_handle_pipeline_error(self):
         step = ConcreteBPS()
+        sys.exit = mock.Mock()
         base_pipeline_step.reporter_service.handle_deployment_error = mock.Mock()
         error = Exception('Test message')
         step.handle_pipeline_error(error, {})
         args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
         self.assertTrue(isinstance(args[0], exceptions.DeploymentError))
         self.assertEqual(str(args[0]), 'Test message')
+        sys.exit.assert_not_called()
         error = subprocess.CalledProcessError(-1, 'Test cmd')
         error.output = 'Test output'
         base_pipeline_step.reporter_service.handle_deployment_error.reset_mock()
         step.handle_pipeline_error(error, {})
         args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
         self.assertEqual(str(args[0]), 'Test output')
+        sys.exit.assert_not_called()
+        error = exceptions.AspenError('should exit')
+        step.handle_pipeline_error(error, {})
+        sys.exit.assert_called_once()

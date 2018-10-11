@@ -7,6 +7,7 @@ handles logging and exceptions"""
 __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod
+import sys
 import time
 import os
 import logging
@@ -104,6 +105,9 @@ class BasePipelineStep:
 
     def handle_pipeline_error(self, error, pipeline_data):
         msg = str(error)
+        if isinstance(error, exceptions.AspenError):
+            msg = str(error)
+            error = exceptions.DeploymentError(msg, fatal=True)
         if isinstance(error, subprocess.CalledProcessError):
             msg = str(error.output) # pylint: disable=E1101
         if not isinstance(error, exceptions.DeploymentError):
@@ -114,8 +118,11 @@ class BasePipelineStep:
         # Complement error with step data
         error = self.add_error_data(error, pipeline_data)
         self.log.debug('An error occured: "%s"', str(error))
-        reporter_service.handle_deployment_error(error)
-        self.stop_pipeline()
+        if error.fatal:
+            sys.exit()
+        else:
+            reporter_service.handle_deployment_error(error)
+            self.stop_pipeline()
 
     def add_error_data(self, deployment_error, pipeline_data):
         deployment_error.pipeline_data = pipeline_data

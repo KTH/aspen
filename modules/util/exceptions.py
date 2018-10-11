@@ -12,7 +12,8 @@ class BaseError(Exception):
                  reportable=True,
                  pipeline_data=None,
                  timestamp=None,
-                 expected=True):
+                 expected=True,
+                 fatal=False):
         super().__init__(message)
         self.retryable = retryable
         self.timestamp = timestamp
@@ -20,6 +21,7 @@ class BaseError(Exception):
         self.reportable = reportable
         self.pipeline_data = pipeline_data
         self.expected = expected
+        self.fatal = fatal
 
 class AspenError(BaseError):
     pass
