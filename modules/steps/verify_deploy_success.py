@@ -31,6 +31,10 @@ class VerifyDeploySuccess(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         service_names = self.get_all_service_names(pipeline_data)
+        if not service_names:
+            raise exceptions.DeploymentError(f'Couldnt get service names from deployment '
+                                             f'output. Output was: '
+                                             f'"{pipeline_data[data_defs.DEPLOY_OUTPUT]}"')
         for service in service_names:
             self.wait_for_service_replication(pipeline_data, service)
         return pipeline_data

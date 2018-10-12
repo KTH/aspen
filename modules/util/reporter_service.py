@@ -70,7 +70,7 @@ def call_with_payload(url, payload):
     try:
         logger = logging.getLogger(__name__)
         logger.debug('Calling "%s" with "%s"', url, payload)
-        response = requests.put(url, json=payload, timeout=2)
+        response = requests.put(url, json=payload, timeout=5)
         response.raise_for_status()
         return response
     except ConnectionError as conn_err:

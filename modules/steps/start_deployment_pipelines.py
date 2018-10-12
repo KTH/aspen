@@ -19,7 +19,7 @@ class StartDeploymentPipelines(BasePipelineStep):
         return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
     def run_step(self, pipeline_data):
-        parallelism = environment.get_with_default_int(environment.PARALLELISM, 10)
+        parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
         executor = ThreadPoolExecutor(max_workers=parallelism)
         tasks = []
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
