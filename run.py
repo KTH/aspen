@@ -23,8 +23,6 @@ class SyncThread(Thread):
     def stopped(self):
         return self._stop_event.is_set()
 
-SYNC_THREAD = SyncThread(target=sync_routine)
-
 def sync_routine():
     logger = logging.getLogger(__name__)
     pipeline = AspenPipeline()
@@ -32,6 +30,8 @@ def sync_routine():
         pipeline.run_pipeline()
         logger.info('Main pipeline done, waiting 15 seconds before next run')
         time.sleep(15)
+
+SYNC_THREAD = SyncThread(target=sync_routine)
 
 @FLASK_APP.route('/api/v1/cache', methods=['DEL'])
 def clear_cache():
@@ -45,7 +45,7 @@ def clear_cache():
 def start_sync():
     logger = logging.getLogger(__name__)
     logger.info('Starting sync thread')
-    SYNC_THREAD.run()
+    SYNC_THREAD.start()
     return jsonify(message='Sync thread started')
 
 @FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
