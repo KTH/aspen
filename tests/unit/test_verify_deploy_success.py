@@ -62,3 +62,9 @@ class TestVerifyDeploySuccess(unittest.TestCase):
         verify_deploy_success.time.sleep = mock.Mock()
         self.assertRaises(exceptions.DeploymentError, step.wait_for_service_replication, {}, 'test-app')
         self.assertEqual(verify_deploy_success.time.sleep.call_count, 5)
+
+    def test_failing_run_step(self):
+        step = VerifyDeploySuccess()
+        step.get_all_service_names = mock.Mock(return_value=[])
+        pipeline_data = {data_defs.DEPLOY_OUTPUT: 'Some error'}
+        self.assertRaises(exceptions.DeploymentError, step.run_step, pipeline_data)
