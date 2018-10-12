@@ -26,6 +26,7 @@ def start_sync():
 
 def main():
     log.init_logging()
+    FLASK_APP.run(host='0.0.0.0', port=3005)
 
 if __name__ == '__main__':
     main()

@@ -30,4 +30,4 @@ COPY ["root_path.py", "root_path.py"]
 
 EXPOSE 3005
 
-CMD ["pipenv", "run", "python", "-u", "run.py"]
+CMD ["pipenv", "run", "python", "run.py"]
