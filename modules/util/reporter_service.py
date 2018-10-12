@@ -158,3 +158,4 @@ def get_combined_service_labels(pipeline_data):
 def get_slack_channels(combined_labels):
     if 'se.kth.slackChannels' in combined_labels:
         return combined_labels['se.kth.slackChannels']
+    return None
