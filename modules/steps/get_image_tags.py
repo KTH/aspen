@@ -4,9 +4,8 @@ Gets all tags from a docker registry for the given service images"""
 
 __author__ = 'tinglev@kth.se'
 
-import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, environment
+from modules.util import data_defs, environment, requests
 
 class GetImageTags(BasePipelineStep):
 
@@ -38,6 +37,5 @@ class GetImageTags(BasePipelineStep):
     def get_tags_from_registry(self, url_to_call):
         user = environment.get_env(environment.DOCKER_REGISTRY_USER)
         password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
-        response = requests.get(url_to_call, auth=(user, password))
-        response.raise_for_status()
+        response = requests.send_get(url_to_call, auth=(user, password))
         return response.json()["tags"]

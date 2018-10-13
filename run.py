@@ -34,8 +34,7 @@ SYNC_THREAD = SyncThread(target=sync_routine)
 @FLASK_APP.route('/api/v1/cache', methods=['DEL'])
 def clear_cache():
     logger = logging.getLogger(__name__)
-    client = redis.get_client()
-    client.flushdb()
+    redis.delete_entire_cache()
     logger.info('Cleared redis cache')
     return jsonify(message='Cache cleared')
 

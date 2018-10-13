@@ -19,6 +19,15 @@ def get_client():
         raise exceptions.DeploymentError(f'Couldnt create redis client. Error was: '
                                          f'"{str(redis_err)}"')
 
+def delete_entire_cache():
+    try:
+        LOG.debug('Deleting entire redis cache')
+        client = get_client()
+        client.flushdb()
+    except redis.RedisError as redis_err:
+        raise exceptions.AspenError(f'Couldnt delete redis cache. Error was: '
+                                    f'"{str(redis_err)}""')
+
 def execute_json_set(client, key, value):
     try:
         LOG.debug('Writing key "%s" and value "%s"', key, value)

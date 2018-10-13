@@ -7,9 +7,8 @@ __author__ = 'tinglev@kth.se'
 
 import os
 import json
-import requests
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, environment, exceptions
+from modules.util import data_defs, environment, exceptions, requests
 
 class LoadDockerHostIps(BasePipelineStep):
 
@@ -52,8 +51,7 @@ class LoadDockerHostIps(BasePipelineStep):
     def call_cluster_status_api(self):
         try:
             url = environment.get_env(environment.CLUSTER_STATUS_API_URL)
-            response = requests.get(url)
-            response.raise_for_status()
+            response = requests.send_get(url)
             return response.json()
         except Exception as err:
             raise exceptions.AspenError(f'Could not call cluster status api. '
