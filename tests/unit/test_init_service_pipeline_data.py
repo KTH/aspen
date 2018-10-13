@@ -16,7 +16,8 @@ class TestInitServicePipelineData(unittest.TestCase):
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_NAME], 'web')
         self.assertEqual(result[data_defs.SERVICES][0][data_defs.S_DEPLOY_LABELS], [])
         self.assertEqual(result[data_defs.SERVICES][1][data_defs.S_NAME], 'api')
-        deploy_labels = [label.split('=') for label in result[data_defs.SERVICES][1][data_defs.S_DEPLOY_LABELS]]
+        deploy_labels = [label.split('=') for label in
+                         result[data_defs.SERVICES][1][data_defs.S_DEPLOY_LABELS]]
         for name, value in deploy_labels:
             if name == 'traefik.deploy' and value == 'true':
                 break

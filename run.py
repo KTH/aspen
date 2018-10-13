@@ -10,8 +10,6 @@ from modules.pipelines.aspen_pipeline import AspenPipeline
 FLASK_APP = Flask(__name__)
 
 class SyncThread(Thread):
-    """Thread class with a stop() method. The thread itself has to check
-    regularly for the stopped() condition."""
 
     def __init__(self, target):
         super(SyncThread, self).__init__(target=target)

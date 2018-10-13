@@ -17,7 +17,8 @@ class TestParseStackFile(unittest.TestCase):
         self.assertTrue('services' in pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT])
         self.assertTrue('networks' in pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT])
         self.assertTrue('web' in pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services'])
-        self.assertFalse(isinstance(pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']['web']['environment'], (list,)))
+        env = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']['web']['environment']
+        self.assertFalse(isinstance(env, (list,)))
 
     def test_bad_run(self):
         file_path = 'BATMAN!'

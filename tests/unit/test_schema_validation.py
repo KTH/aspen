@@ -47,7 +47,10 @@ class TestSchemaValidation(unittest.TestCase):
             environment.VALIDATE_ERROR_URL,
             'https://app-r.referens.sys.kth.se/jsonschema/dizin/error'
         )
-        pipeline_data = {data_defs.STACK_FILE_PARSED_CONTENT: mock_test_data.get_parsed_stack_content()}
+        pipeline_data = {
+            data_defs.STACK_FILE_PARSED_CONTENT:
+                mock_test_data.get_parsed_stack_content()
+            }
         combined_labels = reporter_service.get_combined_service_labels(pipeline_data)
         # Expected error (with slack channels)
         error = mock_test_data.get_mock_deployment_error()

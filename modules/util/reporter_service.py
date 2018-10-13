@@ -64,7 +64,7 @@ def handle_fatal_error(error: exceptions.DeploymentError):
         if response:
             logger.debug('Response was: "%s"', response)
     else:
-        logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')    
+        logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
 
 def call_with_payload(url, payload):
     try:
