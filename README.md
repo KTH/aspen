@@ -2,6 +2,16 @@
 
 Deployment orchestration tool using git repository driven application configurations and secrets.
 
+## Goals of the project
+
+* General clean up (old code)
+* Improve code structure/readability
+* Increased testability
+* Improve deployment performance
+* Improved error handling
+* Open source all the things!
+* Improve caching and redeployments after fatal errors
+
 ## Required installations (when not running as a docker image)
 
 * Python 3.6.5 (pyenv is a good tool for this)
