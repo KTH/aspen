@@ -69,10 +69,10 @@ passwords:
 * Application registry repository must store docker stack files in the following directory structure (`<cluster status>` is active, stage, ...):
 
 ```bash
-<repository root path>/.../<application name>/<cluster status>
+<repository root path>/.../<application name>/<cluster status>/docker-stack.yml
 ```
 
-* Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file. The file must be encrypted with the application password found in the application password file (see above).
+* Ansible vault encrypted secrets file for each application must be named `secrets.env` and reside in the same directory as the corresponding docker stack file (ie: `<repository root path>/.../<application name>/<cluster status>/secrets.env`). The file must be encrypted with the application password found in the application password file (see above).
 
 * The API that is called to fetch cluster statuses must return a json structure according to the following format. If you prefer static configuration of your load balancer IPs you can set the environment variable `CLUSTER_STATUS_URL_IS_FILE` and let `CLUSTER_STATUS_API_URL` point to a local file path instead. The content of the file must be valid json and adhere to the same format as the api - specified here below:
 
