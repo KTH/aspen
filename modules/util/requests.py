@@ -4,8 +4,9 @@ import logging
 from requests import get, post
 from requests.exceptions import Timeout, HTTPError
 from modules.util.exceptions import AspenError
+from modules.util import environment
 
-DEFAULT_TIMEOUT = 5
+DEFAULT_TIMEOUT = environment.get_with_default_int(environment.REQUEST_TIMEOUT, 5)
 
 def send_post(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
     response = send(post, url, json, auth, timeout)
