@@ -1,10 +1,12 @@
 __author__ = 'tinglev@kth.se'
 
+import os
 import time
 import logging
+import subprocess
 from threading import Thread, Event
 from flask import Flask, jsonify
-from modules.util import log, redis
+from modules.util import log, redis, environment, known_hosts
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
@@ -55,6 +57,7 @@ def stop_sync():
 
 def main():
     log.init_logging()
+    known_hosts.write_entry_if_missing()
     FLASK_APP.run(host='0.0.0.0', port=3005)
 
 if __name__ == '__main__':

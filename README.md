@@ -62,6 +62,8 @@ All program environment access is done through `modules/util/environment.py`
 | `VERIFY_START_DELAY_SECS` | The delay between attempts when verifying that a deployed stack has all of its replicas started. Defaults to 5. |
 | `VERIFY_START_RETRY_TIMES` | The number of times to try and verify a successful deploy before considering it a failed deploy. Defaults to 5. |
 | `REQUEST_TIMEOUT` | The default timeout to use when issuing requests against other services. Defaults to 5. |
+| `KNOWN_HOST_ENTRY` | Entry to add to the known_hosts file, for example when needing to access a private registry. Defaults to None. |
+| `KNOWN_HOST_FILE` | The absolute path to the known_hosts file on the system. Defaults to `/root/.ssh/known_hosts`. |
 
 ## Hard coded requirements
 
