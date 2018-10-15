@@ -22,7 +22,7 @@ def add_known_host_entry():
 def write_to_file(file_path, text):
     text = text.rstrip('"').lstrip('"')
     with open(file_path, 'w+') as file_content:
-        file_content.write(f'{text}')
+        file_content.write(f'\n{text}')
 
 def file_has_text(file_path, text):
     if not os.path.isfile(file_path):

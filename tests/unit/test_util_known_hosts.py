@@ -27,18 +27,18 @@ class TestKnownHosts(unittest.TestCase):
     def test_add_known_host_entry(self):
         # Test writing to existing file
         os.environ[environment.KNOWN_HOST_FILE] = self.EXISTING_FILE_PATH
-        os.environ[environment.KNOWN_HOST_ENTRY] = '\ntest entry to write'
+        os.environ[environment.KNOWN_HOST_ENTRY] = 'test entry to write'
         known_hosts.add_known_host_entry()
         with open(self.EXISTING_FILE_PATH, 'r') as test_file:
             content = test_file.read()
-            if content.endswith('\ntest entry to write'):
+            if content.endswith('test entry to write'):
                 return
         os.environ[environment.KNOWN_HOST_FILE] = self.NEW_FILE_PATH
-        os.environ[environment.KNOWN_HOST_ENTRY] = '"\ntest entry to write"'
+        os.environ[environment.KNOWN_HOST_ENTRY] = '"test entry to write"'
         # Test writing to new file with quotation marks
         known_hosts.add_known_host_entry()
         with open(self.NEW_FILE_PATH, 'r') as test_file:
             content = test_file.read()
-            if content.endswith('\ntest entry to write'):
+            if content.endswith('test entry to write'):
                 return
         self.fail('Could not find KNOWN_HOST_ENTRY in KNOWN_HOST_FILE')
