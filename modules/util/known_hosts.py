@@ -12,21 +12,20 @@ def add_known_host_entry():
     logger = logging.getLogger(__name__)
     file = environment.get_with_default_string(environment.KNOWN_HOST_FILE,
                                                '/root/.ssh/known_hosts')
-    if file and os.path.isfile(file):
-        entry = environment.get_env(environment.KNOWN_HOST_ENTRY)
-        if file_has_text(file, entry):
-            logging.debug('KNOWN_HOST_FILE already has KNOWN_HOST_ENTRY')
-        else:
-            logger.debug('Writing KNOWN_HOST_ENTRY to KNOWN_HOST_FILE')
-            write_to_file(file, entry)
+    entry = environment.get_env(environment.KNOWN_HOST_ENTRY)
+    if file_has_text(file, entry):
+        logging.debug('KNOWN_HOST_FILE already has KNOWN_HOST_ENTRY')
     else:
-        logger.info('KNOWN_HOST_FILE is not a valid file')
+        logger.debug('Writing KNOWN_HOST_ENTRY to KNOWN_HOST_FILE')
+        write_to_file(file, entry)
 
 def write_to_file(file_path, text):
-    with open(file_path, 'w') as file_content:
+    with open(file_path, 'w+') as file_content:
         file_content.write(f'{text}')
 
 def file_has_text(file_path, text):
+    if not os.path.isfile(file_path):
+        return False
     with open(file_path, 'r') as file_content:
         content = file_content.read()
         if text in content:
