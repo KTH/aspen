@@ -2,7 +2,6 @@ __author__ = 'tinglev@kth.se'
 
 import os
 import unittest
-import run
 from modules.util import environment, known_hosts
 
 class TestKnownHosts(unittest.TestCase):
@@ -35,7 +34,8 @@ class TestKnownHosts(unittest.TestCase):
             if content.endswith('\ntest entry to write'):
                 return
         os.environ[environment.KNOWN_HOST_FILE] = self.NEW_FILE_PATH
-        # Test writing to new file
+        os.environ[environment.KNOWN_HOST_ENTRY] = '"\ntest entry to write"'
+        # Test writing to new file with quotation marks
         known_hosts.add_known_host_entry()
         with open(self.NEW_FILE_PATH, 'r') as test_file:
             content = test_file.read()
