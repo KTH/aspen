@@ -1,6 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import os
+import time
 import unittest
 import mock
 import root_path
@@ -26,12 +27,17 @@ class TestCompletePipeline(unittest.TestCase):
     @mock.patch('modules.steps.registry_login.RegistryLogin.run_docker_login')
     @mock.patch('modules.steps.fetch_app_registry.FetchAppRegistry.get_latest_changes')
     @mock.patch('modules.steps.deploy_application.DeployApplication.run_docker_cmd')
+    @mock.patch('modules.steps.verify_deploy_success.VerifyDeploySuccess.get_all_service_names')
+    @mock.patch('modules.steps.verify_deploy_success.VerifyDeploySuccess.wait_for_service_replication')
     def test_entire_pipeline(self,
+                             mock_wait_for_replication,
+                             mock_get_service_names,
                              mock_run_docker_cmd,
                              mock_get_latest_changes,
                              mock_run_docker_login):
         pipeline = AspenPipeline()
         pipeline.run_pipeline()
+        mock_get_service_names.return_value = ['service']
         # Assertions
         mock_run_docker_login.assert_called_once()
         mock_get_latest_changes.assert_called_once()
@@ -54,9 +60,18 @@ class TestCompletePipeline(unittest.TestCase):
                       f'--compose-file {r_path}/tests/registry_repo/test_app_2/'
                       f'active/docker-stack.yml test_app_2'),
         ]
+        print('Calls in first run:')
         for call in mock_run_docker_cmd.call_args_list:
             print(call)
         mock_run_docker_cmd.assert_has_calls(docker_deploy_calls, any_order=True)
+        mock_run_docker_cmd.reset_mock()
+        mock_run_docker_login.reset_mock()
+        mock_get_latest_changes.reset_mock()
+        time.sleep(3)
+        pipeline.run_pipeline()
+        mock_run_docker_login.assert_called_once()
+        mock_get_latest_changes.assert_called_once()
+        mock_run_docker_cmd.assert_not_called()
 
 if __name__ == '__main__':
     unittest.main()

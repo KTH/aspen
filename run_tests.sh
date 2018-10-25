@@ -8,7 +8,11 @@ FLASK_APP=mock_api.py pipenv run flask run &
 MOCK_API_PID=$!
 
 # Run with "--debug" to show program logs
-REDIS_URL=localhost pipenv run green -vv --run-coverage --failfast "tests" "$@"
+REDIS_URL=localhost pipenv run green -vv --run-coverage --failfast "tests/test_complete_pipeline.py" "$@"
+if [ $? -eq 0 ]; then
+    # Only run unit tests if the complete pipeline tests succeeded
+    REDIS_URL=localhost pipenv run green -vv --run-coverage --failfast "tests/unit" "$@"
+fi
 
 # Kill mock API server
 kill $MOCK_API_PID 
