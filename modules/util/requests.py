@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import logging
-from requests import get, post
+from requests import get, post, put
 from requests.exceptions import Timeout, HTTPError
 from modules.util.exceptions import AspenError
 from modules.util import environment
@@ -13,7 +13,7 @@ def send_post(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
     return raise_http_error(response)
 
 def send_put(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
-    response = send(post, url, json, auth, timeout)
+    response = send(put, url, json, auth, timeout)
     return raise_http_error(response)
 
 def send_get(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
