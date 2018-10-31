@@ -1,4 +1,4 @@
-FROM python:3.6.5-alpine
+FROM kthse/kth-python:3.6.0
 
 RUN mkdir /repo && \
     mkdir /repo/secrets && \
@@ -9,17 +9,17 @@ WORKDIR /repo
 
 RUN apk update && \
     apk upgrade && \
-    apk add bash && \
-    apk add py-pip && \
+    apk add --repository http://nl.alpinelinux.org/alpine/v3.6/main bash && \
     # installs gcc + deps
-    apk add make git curl libffi-dev openssl-dev build-base openssh && \
-    apk add docker --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/latest-stable/community --allow-untrusted && \
-    pip install --upgrade pip && \
-    # Workaround for https://github.com/pypa/pipenv/issues/2924
-    pip install git+https://github.com/pypa/pipenv.git
+    apk add make curl libffi-dev openssl-dev build-base openssh && \
+    apk add docker --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/latest-stable/community --allow-untrusted
 
 COPY Pipfile Pipfile
 
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8
+
+RUN pipenv install
 RUN pipenv install pip
 RUN pipenv run pip install azure-cli
 
