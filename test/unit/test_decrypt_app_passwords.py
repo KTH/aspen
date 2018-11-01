@@ -17,8 +17,8 @@ class TestDecryptAppPasswords(unittest.TestCase):
 
     def test_good_run(self):
         root = root_path.PROJECT_ROOT
-        os.environ[environment.VAULT_KEY_PATH] = os.path.join(root, 'tests/__init__.py')
-        os.environ[environment.APP_PWD_FILE_PATH] = os.path.join(root, 'tests/mock_test_data.py')
+        os.environ[environment.VAULT_KEY_PATH] = os.path.join(root, 'test/__init__.py')
+        os.environ[environment.APP_PWD_FILE_PATH] = os.path.join(root, 'test/mock_test_data.py')
         step = DecryptAppPasswords()
         step.run_command = mock.Mock(return_value='passwords:\n  test: 123abc\n  test2: abc123')
         try:
@@ -32,8 +32,8 @@ class TestDecryptAppPasswords(unittest.TestCase):
 
     def test_error_in_command(self):
         root = root_path.PROJECT_ROOT
-        os.environ[environment.VAULT_KEY_PATH] = os.path.join(root, 'tests/__init__.py')
-        os.environ[environment.APP_PWD_FILE_PATH] = os.path.join(root, 'tests/mock_test_data.py')
+        os.environ[environment.VAULT_KEY_PATH] = os.path.join(root, 'test/__init__.py')
+        os.environ[environment.APP_PWD_FILE_PATH] = os.path.join(root, 'test/mock_test_data.py')
         step = DecryptAppPasswords()
         step.run_command = mock.Mock(side_effect=Exception('Failed'))
         self.assertRaises(Exception, step.run_step, {})

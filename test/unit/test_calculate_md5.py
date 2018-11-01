@@ -10,7 +10,7 @@ class TestCalculateMd5Step(unittest.TestCase):
 
     def test_run_step(self):
         root = root_path.PROJECT_ROOT
-        file_path = os.path.join(root, 'tests/registry_repo/test_app_1/active/docker-stack.yml')
+        file_path = os.path.join(root, 'test/registry_repo/test_app_1/active/docker-stack.yml')
         step = CalculateMd5()
         pipeline_data = {data_defs.STACK_FILE_PATH: file_path}
         pipeline_data = step.run_step(pipeline_data)

@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.get_docker_host_ip import GetDockerHostIp
 from modules.util import data_defs, exceptions
 

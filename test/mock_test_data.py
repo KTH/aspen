@@ -24,7 +24,7 @@ def get_mock_deployment_error(expected=True):
                                       expected=expected,
                                       step_name='ParseStackFile')
 
-def get_image_data():
+def get_pipeline_data():
     return {
         data_defs.STACK_FILE_PATH: 'test/path/for/real/docker-stack.yml',
         data_defs.STACK_FILE_DIR_HASH: 'alejfbabovudbasepvbsoev',

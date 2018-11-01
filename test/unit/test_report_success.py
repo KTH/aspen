@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.report_success import ReportSuccess
 from modules.util import data_defs
 

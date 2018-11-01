@@ -10,7 +10,7 @@ class TestParseStackFile(unittest.TestCase):
 
     def test_good_run(self):
         file_path = os.path.join(root_path.PROJECT_ROOT,
-                                 'tests/registry_repo/test_app_1/active/docker-stack.yml')
+                                 'test/registry_repo/test_app_1/active/docker-stack.yml')
         pipeline_data = {data_defs.STACK_FILE_PATH: file_path}
         step = ParseStackFile()
         pipeline_data = step.run_step(pipeline_data)
@@ -26,7 +26,7 @@ class TestParseStackFile(unittest.TestCase):
         step = ParseStackFile()
         self.assertRaises(exceptions.DeploymentError, step.run_step, pipeline_data)
         file_path = os.path.join(root_path.PROJECT_ROOT,
-                                 'tests/registry_repo/test_app_1/active/secrets.yml')
+                                 'test/registry_repo/test_app_1/active/secrets.yml')
         pipeline_data = {data_defs.STACK_FILE_PATH: file_path}
         self.assertRaises(exceptions.DeploymentError, step.run_step, pipeline_data)
    

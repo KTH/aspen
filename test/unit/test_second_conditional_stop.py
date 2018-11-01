@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.second_conditional_stop import SecondConditionalStop
 from modules.util import data_defs, cache_defs
 
@@ -9,7 +9,7 @@ class TestSecondConditionalStop(unittest.TestCase):
 
     def test_get_service_image_version(self):
         step = SecondConditionalStop()
-        data = mock_test_data.get_image_data()
+        data = mock_test_data.get_pipeline_data()
         result = step.get_service_image_version(data[data_defs.SERVICES][0])
         self.assertEqual(result, '2.0.1_abc123')
         result = step.get_service_image_version(data[data_defs.SERVICES][1])
@@ -17,7 +17,7 @@ class TestSecondConditionalStop(unittest.TestCase):
 
     def test_cached_versions_are_equal(self):
         step = SecondConditionalStop()
-        data = mock_test_data.get_image_data()
+        data = mock_test_data.get_pipeline_data()
         # No cache entry
         data[data_defs.CACHE_ENTRY] = None
         self.assertFalse(step.cached_versions_are_equal(data))

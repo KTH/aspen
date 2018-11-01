@@ -3,7 +3,7 @@ __author__ = 'tinglev@kth.se'
 import unittest
 import traceback
 import mock
-from tests import mock_test_data
+from test import mock_test_data
 from modules.util import data_defs, reporter_service
 
 class TestSendRecommendations(unittest.TestCase):

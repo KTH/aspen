@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import json
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.write_cache_entry import WriteCacheEntry
 from modules.util import data_defs, cache_defs
 
@@ -10,7 +10,7 @@ class TestWriteCacheEntry(unittest.TestCase):
 
     def test_generate_image_versions(self):
         step = WriteCacheEntry()
-        pipeline_data = mock_test_data.get_image_data()
+        pipeline_data = mock_test_data.get_pipeline_data()
         result = step.generate_image_versions(pipeline_data)
         self.assertTrue(len(result), 2)
         self.assertEqual(result[0][data_defs.IMG_NAME], 'kth-azure-app')
@@ -20,7 +20,7 @@ class TestWriteCacheEntry(unittest.TestCase):
 
     def test_generate_cache_entry(self):
         step = WriteCacheEntry()
-        pipeline_data = mock_test_data.get_image_data()
+        pipeline_data = mock_test_data.get_pipeline_data()
         image_versions = step.generate_image_versions(pipeline_data)
         result = step.generate_cache_entry(pipeline_data, image_versions)
         self.assertEqual(result, {

@@ -3,7 +3,7 @@ __author__ = 'tinglev@kth.se'
 import os
 import unittest
 import root_path
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.load_docker_host_ips import LoadDockerHostIps
 from modules.util import environment, exceptions
 
@@ -13,7 +13,7 @@ class TestLoadDockerHostIps(unittest.TestCase):
         step = LoadDockerHostIps()
         root = root_path.PROJECT_ROOT
         api_url = environment.CLUSTER_STATUS_API_URL
-        os.environ[api_url] = os.path.join(root, 'tests/cluster_lb_info.json')
+        os.environ[api_url] = os.path.join(root, 'test/cluster_lb_info.json')
         result = step.load_cluster_status_from_file()
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0]['status'], 'active')

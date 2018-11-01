@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.resource_policy_checker import ResourcePolicyChecker
 from modules.util import data_defs, exceptions
 

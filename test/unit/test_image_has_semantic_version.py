@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.image_has_semantic_version import ImageHasSemanticVersion
 from modules.util import data_defs, exceptions
 

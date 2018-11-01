@@ -27,7 +27,7 @@ Deployment orchestration tool using git repository driven application configurat
 
 Unit tests: `./run_tests.sh`
 
-Integration tests (uses KTH specifics): `./run_integration_tests.sh`. Requires additional environment settings for docker registry login. See `tests/integration/integration_test.py` for further details.
+Integration tests (uses KTH specifics): `./run_integration_tests.sh`. Requires additional environment settings for docker registry login. See `test/integration/integration_test.py` for further details.
 
 `--debug` can be appended to the end of both commands to enable logging while running tests
 

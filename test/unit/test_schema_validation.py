@@ -4,7 +4,7 @@ import unittest
 import traceback
 import mock
 import requests
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.report_success import ReportSuccess
 from modules.util import data_defs, reporter_service, environment
 
@@ -18,7 +18,7 @@ class TestSchemaValidation(unittest.TestCase):
             'https://app-r.referens.sys.kth.se/jsonschema/dizin/deployment'
         )
         step = ReportSuccess()
-        pipeline_data = mock_test_data.get_image_data()
+        pipeline_data = mock_test_data.get_pipeline_data()
         deployment_json = step.create_deployment_json(pipeline_data)
         result = requests.post(validation_url, json=deployment_json, allow_redirects=False)
         self.assertEqual(result.status_code, 200)

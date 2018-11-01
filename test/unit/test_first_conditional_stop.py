@@ -2,14 +2,14 @@ __author__ = 'tinglev@kth.se'
 
 import unittest
 import mock
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.first_conditional_stop import FirstConditionalStop
 from modules.util import data_defs, cache_defs
 
 class TestFirstConditionalStop(unittest.TestCase):
 
     def test_service_uses_semver(self):
-        pipeline_data = mock_test_data.get_image_data()
+        pipeline_data = mock_test_data.get_pipeline_data()
         step = FirstConditionalStop()
         result = step.service_uses_semver(pipeline_data)
         self.assertTrue(result)
@@ -31,7 +31,7 @@ class TestFirstConditionalStop(unittest.TestCase):
         self.assertTrue(result)
 
     def test_run_step(self):
-        pipeline_data = mock_test_data.get_image_data()
+        pipeline_data = mock_test_data.get_pipeline_data()
         pipeline_data[data_defs.CACHE_ENTRY] = None
         step = FirstConditionalStop()
         step.stop_pipeline = mock.Mock()

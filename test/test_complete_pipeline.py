@@ -14,15 +14,15 @@ class TestCompletePipeline(unittest.TestCase):
     def setUpClass(cls):
         r_path = root_path.PROJECT_ROOT
         # Initialize test environment
-        os.environ[environment.APP_PWD_FILE_PATH] = os.path.join(r_path, 'tests/app.passwords.yml')
+        os.environ[environment.APP_PWD_FILE_PATH] = os.path.join(r_path, 'test/app.passwords.yml')
         os.environ[environment.CLUSTERS_TO_DEPLOY] = 'active,stage'
         os.environ[environment.DOCKER_REGISTRY_PWD] = 'will_be_mocked'
         os.environ[environment.DOCKER_REGISTRY_USER] = 'will_be_mocked'
         os.environ[environment.DOCKER_REGISTRY_URL] = 'http://localhost:5000/tags'
         os.environ[environment.CLUSTER_STATUS_API_URL] = 'http://localhost:5000/clusters'
         os.environ[environment.REGISTRY_REPOSITORY_URL] = 'http://localhost/cellus-registry'
-        os.environ[environment.REGISTRY_SUB_DIRECTORY] = os.path.join(r_path, 'tests/registry_repo')
-        os.environ[environment.VAULT_KEY_PATH] = os.path.join(r_path, 'tests/vault.password')
+        os.environ[environment.REGISTRY_SUB_DIRECTORY] = os.path.join(r_path, 'test/registry_repo')
+        os.environ[environment.VAULT_KEY_PATH] = os.path.join(r_path, 'test/vault.password')
 
     @mock.patch('modules.steps.registry_login.RegistryLogin.run_docker_login')
     @mock.patch('modules.steps.fetch_app_registry.FetchAppRegistry.get_latest_changes')
@@ -45,19 +45,19 @@ class TestCompletePipeline(unittest.TestCase):
         docker_deploy_calls = [
             mock.call(f'WEB_VERSION=2.9.202_3b01b96 DOCKER_TLS_VERIFY=1 docker '
                       f'-H 10.28.21.30:2376 stack deploy --with-registry-auth '
-                      f'--compose-file {r_path}/tests/registry_repo/test_app_1/'
+                      f'--compose-file {r_path}/test/registry_repo/test_app_1/'
                       f'stage/docker-stack.yml test_app_1'),
             mock.call(f'WEB_VERSION=2.9.202_3b01b96 DOCKER_TLS_VERIFY=1 docker '
                       f'-H 10.28.20.30:2376 stack deploy --with-registry-auth '
-                      f'--compose-file {r_path}/tests/registry_repo/test_app_1/'
+                      f'--compose-file {r_path}/test/registry_repo/test_app_1/'
                       f'active/docker-stack.yml test_app_1'),
             mock.call(f'WEB_VERSION=2.9.202_3b01b96 DOCKER_TLS_VERIFY=1 docker '
                       f'-H 10.28.21.30:2376 stack deploy --with-registry-auth '
-                      f'--compose-file {r_path}/tests/registry_repo/test_app_2/'
+                      f'--compose-file {r_path}/test/registry_repo/test_app_2/'
                       f'stage/docker-stack.yml test_app_2'),
             mock.call(f'WEB_VERSION=2.9.202_3b01b96 DOCKER_TLS_VERIFY=1 docker '
                       f'-H 10.28.20.30:2376 stack deploy --with-registry-auth '
-                      f'--compose-file {r_path}/tests/registry_repo/test_app_2/'
+                      f'--compose-file {r_path}/test/registry_repo/test_app_2/'
                       f'active/docker-stack.yml test_app_2'),
         ]
         print('Calls in first run:')

@@ -10,7 +10,7 @@ class TestParseStackPath(unittest.TestCase):
 
     def test_run(self):
         good_file_path = os.path.join(root_path.PROJECT_ROOT,
-                                      'tests/registry_repo/test_app_1/active/docker-stack.yml')
+                                      'test/registry_repo/test_app_1/active/docker-stack.yml')
         pipeline_data = {data_defs.STACK_FILE_PATH: good_file_path}
         step = ParseStackPath()
         result = step.run_step(pipeline_data)

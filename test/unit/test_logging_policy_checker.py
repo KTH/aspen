@@ -1,7 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 import unittest
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps.logging_policy_checker import LoggingPolicyChecker
 from modules.util import data_defs, exceptions
 

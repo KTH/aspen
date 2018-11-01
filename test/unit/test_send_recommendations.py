@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import unittest
 import mock
-from tests import mock_test_data
+from test import mock_test_data
 from modules.steps import send_recommendations
 from modules.steps.send_recommendations import SendRecommendations
 from modules.util import data_defs

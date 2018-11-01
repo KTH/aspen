@@ -12,7 +12,7 @@ class TestDockerComposeValidate(unittest.TestCase):
     def test_create_temp_secrets_file(self):
         try:
             step = DockerComposeValidate()
-            temp_dir = os.path.join(root_path.PROJECT_ROOT, 'tests')
+            temp_dir = os.path.join(root_path.PROJECT_ROOT, 'test')
             temp_file = step.create_temp_secrets_file(temp_dir)
             self.assertTrue(os.path.isfile(temp_file))
             with open(temp_file, 'r') as temp_file_content:
@@ -25,7 +25,7 @@ class TestDockerComposeValidate(unittest.TestCase):
         step = DockerComposeValidate()
         step.run_command = mock.Mock()
         stack_file = os.path.join(root_path.PROJECT_ROOT,
-                                  'tests/registry_repo/test_app_1/active/docker-stack.yml')
+                                  'test/registry_repo/test_app_1/active/docker-stack.yml')
         stack_file_dir = os.path.dirname(stack_file)
         pipeline_data = {data_defs.STACK_FILE_PATH: stack_file}
         step.run_step(pipeline_data)
