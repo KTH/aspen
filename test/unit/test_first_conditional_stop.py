@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import unittest
 import mock
-from test import mock_test_data
+from test import mock_test_data # pylint: disable=C0411
 from modules.steps.first_conditional_stop import FirstConditionalStop
 from modules.util import data_defs, cache_defs
 

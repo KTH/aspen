@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import unittest
 from modules.util import data_defs, pipeline_data_utils
-from test import mock_test_data
+from test import mock_test_data # pylint: disable=C0411
 
 class TestPipelineDataUtils(unittest.TestCase):
 
@@ -42,7 +42,9 @@ class TestPipelineDataUtils(unittest.TestCase):
         self.assertTrue(pipeline_data_utils.service_uses_semver(service))
 
     def test_get_parsed_services(self):
-        pipeline_data = {data_defs.STACK_FILE_PARSED_CONTENT: mock_test_data.get_parsed_stack_content()}
+        pipeline_data = {
+            data_defs.STACK_FILE_PARSED_CONTENT: mock_test_data.get_parsed_stack_content()
+            }
         service_data = []
         for name, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             service_data.append((name, service))
