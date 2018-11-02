@@ -7,7 +7,7 @@ __author__ = 'tinglev@kth.se'
 
 import time
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, reporter_service
+from modules.util import data_defs, reporter_service, pipeline_data_utils
 
 class ReportSuccess(BasePipelineStep):
 
@@ -37,7 +37,7 @@ class ReportSuccess(BasePipelineStep):
         return deployment_json
 
     def get_service_values(self, deployment_json, pipeline_data):
-        for service in pipeline_data[data_defs.SERVICES]:
+        for service in pipeline_data_utils.get_services(pipeline_data):
             deployment_json['version'] = self.get_version(service)
             deployment_json['imageName'] = self.get_image_name(service)
             deployment_json['servicePath'] = self.get_service_path(service)
@@ -47,8 +47,7 @@ class ReportSuccess(BasePipelineStep):
         return deployment_json
 
     def get_service_labels(self, deployment_json, service):
-        for label in service[data_defs.S_LABELS]:
-            name, value = label.split('=')[0], label.split('=')[1]
+        for (name, value) in pipeline_data_utils.get_labels(service):
             if name == 'se.kth.slackChannels':
                 deployment_json['slackChannels'] = value
             elif name == 'se.kth.publicNameSwedish':

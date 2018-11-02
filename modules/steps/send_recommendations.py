@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import random
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, reporter_service
+from modules.util import data_defs, reporter_service, pipeline_data_utils
 
 class SendRecommendations(BasePipelineStep):
 
@@ -21,7 +21,6 @@ class SendRecommendations(BasePipelineStep):
         return pipeline_data
 
     def send_label_recommendations(self, pipeline_data):
-        parsed_data = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
         application_name = pipeline_data[data_defs.APPLICATION_NAME]
         labels = [
             ('se.kth.publicName.english', 'This apps name'),
@@ -34,7 +33,7 @@ class SendRecommendations(BasePipelineStep):
         for label in labels:
             label_name = label[0]
             example_text = label[1]
-            if not self.has_service_label(parsed_data, label_name):
+            if not self.has_service_label(pipeline_data, label_name):
                 recommendation_text = self.create_recommendation_text(label_name, example_text)
                 reporter_service.handle_recommendation(pipeline_data,
                                                        application_name,
@@ -44,14 +43,13 @@ class SendRecommendations(BasePipelineStep):
         return (f'{self.get_random_emoji()} {self.get_random_flavor_text()}\n '
                 f'`{label_name}="{example_value}"`')
 
-    def has_service_label(self, parsed_data, label_name):
-        if 'services' in parsed_data:
-            for _, service in parsed_data['services'].items():
-                if 'labels' in service:
-                    return label_name in [label.split('=')[0] for label in service['labels']]
-                # Only try the first service
-                return False
+    def has_service_label(self, pipeline_data, label_name):
+        for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
+            if 'labels' in service:
+                return label_name in [label.split('=')[0] for label in service['labels']]
+            # Only try the first service
             return False
+        return False
 
     def get_random_flavor_text(self):
         flavor_texts = [

@@ -1,8 +1,15 @@
+"""VerifyFrontendRule
+
+To make sure that no one maliciously or by accident tries to publish
+their app on certain urls, this step checks the published url against
+a blacklist and stops the pipeline if the url is considered invalid."""
+
 __author__ = 'tinglev@kth.se'
 
 import re
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import environment, data_defs, reporter_service
+from modules.util import environment, data_defs
+from modules.util import reporter_service, pipeline_data_utils
 from modules.util.exceptions import DeploymentError
 
 class VerifyFrontendRule(BasePipelineStep):
@@ -36,7 +43,7 @@ class VerifyFrontendRule(BasePipelineStep):
         return self.disallowed_rules
 
     def get_frontend_rule(self, label_name, pipeline_data):
-        for service in pipeline_data[data_defs.SERVICES]:
+        for service in pipeline_data_utils.get_services(pipeline_data):
             if data_defs.S_DEPLOY_LABELS in service:
                 entries = service[data_defs.S_DEPLOY_LABELS]
                 for label, value in [entry.split('=') for entry in entries]:

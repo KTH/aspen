@@ -7,7 +7,7 @@ __author__ = 'tinglev@kth.se'
 
 import re
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, regex, exceptions
+from modules.util import data_defs, regex, exceptions, pipeline_data_utils
 
 class ImageHasSemanticVersion(BasePipelineStep):
 
@@ -42,8 +42,7 @@ class ImageHasSemanticVersion(BasePipelineStep):
         return re.match(regex.get_semver_regex(), image_data[data_defs.IMG_VERSION])
 
     def get_semver_version_from_env(self, pipeline_data, service_name, semver_env_key):
-        all_services = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']
-        for name, service in all_services.items():
+        for name, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             if name == service_name:
                 # Environment always exists - set in init_service_pipeline_data.py
                 for env_var, env_val in service['environment'].items():

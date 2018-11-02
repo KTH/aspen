@@ -6,7 +6,7 @@ for the image given a list of tags fetched from the registry for the image"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs
+from modules.util import data_defs, pipeline_data_utils
 from modules.util.semver import max_satisfying
 
 class CalculateSemanticVersion(BasePipelineStep):
@@ -21,7 +21,7 @@ class CalculateSemanticVersion(BasePipelineStep):
         return [data_defs.SERVICES]
 
     def run_step(self, pipeline_data):
-        for i, service in enumerate(pipeline_data[data_defs.SERVICES]):
+        for i, service in pipeline_data_utils.get_enumerated_services(pipeline_data):
             image_data = service[data_defs.S_IMAGE]
             self.log.debug('Found image data "%s"', image_data)
             if image_data[data_defs.IMG_IS_SEMVER] and image_data[data_defs.IMG_TAGS]:

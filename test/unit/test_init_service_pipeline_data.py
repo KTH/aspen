@@ -3,7 +3,7 @@ __author__ = 'tinglev@kth.se'
 import unittest
 from test import mock_test_data
 from modules.steps.init_service_pipeline_data import InitServicePipelineData
-from modules.util import data_defs
+from modules.util import data_defs, pipeline_data_utils
 
 class TestInitServicePipelineData(unittest.TestCase):
 
@@ -23,7 +23,7 @@ class TestInitServicePipelineData(unittest.TestCase):
                 break
         else:
             self.fail('Couldnt find traefik.deploy deploy label')
-        labels = [label.split('=') for label in result[data_defs.SERVICES][1][data_defs.S_LABELS]]
+        labels = pipeline_data_utils.get_labels(result[data_defs.SERVICES][1])
         for name, value in labels:
             if name == 'se.kth.slackChannels' and value == '#team-pipeline,#ita-ops':
                 break

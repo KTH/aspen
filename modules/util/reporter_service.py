@@ -2,7 +2,8 @@ __author__ = 'tinglev@kth.se'
 
 import logging
 import traceback
-from modules.util import environment, exceptions, data_defs, redis, requests
+from modules.util import environment, exceptions, data_defs
+from modules.util import redis, requests, pipeline_data_utils
 
 def handle_recommendation(pipeline_data, application_name, recommendation_text):
     logger = logging.getLogger(__name__)
@@ -125,7 +126,7 @@ def format_error_message(cluster, application, step, error):
 
 def get_combined_service_labels(pipeline_data):
     labels = {}
-    for _, service in pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services'].items():
+    for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
         if 'labels' in service:
             for name, value in [label.split('=') for label in service['labels']]:
                 if not name in labels:

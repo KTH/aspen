@@ -6,7 +6,7 @@ environment (for instance semver versioning)"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, process
+from modules.util import data_defs, process, pipeline_data_utils
 
 class DeployApplication(BasePipelineStep):
 
@@ -27,14 +27,12 @@ class DeployApplication(BasePipelineStep):
 
     def set_application_env(self, pipeline_data):
         application_env = None
-        for service in pipeline_data[data_defs.SERVICES]:
-            env_as_string = [f'{key}={value}' for key, value in
-                             service[data_defs.S_ENVIRONMENT].items()]
-            service_env = ' '.join(env_as_string)
+        for service in pipeline_data_utils.get_services(pipeline_data):
+            service_env_str = pipeline_data_utils.service_env_as_string(service)
             if application_env:
-                application_env = f'{application_env} {service_env}'
+                application_env = f'{application_env} {service_env_str}'
             else:
-                application_env = service_env
+                application_env = service_env_str
         return application_env.rstrip()
 
     def run_deploy(self, pipeline_data, environment):

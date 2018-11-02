@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import os
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, exceptions
+from modules.util import data_defs, exceptions, pipeline_data_utils
 
 class SecretVerification(BasePipelineStep):
 
@@ -35,8 +35,7 @@ class SecretVerification(BasePipelineStep):
                                                  'in app.passwords.yml')
 
     def has_secrets_env_file(self, pipeline_data):
-        stack_file_content = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
-        for _, service in stack_file_content['services'].items():
+        for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             if 'env_file' in service and 'secrets.decrypted.env' in service['env_file']:
                 return True
         return False

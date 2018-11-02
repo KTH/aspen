@@ -28,9 +28,10 @@ class TestSendRecommendations(unittest.TestCase):
     def test_has_service_label(self):
         step = SendRecommendations()
         parsed_data = mock_test_data.get_parsed_stack_content()
-        self.assertTrue(step.has_service_label(parsed_data, 'se.kth.slackChannels'))
-        self.assertTrue(step.has_service_label(parsed_data, 'se.kth.importance'))
-        self.assertFalse(step.has_service_label(parsed_data, 'se.kth.missing'))
+        pipeline_data = {data_defs.STACK_FILE_PARSED_CONTENT: parsed_data}
+        self.assertTrue(step.has_service_label(pipeline_data, 'se.kth.slackChannels'))
+        self.assertTrue(step.has_service_label(pipeline_data, 'se.kth.importance'))
+        self.assertFalse(step.has_service_label(pipeline_data, 'se.kth.missing'))
 
     def test_create_recommendation_text(self):
         step = SendRecommendations()
