@@ -43,6 +43,10 @@ def get_pipeline_data():
                     data_defs.IMG_TAGS: None,
                     data_defs.IMG_VERSION: '2.0.1_abc123'
                 },
+                data_defs.S_ENVIRONMENT: {
+                    'env1': 'key1',
+                    'env2': 'key2'
+                },
                 data_defs.S_LABELS: [
                     'label1=value1,value11',
                     'label2=value2'
