@@ -19,13 +19,13 @@ class TestReportSuccess(unittest.TestCase):
         result = step.get_version(service)
         self.assertEqual(result, '12.4.5_zxc444')
 
-    def test_get_service_path(self):
+    def test_get_application_path(self):
         step = ReportSuccess()
         service = {data_defs.S_DEPLOY_LABELS: ['traefik.frontend.rule=PathPrefix:/test/url']}
-        result = step.get_service_path(service)
+        result = step.get_application_path(service)
         self.assertEqual(result, '/test/url')
         service = {}
-        result = step.get_service_path(service)
+        result = step.get_application_path(service)
         self.assertIsNone(result)
 
     def test_get_service_labels(self):
@@ -38,7 +38,8 @@ class TestReportSuccess(unittest.TestCase):
                 'se.kth.descriptionSwedish=Beskrivning',
                 'se.kth.descriptionEnglish=Description',
                 'se.kth.importance=medium',
-                'se.kth.detectify.profileToken=abc123,zxc456'
+                'se.kth.detectify.profileToken=abc123,zxc456',
+                'se.kth.monitorUrl=/_monitor'
             ]
         }
         expected = {
@@ -48,7 +49,8 @@ class TestReportSuccess(unittest.TestCase):
             'descriptionSwedish': 'Beskrivning',
             'descriptionEnglish': 'Description',
             'importance': 'medium',
-            'detectifyProfileTokens': 'abc123,zxc456'
+            'detectifyProfileTokens': 'abc123,zxc456',
+            'monitorPath': '/_monitor'
         }
         result = step.get_service_labels({}, service)
         self.assertEqual(result, expected)

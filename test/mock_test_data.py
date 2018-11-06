@@ -49,7 +49,8 @@ def get_pipeline_data():
                 },
                 data_defs.S_LABELS: [
                     'label1=value1,value11',
-                    'label2=value2'
+                    'label2=value2',
+                    'se.kth.monitorUrl=/_monitor'
                 ],
                 data_defs.S_DEPLOY_LABELS: [
                     'traefik.frontend.rule=PathPrefix:/kth-azure-app'

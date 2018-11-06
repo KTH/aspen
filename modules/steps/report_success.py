@@ -40,7 +40,7 @@ class ReportSuccess(BasePipelineStep):
         for service in pipeline_data_utils.get_services(pipeline_data):
             deployment_json['version'] = self.get_version(service)
             deployment_json['imageName'] = self.get_image_name(service)
-            deployment_json['servicePath'] = self.get_service_path(service)
+            deployment_json['applicationPath'] = self.get_application_path(service)
             deployment_json['created'] = str(time.time())
             deployment_json = self.get_service_labels(deployment_json, service)
             break
@@ -62,9 +62,11 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['importance'] = value
             elif name == 'se.kth.detectify.profileToken':
                 deployment_json['detectifyProfileTokens'] = value
+            elif name == 'se.kth.monitorUrl':
+                deployment_json['monitorPath'] = value
         return deployment_json
 
-    def get_service_path(self, service):
+    def get_application_path(self, service):
         if data_defs.S_DEPLOY_LABELS in service:
             for label in service[data_defs.S_DEPLOY_LABELS]:
                 name, value = label.split('=')[0], label.split('=')[1]

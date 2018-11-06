@@ -26,7 +26,9 @@ class TestPipelineDataUtils(unittest.TestCase):
         label_data = []
         for name, value in pipeline_data_utils.get_labels(service):
             label_data.append((name, value))
-        self.assertEqual(label_data, [('label1', 'value1,value11'), ('label2', 'value2')])
+        self.assertEqual(label_data, [('label1', 'value1,value11'),
+                                      ('label2', 'value2'),
+                                      ('se.kth.monitorUrl', '/_monitor')])
 
     def test_service_env_as_string(self):
         pipeline_data = mock_test_data.get_pipeline_data()

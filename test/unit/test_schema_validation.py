@@ -15,21 +15,21 @@ class TestSchemaValidation(unittest.TestCase):
     def test_validate_deployment(self):
         validation_url = environment.get_with_default_string(
             environment.VALIDATE_DEPLOYMENT_URL,
-            'https://app-r.referens.sys.kth.se/jsonschema/dizin/deployment'
+            'https://app.kth.se/jsonschema/dizin/deployment'
         )
         step = ReportSuccess()
         pipeline_data = mock_test_data.get_pipeline_data()
         deployment_json = step.create_deployment_json(pipeline_data)
         result = requests.post(validation_url, json=deployment_json, allow_redirects=False)
-        self.assertEqual(result.status_code, 200)
         self.assertEqual(result.json(), {})
+        self.assertEqual(result.status_code, 200)
 
     @unittest.skipIf(environment.get_env(environment.SKIP_VALIDATION_TESTS),
                      'SKIP_VALIDATION_TESTS set')
     def test_validate_recommendation(self):
         validation_url = environment.get_with_default_string(
             environment.VALIDATE_RECOMMENDATION_URL,
-            'https://app-r.referens.sys.kth.se/jsonschema/dizin/recommendation'
+            'https://app.kth.se/jsonschema/dizin/recommendation'
         )
         rec_obj = reporter_service.create_recommedation_object(
             'kth-azure-app',
@@ -37,15 +37,15 @@ class TestSchemaValidation(unittest.TestCase):
             '#channel1,#channel2'
         )
         result = requests.post(validation_url, json=rec_obj, allow_redirects=False)
-        self.assertEqual(result.status_code, 200)
         self.assertEqual(result.json(), {})
+        self.assertEqual(result.status_code, 200)
 
     @unittest.skipIf(environment.get_env(environment.SKIP_VALIDATION_TESTS),
                      'SKIP_VALIDATION_TESTS set')
     def test_validate_error(self):
         validation_url = environment.get_with_default_string(
             environment.VALIDATE_ERROR_URL,
-            'https://app-r.referens.sys.kth.se/jsonschema/dizin/error'
+            'https://app.kth.se/jsonschema/dizin/error'
         )
         pipeline_data = {
             data_defs.STACK_FILE_PARSED_CONTENT:
@@ -56,12 +56,12 @@ class TestSchemaValidation(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error()
         error_object = reporter_service.create_error_object(error, combined_labels)
         result = requests.post(validation_url, json=error_object, allow_redirects=False)
-        self.assertEqual(result.status_code, 200)
         self.assertEqual(result.json(), {})
+        self.assertEqual(result.status_code, 200)
         # Unexpected error (with stack trace)
         traceback.format_exc = mock.Mock(return_value='Stack\ntrace')
         error = mock_test_data.get_mock_deployment_error(expected=False)
         error_object = reporter_service.create_error_object(error, combined_labels)
         result = requests.post(validation_url, json=error_object, allow_redirects=False)
-        self.assertEqual(result.status_code, 200)
         self.assertEqual(result.json(), {})
+        self.assertEqual(result.status_code, 200)
