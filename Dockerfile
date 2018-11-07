@@ -11,7 +11,7 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache --repository http://nl.alpinelinux.org/alpine/v3.6/main bash && \
     # installs gcc + deps
-    apk add --no-cache make curl libffi-dev openssl-dev build-base openssh && \
+    apk add --no-cache make curl libffi-dev openssl-dev build-base openssh git && \
     apk add --no-cache docker --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/latest-stable/community --allow-untrusted
 
 COPY Pipfile Pipfile
