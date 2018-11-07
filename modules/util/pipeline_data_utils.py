@@ -5,14 +5,17 @@ from modules.util import data_defs
 def get_services(pipeline_data):
     if pipeline_data[data_defs.SERVICES]:
         return (service for service in pipeline_data[data_defs.SERVICES])
+    return []
 
 def get_enumerated_services(pipeline_data):
     if pipeline_data[data_defs.SERVICES]:
         return ((i, service) for (i, service) in enumerate(pipeline_data[data_defs.SERVICES]))
+    return iter([])
 
 def get_labels(service):
     if service and service[data_defs.S_LABELS]:
         return ((l.split('=')[0], l.split('=')[1]) for l in service[data_defs.S_LABELS])
+    return iter([])
 
 def service_env_as_string(service):
     if service[data_defs.S_ENVIRONMENT]:
