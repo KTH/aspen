@@ -47,7 +47,8 @@ def start_sync():
     if SYNC_THREAD.stopped():
         SYNC_THREAD.start()
         return jsonify(message='Sync thread started')
-    return jsonify(message='Sync thread already running')
+    else:
+        return jsonify(message='Sync thread already running')
 
 @FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
 def stop_sync():
@@ -56,12 +57,17 @@ def stop_sync():
     if not SYNC_THREAD.stopped():
         SYNC_THREAD.stop()
         return jsonify(message='Sync thread stopped')
-    return jsonify(message='Sync thread already stopped')
+    else:
+        return jsonify(message='Sync thread already stopped')
 
 def main():
     log.init_logging()
+    logger = logging.getLogger(__name__)
     known_hosts.write_entry_if_missing()
     FLASK_APP.run(host='0.0.0.0', port=3005)
+    if environment.get_env(environment.SYNC_START_ON_RUN):
+        logger.info('Starting sync thread on run')
+        SYNC_THREAD.start()
 
 if __name__ == '__main__':
     main()
