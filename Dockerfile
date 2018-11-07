@@ -24,7 +24,6 @@ RUN pipenv install pip
 RUN pipenv run pip install azure-cli
 
 # Clean up
-RUN apk del make libffi-dev openssl-dev build-base openssh
 RUN rm -rf /var/cache/apk/*
 
 COPY ["modules",  "modules"]
