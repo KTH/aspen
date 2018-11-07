@@ -44,8 +44,10 @@ def clear_cache():
 def start_sync():
     logger = logging.getLogger(__name__)
     logger.info('Starting sync thread')
-    SYNC_THREAD.start()
-    return jsonify(message='Sync thread started')
+    if SYNC_THREAD.stopped():
+        SYNC_THREAD.start()
+        return jsonify(message='Sync thread started')
+    return jsonify(message='Sync thread already running')
 
 @FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
 def stop_sync():
@@ -53,7 +55,8 @@ def stop_sync():
     logger.info('Stopping sync thread')
     if not SYNC_THREAD.stopped():
         SYNC_THREAD.stop()
-    return jsonify(message='Sync thread stopped')
+        return jsonify(message='Sync thread stopped')
+    return jsonify(message='Sync thread already stopped')
 
 def main():
     log.init_logging()
