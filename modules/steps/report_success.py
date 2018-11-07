@@ -64,6 +64,9 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['detectifyProfileTokens'] = value
             elif name == 'se.kth.monitorUrl':
                 deployment_json['monitorPath'] = value
+        if not 'monitorPath' in deployment_json:
+            # Required
+            deployment_json['monitorPath'] = None
         return deployment_json
 
     def get_application_path(self, service):
