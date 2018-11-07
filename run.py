@@ -64,10 +64,10 @@ def main():
     log.init_logging()
     logger = logging.getLogger(__name__)
     known_hosts.write_entry_if_missing()
-    FLASK_APP.run(host='0.0.0.0', port=3005)
     if environment.get_env(environment.SYNC_START_ON_RUN):
         logger.info('Starting sync thread on run')
         SYNC_THREAD.start()
+    FLASK_APP.run(host='0.0.0.0', port=3005)
 
 if __name__ == '__main__':
     main()
