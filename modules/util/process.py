@@ -15,8 +15,8 @@ def run_with_output(cmd):
                                            stdout=subprocess.PIPE,
                                            stderr=subprocess.PIPE)
         if completed_process.stderr:
-            return completed_process.stderr.rstrip('\n')
-        return completed_process.stdout.rstrip('\n')
+            return str(completed_process.stderr).rstrip('\n')
+        return str(completed_process.stdout).rstrip('\n')
     except subprocess.CalledProcessError as cpe:
         logger.error('Shell command gave error with output "%s"', str(cpe.output).rstrip('\n'))
         raise
