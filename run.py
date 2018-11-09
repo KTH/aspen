@@ -6,7 +6,7 @@ import logging
 import subprocess
 from threading import Thread, Event
 from flask import Flask, jsonify
-from modules.util import log, redis, environment, known_hosts
+from modules.util import log, redis, environment, known_hosts, exceptions
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
@@ -27,9 +27,13 @@ def sync_routine():
     logger = logging.getLogger(__name__)
     pipeline = AspenPipeline()
     while not SYNC_THREAD.stopped():
-        pipeline.run_pipeline()
-        logger.info('Main pipeline done, waiting 15 seconds before next run')
-        time.sleep(15)
+        try:
+            pipeline.run_pipeline()
+            logger.info('Main pipeline done, waiting 15 seconds before next run')
+            time.sleep(15)
+        except exceptions.AspenError as aspen_err:
+            logger.error('Stopping sync thread due to previous error: %s', aspen_err)
+            stop_sync()
 
 SYNC_THREAD = SyncThread(target=sync_routine)
 
