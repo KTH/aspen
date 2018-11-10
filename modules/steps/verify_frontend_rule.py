@@ -9,7 +9,7 @@ __author__ = 'tinglev@kth.se'
 import re
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import environment, data_defs
-from modules.util import reporter_service, pipeline_data_utils
+from modules.util import pipeline_data_utils
 from modules.util.exceptions import DeploymentError
 
 class VerifyFrontendRule(BasePipelineStep):
@@ -18,6 +18,10 @@ class VerifyFrontendRule(BasePipelineStep):
         BasePipelineStep.__init__(self)
         self.disallowed_rules = [
             '^Path(.+):/$'
+        ]
+        # TODO: Make this configurable
+        self.excluded_apps = [
+            'tamarack'
         ]
 
     def get_required_env_variables(self):
@@ -31,12 +35,13 @@ class VerifyFrontendRule(BasePipelineStep):
             environment.FRONT_END_RULE_LABEL,
             'traefik.frontend.rule')
         frontend_rule = self.get_frontend_rule(frontend_rule_label, pipeline_data)
+        application_name = pipeline_data[data_defs.APPLICATION_NAME]
         if frontend_rule:
             for disallowed_rule in self.disallowed_rules:
-                if re.match(disallowed_rule, frontend_rule):
-                    error = DeploymentError('Service is using a disallowed frontend rule')
-                    reporter_service.handle_deployment_error(error)
-                    self.stop_pipeline()
+                if (re.match(disallowed_rule, frontend_rule) and
+                        not application_name in self.excluded_apps):
+                    raise DeploymentError(f'Service is using a disallowed frontend rule: '
+                                          f'"{frontend_rule}"')
         return pipeline_data
 
     def get_disallowed_rules(self):

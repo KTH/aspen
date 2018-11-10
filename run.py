@@ -24,13 +24,14 @@ class SyncThread(Thread):
         return self._stop_event.is_set()
 
 def sync_routine():
+    delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
     pipeline = AspenPipeline()
     while not SYNC_THREAD.stopped():
         try:
             pipeline.run_pipeline()
             logger.info('Main pipeline done, waiting 15 seconds before next run')
-            time.sleep(15)
+            time.sleep(delay)
         except exceptions.AspenError as aspen_err:
             logger.error('Stopping sync thread due to previous error: %s', aspen_err)
             stop_sync()
