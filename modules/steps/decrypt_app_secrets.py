@@ -24,7 +24,7 @@ class DecryptAppSecrets(BasePipelineStep):
                 data_defs.USES_SECRETS]
 
     def run_step(self, pipeline_data):
-        if pipeline_data[data_defs.USES_SECRETS]:
+        if data_defs.USES_SECRETS in pipeline_data and pipeline_data[data_defs.USES_SECRETS]:
             base_dir = os.path.dirname(pipeline_data[data_defs.STACK_FILE_PATH])
             self.run_decrypt(base_dir, pipeline_data)
         return pipeline_data

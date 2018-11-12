@@ -18,7 +18,8 @@ class ParseStackPath(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         file_path = pipeline_data[data_defs.STACK_FILE_PATH]
-        pipeline_data[data_defs.APPLICATION_CLUSTER] = path.get_app_cluster_from_file_path(file_path)
+        pipeline_data[data_defs.APPLICATION_CLUSTER] = \
+            path.get_app_cluster_from_file_path(file_path)
         pipeline_data[data_defs.APPLICATION_NAME] = path.get_app_name_from_file_path(file_path)
         self.log.debug('Cluster is "%s"', pipeline_data[data_defs.APPLICATION_CLUSTER])
         self.log.debug('Application name is "%s"', pipeline_data[data_defs.APPLICATION_NAME])

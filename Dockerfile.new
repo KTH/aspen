@@ -1,0 +1,27 @@
+FROM kthse/kth-python:3.6.0
+
+RUN mkdir /repo && \
+    mkdir /repo/secrets && \
+    mkdir /repo/certs && \
+    mkdir -p /root/.ssh
+
+WORKDIR /repo
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
+
+COPY ["Pipfile", "Pipfile"]
+
+RUN apk add --no-cache make curl libffi-dev openssl-dev build-base openssh docker && \
+    pipenv install && \
+    pipenv run pip install azure-cli && \
+    apk del make libffi-dev openssl-dev build-base openssh  && \
+    rm -rf /var/cache/apk/*
+
+COPY ["modules",  "modules"]
+COPY ["run.py", "run.py"]
+COPY ["root_path.py", "root_path.py"]
+
+EXPOSE 3005
+
+CMD ["pipenv", "run", "python", "run.py"]

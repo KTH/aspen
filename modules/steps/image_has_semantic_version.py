@@ -7,7 +7,7 @@ __author__ = 'tinglev@kth.se'
 
 import re
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, regex, exceptions
+from modules.util import data_defs, regex, exceptions, pipeline_data_utils
 
 class ImageHasSemanticVersion(BasePipelineStep):
 
@@ -29,9 +29,10 @@ class ImageHasSemanticVersion(BasePipelineStep):
                 self.log.debug('Image has uses semantic versioning')
                 image_data[data_defs.IMG_IS_SEMVER] = True
                 image_data[data_defs.IMG_SEMVER_ENV_KEY] = match.group(1)
-                semver_version = self.get_semver_version_from_env(pipeline_data,
-                                                                  service[data_defs.S_NAME],
-                                                                  image_data[data_defs.IMG_SEMVER_ENV_KEY])
+                semver_version = \
+                    self.get_semver_version_from_env(pipeline_data,
+                                                     service[data_defs.S_NAME],
+                                                     image_data[data_defs.IMG_SEMVER_ENV_KEY])
                 image_data[data_defs.IMG_SEMVER_VERSION] = semver_version
             pipeline_data[data_defs.SERVICES][i][data_defs.S_IMAGE] = image_data
             self.log.debug('Image data after step is "%s"', image_data)
@@ -41,8 +42,7 @@ class ImageHasSemanticVersion(BasePipelineStep):
         return re.match(regex.get_semver_regex(), image_data[data_defs.IMG_VERSION])
 
     def get_semver_version_from_env(self, pipeline_data, service_name, semver_env_key):
-        all_services = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']
-        for name, service in all_services.items():
+        for name, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             if name == service_name:
                 # Environment always exists - set in init_service_pipeline_data.py
                 for env_var, env_val in service['environment'].items():

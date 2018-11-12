@@ -12,7 +12,7 @@ import time
 import os
 import logging
 import subprocess
-from modules.util import exceptions, reporter_service, data_defs
+from modules.util import exceptions, data_defs, reporter_service
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta

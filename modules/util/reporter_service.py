@@ -2,9 +2,8 @@ __author__ = 'tinglev@kth.se'
 
 import logging
 import traceback
-import requests
-from requests.exceptions import Timeout, HTTPError
-from modules.util import environment, exceptions, data_defs, redis
+from modules.util import environment, exceptions, data_defs
+from modules.util import redis, requests, pipeline_data_utils
 
 def handle_recommendation(pipeline_data, application_name, recommendation_text):
     logger = logging.getLogger(__name__)
@@ -64,27 +63,11 @@ def handle_fatal_error(error: exceptions.DeploymentError):
         if response:
             logger.debug('Response was: "%s"', response)
     else:
-        logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')    
+        logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
 
 def call_with_payload(url, payload):
-    try:
-        logger = logging.getLogger(__name__)
-        logger.debug('Calling "%s" with "%s"', url, payload)
-        response = requests.put(url, json=payload, timeout=5)
-        response.raise_for_status()
-        return response
-    except ConnectionError as conn_err:
-        logger.error('Connection error while calling slack reporting service. Error was: "%s"',
-                     str(conn_err))
-        return None
-    except Timeout as timeout_err:
-        logger.error('Timeout while calling slack reporting service. Error was: "%s"',
-                     str(timeout_err))
-        return None
-    except HTTPError as http_err:
-        logger.error('Http error while calling slack reporting service. Error was: "%s"',
-                     str(http_err))
-        return None
+    response = requests.send_put(url, json=payload, timeout=5)
+    return response
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):
     return {
@@ -143,7 +126,7 @@ def format_error_message(cluster, application, step, error):
 
 def get_combined_service_labels(pipeline_data):
     labels = {}
-    for _, service in pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services'].items():
+    for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
         if 'labels' in service:
             for name, value in [label.split('=') for label in service['labels']]:
                 if not name in labels:

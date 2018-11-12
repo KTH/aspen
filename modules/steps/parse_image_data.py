@@ -7,7 +7,7 @@ __author__ = 'tinglev@kth.se'
 import re
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util.exceptions import DeploymentError
-from modules.util import data_defs, regex, service_data
+from modules.util import data_defs, regex, service_data, pipeline_data_utils
 
 class ParseImageData(BasePipelineStep):
 
@@ -21,8 +21,7 @@ class ParseImageData(BasePipelineStep):
         return [data_defs.STACK_FILE_PARSED_CONTENT, data_defs.SERVICES]
 
     def run_step(self, pipeline_data):
-        file_content = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
-        for name, service in file_content['services'].items():
+        for name, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             self.has_image(service)
             registry = self.parse_registry(service)
             image_name = self.parse_image_name(service)

@@ -5,7 +5,7 @@ Initializes required pipeline data for services"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs
+from modules.util import data_defs, pipeline_data_utils
 
 class InitServicePipelineData(BasePipelineStep):
 
@@ -19,9 +19,8 @@ class InitServicePipelineData(BasePipelineStep):
         return [data_defs.STACK_FILE_PARSED_CONTENT]
 
     def run_step(self, pipeline_data):
-        parsed_content = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
         service_data = []
-        for name, service in parsed_content['services'].items():
+        for name, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             service_json = {
                 data_defs.S_NAME: name,
                 data_defs.S_IMAGE: {},

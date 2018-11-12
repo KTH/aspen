@@ -8,7 +8,7 @@ we can safely stop the pipeline"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, cache_defs
+from modules.util import data_defs, cache_defs, pipeline_data_utils
 
 class FirstConditionalStop(BasePipelineStep):
 
@@ -36,8 +36,8 @@ class FirstConditionalStop(BasePipelineStep):
         return pipeline_data
 
     def service_uses_semver(self, pipeline_data):
-        for service in pipeline_data[data_defs.SERVICES]:
-            if service[data_defs.S_IMAGE][data_defs.IMG_IS_SEMVER]:
+        for service in pipeline_data_utils.get_services(pipeline_data):
+            if pipeline_data_utils.service_uses_semver(service):
                 self.log.debug('Image "%s" uses semver',
                                service[data_defs.S_IMAGE][data_defs.IMG_NAME])
                 return True

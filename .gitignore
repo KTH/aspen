@@ -101,7 +101,7 @@ ENV/
 .mypy_cache/
 
 # Integration test assets
-tests/integration/*
-!tests/integration/vault.password.in
-!tests/integration/*.py
-tests/**/secrets.decrypted.env
+test/integration/*
+!test/integration/vault.password.in
+!test/integration/*.py
+test/**/secrets.decrypted.env

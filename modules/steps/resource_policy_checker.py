@@ -6,7 +6,7 @@ policies are in effect and adhere to certain demands"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs
+from modules.util import data_defs, pipeline_data_utils
 from modules.util.exceptions import DeploymentError
 
 class ResourcePolicyChecker(BasePipelineStep):
@@ -21,8 +21,7 @@ class ResourcePolicyChecker(BasePipelineStep):
         return [data_defs.STACK_FILE_PARSED_CONTENT]
 
     def run_step(self, pipeline_data):
-        stack_contents = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
-        for _, service in stack_contents['services'].items():
+        for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
             self.has_resource_policy(service)
             self.verify_resource_policy(service['deploy']['resources'])
         return pipeline_data

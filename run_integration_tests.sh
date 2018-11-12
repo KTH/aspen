@@ -8,7 +8,7 @@ FLASK_APP=mock_api.py pipenv run flask run &
 MOCK_API_PID=$!
 
 # Run with "--debug" to show program logs
-REDIS_URL=localhost pipenv run green -vv --run-coverage --failfast --file-pattern "integration_*" "tests/integration" "$@"
+REDIS_URL=localhost pipenv run green -vv --run-coverage --failfast --file-pattern "integration_*" "test/integration" "$@"
 
 # Kill mock API server
 kill $MOCK_API_PID 

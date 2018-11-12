@@ -7,7 +7,7 @@ or not"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, cache_defs, redis
+from modules.util import data_defs, cache_defs, redis, pipeline_data_utils
 
 class WriteCacheEntry(BasePipelineStep):
 
@@ -39,7 +39,7 @@ class WriteCacheEntry(BasePipelineStep):
 
     def generate_image_versions(self, pipeline_data):
         image_versions = []
-        for service in pipeline_data[data_defs.SERVICES]:
+        for service in pipeline_data_utils.get_services(pipeline_data):
             image_data = service[data_defs.S_IMAGE]
             version = self.get_image_version(image_data)
             image_version = {
