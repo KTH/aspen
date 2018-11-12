@@ -1,9 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
-import os
 import time
 import logging
-import subprocess
 from threading import Thread, Event
 from flask import Flask, jsonify
 from modules.util import log, redis, environment, known_hosts, exceptions
@@ -30,7 +28,7 @@ def sync_routine():
     while not SYNC_THREAD.stopped():
         try:
             pipeline.run_pipeline()
-            logger.info('Main pipeline done, waiting 15 seconds before next run')
+            logger.info('Main pipeline done, waiting %s seconds before next run', delay)
             time.sleep(delay)
         except exceptions.AspenError as aspen_err:
             logger.error('Stopping sync thread due to previous error: %s', aspen_err)
