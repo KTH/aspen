@@ -47,7 +47,9 @@ def get_env(env_name):
 
 def get_env_list(env_name):
     env_value = os.environ.get(env_name)
-    return [value.rstrip() for value in env_value.split(',')]
+    if env_value:
+        return [value.rstrip() for value in env_value.split(',')]
+    return []
 
 def get_registry_path():
     return os.path.join(root_path.PROJECT_ROOT,

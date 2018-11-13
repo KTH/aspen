@@ -24,4 +24,7 @@ class TestStopExcludedApps(unittest.TestCase):
         os.environ[environment.EXCLUDED_APPS] = "app1,kth-azure-app"
         step.run_step(pipeline_data)
         step.stop_pipeline.assert_called_once()
-     
+        step.stop_pipeline.reset_mock()
+        del os.environ[environment.EXCLUDED_APPS]
+        step.run_step(pipeline_data)
+        step.stop_pipeline.assert_not_called()    
