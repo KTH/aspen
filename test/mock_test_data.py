@@ -132,12 +132,20 @@ def get_cluster_ip_response():
         {
             'status': 'active',
             'name': 'everest-white',
-            'lb_ip': '10.28.20.30:2376'
+            'lb_ip': '10.28.20.30:2376',
+            'preparing': False
         },
         {
             'status': 'stage',
             'name': 'everest-black',
-            'lb_ip': '10.28.21.30:2376'
+            'lb_ip': '10.28.21.30:2376',
+            'preparing': False
+        },
+        {
+            'status': 'test',
+            'name': 'everest-green',
+            'lb_ip': '10.28.22.30:2376',
+            'preparing': True
         }
     ]
 

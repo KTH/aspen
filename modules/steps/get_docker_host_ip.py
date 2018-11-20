@@ -23,7 +23,9 @@ class GetDockerHostIp(BasePipelineStep):
     def run_step(self, pipeline_data):
         cluster_data = pipeline_data[data_defs.DOCKER_HOST_IPS]
         cluster_lb_ip = self.get_current_cluster_lb_ip(cluster_data, pipeline_data)
+        portillo_cluster = self.get_current_cluster_status(cluster_data, pipeline_data)
         pipeline_data[data_defs.DOCKER_HOST_IP] = cluster_lb_ip
+        pipeline_data[data_defs.DOCKER_PORTILLO_CLUSTER] = portillo_cluster
         return pipeline_data
 
     def get_current_cluster_lb_ip(self, cluster_data, pipeline_data):
@@ -32,3 +34,13 @@ class GetDockerHostIp(BasePipelineStep):
             if cluster['status'] == application_cluster:
                 return cluster['lb_ip']
         raise exceptions.DeploymentError('Application not targeted for cluster')
+
+    def get_current_cluster_status(self, cluster_data, pipeline_data):
+        application_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]
+        for cluster in cluster_data:
+            if cluster['status'] == application_cluster:
+                if cluster['preparing']:
+                    return f'preparing-{cluster["status"]}'
+                else:
+                    return f'{cluster["status"]}'
+        return None

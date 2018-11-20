@@ -27,6 +27,10 @@ class DeployApplication(BasePipelineStep):
 
     def set_application_env(self, pipeline_data):
         application_env = None
+        if (data_defs.DOCKER_PORTILLO_CLUSTER in pipeline_data and
+                pipeline_data[data_defs.DOCKER_PORTILLO_CLUSTER]):
+            portillo_cluster = pipeline_data[data_defs.DOCKER_PORTILLO_CLUSTER]
+            application_env = f'PORTILLO_CLUSTER={portillo_cluster}'
         for service in pipeline_data_utils.get_services(pipeline_data):
             service_env_str = pipeline_data_utils.service_env_as_string(service)
             if application_env:
