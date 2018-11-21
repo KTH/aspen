@@ -20,8 +20,9 @@ COPY Pipfile Pipfile
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
 
+RUN pipenv install
+RUN pipenv install pip
 RUN pipenv run pip install azure-cli
-
 
 COPY ["modules",  "modules"]
 COPY ["run.py", "run.py"]
