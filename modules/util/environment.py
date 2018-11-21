@@ -34,6 +34,7 @@ KNOWN_HOST_FILE = 'KNOWN_HOST_FILE'
 FRONT_END_RULE_LABEL = 'FRONT_END_RULE_LABEL'
 SYNC_START_ON_RUN = 'SYNC_START_ON_RUN'
 DELAY_SECS_BETWEEN_RUNS = 'DELAY_SECS_BETWEEN_RUNS'
+EXCLUDED_APPS = 'EXCLUDED_APPS'
 
 # TEST SETTINGS
 SKIP_VALIDATION_TESTS = 'SKIP_VALIDATION_TESTS' # Set this to skip validation tests
@@ -46,7 +47,9 @@ def get_env(env_name):
 
 def get_env_list(env_name):
     env_value = os.environ.get(env_name)
-    return [value.rstrip() for value in env_value.split(',')]
+    if env_value:
+        return [value.rstrip() for value in env_value.split(',')]
+    return []
 
 def get_registry_path():
     return os.path.join(root_path.PROJECT_ROOT,

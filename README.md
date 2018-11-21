@@ -25,7 +25,9 @@ Deployment orchestration tool using git repository driven application configurat
 
 ## To run tests
 
-Unit tests: `./run_tests.sh`
+Complete mocked pipeline test + unit tests: `./run_tests.sh`
+
+Only unit tests: `./run_unit_tests.sh`
 
 Integration tests (uses KTH specifics): `./run_integration_tests.sh`. Requires additional environment settings for docker registry login. See `test/integration/integration_test.py` for further details.
 
@@ -64,6 +66,9 @@ All program environment access is done through `modules/util/environment.py`
 | `REQUEST_TIMEOUT` | The default timeout to use when issuing requests against other services. Defaults to 5. |
 | `KNOWN_HOST_ENTRY` | Entry to add to the known_hosts file, for example when needing to access a private registry. Defaults to None. |
 | `KNOWN_HOST_FILE` | The absolute path to the known_hosts file on the system. Defaults to `/root/.ssh/known_hosts`. |
+| `FRONT_END_RULE_LABEL` | The deploy label to use for frontends. Defaults to `traefik.frontend.rule` |
+| `SYNC_START_ON_RUN` | Start the sync thread on application startup. Set to anything to enable |
+| `DELAY_SECS_BETWEEN_RUNS` | The time between pipeline runs. Defaults to 15 |
 
 ## Hard coded requirements
 
@@ -94,11 +99,11 @@ passwords:
         "name": "active",
         "lb_ip": "XX.YY.ZZ.AA:PORT",
         "your-own-data-here": "whatever-you-like",
-        ...
+        "..."
     }
 ]
 ```
 
 ## Optional integrations
 
-Aspen supports sending errors, successful deployments and recommendations for labels to an external service (see optional environment configuration above). KTH uses it's custom made application Dizin to handle these requests, and push them through a pipeline of sorts. The external service could for instance send messages and errors to Slack, saving them to a database for further processing or something else.
+Aspen supports sending errors, successful deployments and recommendations for labels to an external service (see optional environment configuration above). KTH uses it's custom made application Alvares to handle these requests, and push them through a pipeline of sorts. The external service could for instance send messages and errors to Slack, saving them to a database for further processing or something else.

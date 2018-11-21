@@ -16,3 +16,16 @@ class TestGetClusterLbIp(unittest.TestCase):
         pipeline_data = {data_defs.APPLICATION_CLUSTER: 'doesnt-exist'}
         self.assertRaises(exceptions.DeploymentError, step.get_current_cluster_lb_ip,
                           cluster_data, pipeline_data)
+
+    def test_get_current_cluster_status(self):
+        pipeline_data = {data_defs.APPLICATION_CLUSTER: 'stage'}
+        cluster_data = mock_test_data.get_cluster_ip_response()
+        step = GetDockerHostIp()
+        lb_status = step.get_current_cluster_status(cluster_data, pipeline_data)
+        self.assertEqual(lb_status, 'stage')
+        pipeline_data = {data_defs.APPLICATION_CLUSTER: 'test'}
+        lb_status = step.get_current_cluster_status(cluster_data, pipeline_data)
+        self.assertEqual(lb_status, 'preparing-test')
+        pipeline_data = {data_defs.APPLICATION_CLUSTER: 'nope'}
+        lb_status = step.get_current_cluster_status(cluster_data, pipeline_data)
+        self.assertIsNone(lb_status)

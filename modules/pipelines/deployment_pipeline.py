@@ -28,6 +28,7 @@ from modules.steps.report_success import ReportSuccess
 from modules.steps.second_conditional_stop import SecondConditionalStop
 from modules.steps.verify_pipeline_data import VerifyPipelineData
 from modules.steps.verify_frontend_rule import VerifyFrontendRule
+from modules.steps.stop_excluded_apps import StopExcludedApps
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -37,10 +38,11 @@ class DeploymentPipeline():
         self.pipeline_data = {}
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             ParseStackPath(),
+            ClusterVerification(),
+            StopExcludedApps(),
             GetCacheEntry(),
             CalculateMd5(),
             ParseStackFile(),
-            ClusterVerification(),
             InitServicePipelineData(),
             ParseImageData(),
             VerifyPipelineData(),

@@ -12,19 +12,16 @@ RUN apk update && \
     apk add --no-cache --repository http://nl.alpinelinux.org/alpine/v3.6/main bash && \
     # installs gcc + deps
     apk add --no-cache make curl libffi-dev openssl-dev build-base openssh git && \
-    apk add --no-cache docker --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/latest-stable/community --allow-untrusted
+    apk add --no-cache docker --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/latest-stable/community --allow-untrusted && \
+    rm -rf /var/cache/apk/*
 
 COPY Pipfile Pipfile
 
 ENV LANG=en_US.UTF-8 \
     LANGUAGE=en_US.UTF-8
 
-RUN pipenv install
-RUN pipenv install pip
 RUN pipenv run pip install azure-cli
 
-# Clean up
-RUN rm -rf /var/cache/apk/*
 
 COPY ["modules",  "modules"]
 COPY ["run.py", "run.py"]
