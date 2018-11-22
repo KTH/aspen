@@ -12,7 +12,7 @@ def init():
     sentry_dsn = environment.get_env(environment.SENTRY_DSN)
     if sentry_dsn:
         log.info('Initializing Sentry with dsn: "%s"', sentry_dsn)
-        sentry_sdk.init(sentry_dsn)
+        sentry_sdk.init(sentry_dsn, debug=True)
         _INITIALIZED = True
 
 def capture_exception(exception):
