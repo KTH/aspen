@@ -6,7 +6,7 @@ import logging
 import subprocess
 from threading import Thread, Event
 from flask import Flask, jsonify
-from modules.util import log, redis, environment, known_hosts, exceptions
+from modules.util import log, redis, environment, known_hosts, exceptions, sentry
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
@@ -49,6 +49,7 @@ def clear_cache():
 def start_sync():
     logger = logging.getLogger(__name__)
     logger.info('Starting sync thread')
+    sentry.capture_message('Aspen started syncing')
     if SYNC_THREAD.stopped():
         SYNC_THREAD.start()
         return jsonify(message='Sync thread started')
