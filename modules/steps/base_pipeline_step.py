@@ -12,7 +12,7 @@ import time
 import os
 import logging
 import subprocess
-from modules.util import exceptions, data_defs, reporter_service
+from modules.util import exceptions, data_defs, reporter_service, sentry
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
@@ -105,6 +105,7 @@ class BasePipelineStep:
 
     def handle_pipeline_error(self, error, pipeline_data):
         msg = str(error)
+        sentry.capture_exception(error)
         if isinstance(error, exceptions.AspenError):
             msg = str(error)
             error = exceptions.DeploymentError(msg, fatal=True, expected=False)
