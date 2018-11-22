@@ -47,8 +47,8 @@ class VerifyDeploySuccess(BasePipelineStep):
 
     def wait_for_service_replication(self, pipeline_data, service):
         for i in range(self.wait_times):
-            self.log.debug('Checking if service "%s" has all replicas (attempt #%s)',
-                           service, i+1)
+            self.log.debug('Checking if service "%s" has all replicas (attempt #%s/#%s)',
+                           service, i+1, self.wait_times)
             match = self.get_running_replicas(pipeline_data, service)
             if match.group(1) == match.group(2):
                 self.log.debug('Service "%s" has %s/%s replicas. All clear.',

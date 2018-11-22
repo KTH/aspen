@@ -119,10 +119,15 @@ def create_error_message(error):
     return format_error_message(cluster, application, step, error)
 
 def format_error_message(cluster, application, step, error):
+    # Only use backticks for error message if the message itself doesn't already
+    # have any in it
+    error_str = str(error)
+    if '`' not in str(error):
+        error_str = f'`{error_str}`'
     return (f'Cluster: `{cluster}`, '
             f'Application: `{application}`, '
             f'Step: `{step}`, '
-            f'Error: `{str(error)}`')
+            f'Error: {error_str}')
 
 def get_combined_service_labels(pipeline_data):
     labels = {}
