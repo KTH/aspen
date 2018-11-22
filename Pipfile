@@ -14,7 +14,7 @@ pyyaml = "==3.13"
 coloredlogs = "==10.0"
 prometheus_client = "==0.3.1"
 redis = "==2.10.6"
-raven = "==6.9.0"
+sentry-sdk = "==0.5.5"
 
 [dev-packages]
 pylint = "*"

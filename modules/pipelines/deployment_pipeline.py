@@ -83,5 +83,5 @@ class DeploymentPipeline():
                             'with pipeline_data "%s" '
                             'and message: "%s"'),
                            dep_err.step_name, dep_err.pipeline_data, str(dep_err))
-            sentry.capture_exception()
+            sentry.capture_exception(dep_err)
             reporter_service.handle_deployment_error(dep_err)

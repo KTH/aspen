@@ -29,9 +29,9 @@ class AspenPipeline():
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
         except exceptions.AspenError as as_err:
             self.log.error('AspenError occured: "%s"', str(as_err))
-            sentry.capture_exception()
+            sentry.capture_exception(as_err)
             raise
         except Exception as err:
             self.log.error('Unhandled exception occured: "%s"', str(err))
-            sentry.capture_exception()
+            sentry.capture_exception(err)
             raise

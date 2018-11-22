@@ -1,12 +1,12 @@
 __author__ = 'tinglev@kth.se'
 
-from raven import Client
+import sentry-sdk
 from modules.util import environment
 
-def capture_exception():
-    client = Client(environment.get_env(environment.SENTRY_DSN))
-    client.captureException()
+sentry-sdk.init(environment.get_env(environment.SENTRY_DSN))
+
+def capture_exception(exception):
+    sentry-sdk.capture_exception(exception)
 
 def capture_message(message):
-    client = Client(environment.get_env(environment.SENTRY_DSN))
-    client.captureMessage(message)
+    sentry-sdk.capture_message(message)
