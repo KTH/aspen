@@ -24,6 +24,7 @@ class SyncThread(Thread):
 def sync_routine():
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
+    sentry.capture_message('Aspen started syncing')
     pipeline = AspenPipeline()
     while not SYNC_THREAD.stopped():
         try:
@@ -47,7 +48,6 @@ def clear_cache():
 def start_sync():
     logger = logging.getLogger(__name__)
     logger.info('Starting sync thread')
-    sentry.capture_message('Aspen started syncing')
     if SYNC_THREAD.stopped():
         SYNC_THREAD.start()
         return jsonify(message='Sync thread started')
