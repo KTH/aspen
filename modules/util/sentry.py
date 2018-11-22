@@ -17,5 +17,5 @@ def capture_exception(exception):
 
 def capture_message(message):
     log = logging.getLogger(__name__)
-    log.debug('Caputing Sentry message')
+    log.info('Caputing Sentry message')
     sentry_sdk.capture_message(message)
