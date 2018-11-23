@@ -7,7 +7,7 @@ from modules.steps.find_docker_stack_files import FindDockerStackFiles
 from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
 from modules.steps.registry_login import RegistryLogin
 from modules.steps.load_docker_host_ips import LoadDockerHostIps
-from modules.util import pipeline, exceptions, sentry
+from modules.util import pipeline, exceptions
 
 class AspenPipeline():
 
@@ -29,9 +29,7 @@ class AspenPipeline():
             self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
         except exceptions.AspenError as as_err:
             self.log.error('AspenError occured: "%s"', str(as_err))
-            sentry.capture_exception(as_err)
             raise
         except Exception as err:
             self.log.error('Unhandled exception occured: "%s"', str(err))
-            sentry.capture_exception(err)
             raise

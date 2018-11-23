@@ -29,7 +29,7 @@ from modules.steps.second_conditional_stop import SecondConditionalStop
 from modules.steps.verify_pipeline_data import VerifyPipelineData
 from modules.steps.verify_frontend_rule import VerifyFrontendRule
 from modules.steps.stop_excluded_apps import StopExcludedApps
-from modules.util import pipeline, data_defs, exceptions, reporter_service, sentry
+from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
 
@@ -83,5 +83,4 @@ class DeploymentPipeline():
                             'with pipeline_data "%s" '
                             'and message: "%s"'),
                            dep_err.step_name, dep_err.pipeline_data, str(dep_err))
-            sentry.capture_exception(dep_err)
             reporter_service.handle_deployment_error(dep_err)

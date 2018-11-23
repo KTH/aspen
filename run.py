@@ -4,7 +4,7 @@ import time
 import logging
 from threading import Thread, Event
 from flask import Flask, jsonify
-from modules.util import log, redis, environment, known_hosts, exceptions, sentry
+from modules.util import log, redis, environment, known_hosts, exceptions
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
@@ -24,7 +24,6 @@ class SyncThread(Thread):
 def sync_routine():
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
-    sentry.capture_message('Aspen started syncing')
     pipeline = AspenPipeline()
     while not SYNC_THREAD.stopped():
         try:
