@@ -54,3 +54,11 @@ def execute_json_delete(client, key):
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt execute redis delete cmd. '
                                          f'Error was: "{str(redis_err)}"')
+
+def execute_command(client, command):
+    try:
+        LOG.debug('Running command "%s"', command)
+        return client.execute_command(command)
+    except redis.RedisError as redis_err:
+        raise exceptions.DeploymentError(f'Couldnt execute redis command f{command}. '
+                                         f'Error was: "{str(redis_err)}"')

@@ -63,6 +63,18 @@ def stop_sync():
     else:
         return jsonify(message='Sync thread already stopped')
 
+@FLASK_APP.route('/api/v1/status', methods=['GET'])
+def get_status():
+    logger = logging.getLogger(__name__)
+    logger.info('Returning status')
+    redis_client = redis.get_client()
+    cache_size = redis.execute_command(redis_client, 'DBSIZE')
+    status = {
+        'sync_thread_state': 'STOPPED' if SYNC_THREAD.stopped() else 'RUNNING',
+        'cache_size': cache_size
+    }
+    return jsonify(status)
+
 def main():
     log.init_logging()
     logger = logging.getLogger(__name__)
