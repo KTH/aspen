@@ -70,7 +70,7 @@ def get_status():
     redis_client = redis.get_client()
     cache_size = redis.execute_command(redis_client, 'DBSIZE')
     status = {
-        'sync_thread_state': 'STOPPED' if SYNC_THREAD.stopped() else 'RUNNING',
+        'sync_thread_running': not SYNC_THREAD.stopped(),
         'cache_size': cache_size
     }
     return jsonify(status)
