@@ -33,8 +33,6 @@ def get_application_passwords(pipeline_data):
     logger = logging.getLogger(__name__)
     if (data_defs.APPLICATION_PASSWORDS in pipeline_data and
             'passwords' in pipeline_data[data_defs.APPLICATION_PASSWORDS]):
-        logger.info(pipeline_data[data_defs.APPLICATION_PASSWORDS])
-        logger.info('(%s', pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords'])
         return pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords'].items()
     return []
 
