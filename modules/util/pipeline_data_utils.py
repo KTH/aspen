@@ -31,6 +31,8 @@ def service_uses_semver(service):
 def get_application_passwords(pipeline_data):
     if (data_defs.APPLICATION_PASSWORDS in pipeline_data and
             'passwords' in pipeline_data[data_defs.APPLICATION_PASSWORDS]):
+        print(pipeline_data[data_defs.APPLICATION_PASSWORDS])
+        print('(', pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords'], ')')
         return pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords'].items()
     return []
 
