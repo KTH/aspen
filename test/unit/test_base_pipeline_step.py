@@ -70,21 +70,24 @@ class TestBasePipelineStep(unittest.TestCase):
 
     def test_handle_pipeline_error(self):
         step = ConcreteBPS()
-        sys.exit = mock.Mock()
+        step.stop_pipeline = mock.Mock()
         base_pipeline_step.reporter_service.handle_deployment_error = mock.Mock()
         error = Exception('Test message')
         step.handle_pipeline_error(error, {})
         args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
         self.assertTrue(isinstance(args[0], exceptions.DeploymentError))
         self.assertEqual(str(args[0]), 'Test message')
-        sys.exit.assert_not_called()
+        step.stop_pipeline.assert_called_once()
+        step.stop_pipeline.reset_mock()
         error = subprocess.CalledProcessError(-1, 'Test cmd')
         error.output = 'Test output'
         base_pipeline_step.reporter_service.handle_deployment_error.reset_mock()
         step.handle_pipeline_error(error, {})
         args, _ = base_pipeline_step.reporter_service.handle_deployment_error.call_args
         self.assertEqual(str(args[0]), 'Test output')
-        sys.exit.assert_not_called()
+        step.stop_pipeline.assert_called_once()
+        step.stop_pipeline.reset_mock()
         error = exceptions.AspenError('should exit')
         step.handle_pipeline_error(error, {})
-        sys.exit.assert_called_once()
+        step.stop_pipeline.assert_called_once()
+        step.stop_pipeline.reset_mock()

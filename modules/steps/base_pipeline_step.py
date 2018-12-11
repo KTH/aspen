@@ -120,10 +120,12 @@ class BasePipelineStep:
         self.log.error('An error occured: "%s"', str(error))
         if error.fatal:
             reporter_service.handle_fatal_error(error)
-            sys.exit()
         else:
             reporter_service.handle_deployment_error(error)
-            self.stop_pipeline()
+        # If the error was an AspenError, the Aspen pipeline will
+        # be stopped. This is a more friendly solution than
+        # using sys.exit()
+        self.stop_pipeline()
 
     def add_error_data(self, deployment_error, pipeline_data):
         deployment_error.pipeline_data = pipeline_data
