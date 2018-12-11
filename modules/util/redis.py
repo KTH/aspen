@@ -63,8 +63,12 @@ def execute_command(client, command):
         raise exceptions.DeploymentError(f'Couldnt execute redis command f{command}. '
                                          f'Error was: "{str(redis_err)}"')
 
+def get_all_keys(client):
+    keys = execute_command(client, f'KEYS *')
+    return [key.decode("utf-8") for key in keys]
+
 def clear_cache_with_filter(client, key_filter):
     keys = execute_command(client, f'KEYS *{key_filter}*')
     LOG.info('Found %s keys to clear', len(keys))
-    for key in keys:
+    for key in [key.decode("utf-8") for key in keys]:
         execute_json_delete(client, key)
