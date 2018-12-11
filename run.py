@@ -36,6 +36,16 @@ def sync_routine():
 
 SYNC_THREAD = SyncThread(target=sync_routine)
 
+@FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DEL'])
+def clear_app_from_cache(cluster, app):
+    client = redis.get_client()
+    redis.clear_cache_with_filter(client, f'{cluster}*{app}')
+
+@FLASK_APP.route('/api/v1/cache/<cluster>', methods=['DEL'])
+def clear_cluster_from_cache(cluster, app):
+    client = redis.get_client()
+    redis.clear_cache_with_filter(client, f'{cluster}')
+
 @FLASK_APP.route('/api/v1/cache', methods=['DEL'])
 def clear_cache():
     logger = logging.getLogger(__name__)
