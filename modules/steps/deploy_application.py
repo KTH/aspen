@@ -44,7 +44,7 @@ class DeployApplication(BasePipelineStep):
         name = pipeline_data[data_defs.APPLICATION_NAME]
         cluster_lb_ip = pipeline_data[data_defs.DOCKER_HOST_IP]
         cmd = (f'{environment} DOCKER_TLS_VERIFY=1 docker '
-               f'-H {cluster_lb_ip} stack deploy '
+               f'-H tcp://{cluster_lb_ip} stack deploy '
                f'--with-registry-auth '
                f'--compose-file {stack_file} {name}')
         deploy_output = self.run_docker_cmd(cmd)
