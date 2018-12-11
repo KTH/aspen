@@ -62,6 +62,13 @@ class TestVerifyDeploySuccess(unittest.TestCase):
         verify_deploy_success.time.sleep = mock.Mock()
         self.assertRaises(exceptions.DeploymentError, step.wait_for_service_replication, {}, 'test-app')
         self.assertEqual(verify_deploy_success.time.sleep.call_count, 5)
+        output = ('ID     NAME    MODE      REPLICAS  IMAGE   PORTS\n'
+                  'm7h75hnflmpd   test-app       global     13/13 redis:latest ')
+        step.run_service_ls = mock.Mock(return_value=output)
+        match = step.get_running_replicas({}, 'test-app')
+        self.assertIsNotNone(match)
+        self.assertEqual(match.group(1), '13')
+        self.assertEqual(match.group(2), '13')
 
     def test_failing_run_step(self):
         step = VerifyDeploySuccess()

@@ -35,4 +35,4 @@ def get_service_name_from_update_deploy():
     return r'^Updating service (.+) \(id: (.+)\)$'
 
 def get_nr_of_replicas():
-    return r'^.+([0-9]+)/([0-9]+).*$'
+    return r'^.+?([0-9]+)/([0-9]+).*$'
