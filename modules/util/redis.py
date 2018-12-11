@@ -65,5 +65,6 @@ def execute_command(client, command):
 
 def clear_cache_with_filter(client, key_filter):
     keys = execute_command(client, f'KEYS *{key_filter}*')
+    LOG.info('Found %s keys to clear', len(keys))
     for key in keys:
         execute_json_delete(client, key)
