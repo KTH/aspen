@@ -92,8 +92,7 @@ class BasePipelineStep:
         return pipeline_data
 
     def thread_is_stoppped(self):
-        if isinstance(threading.current_thread(), thread.SyncThread):
-            # We are running in a SyncThread
+        if threading.current_thread().name is 'SyncThread':
             current_thread = threading.current_thread()
             return current_thread.stopped()
         return False
