@@ -2,24 +2,11 @@ __author__ = 'tinglev@kth.se'
 
 import time
 import logging
-from threading import Thread, Event
 from flask import Flask, jsonify
-from modules.util import log, redis, environment, known_hosts, exceptions
+from modules.util import log, redis, environment, known_hosts, exceptions, thread
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
-
-class SyncThread(Thread):
-
-    def __init__(self, target):
-        super(SyncThread, self).__init__(target=target)
-        self._stop_event = Event()
-
-    def stop(self):
-        self._stop_event.set()
-
-    def stopped(self):
-        return self._stop_event.is_set()
 
 def sync_routine():
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
@@ -34,7 +21,7 @@ def sync_routine():
             logger.error('Stopping sync thread due to previous error: %s', aspen_err)
             stop_sync()
 
-SYNC_THREAD = SyncThread(target=sync_routine)
+SYNC_THREAD = thread.SyncThread(target=sync_routine)
 
 @FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
 def clear_app_from_cache(cluster, app):
