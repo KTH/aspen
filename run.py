@@ -15,6 +15,9 @@ def sync_routine():
     while not SYNC_THREAD.stopped():
         try:
             pipeline.run_pipeline()
+            if SYNC_THREAD.stopped():
+                logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
+                break
             logger.info('Main pipeline done, waiting %s seconds before next run', delay)
             time.sleep(delay)
         except exceptions.AspenError as aspen_err:
