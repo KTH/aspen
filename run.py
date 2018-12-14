@@ -47,9 +47,11 @@ def clear_cache():
 
 @FLASK_APP.route('/api/v1/sync/start', methods=['GET'])
 def start_sync():
+    global SYNC_THREAD
     logger = logging.getLogger(__name__)
     logger.info('Starting sync thread')
     if SYNC_THREAD.stopped():
+        SYNC_THREAD = thread.SyncThread(target=sync_routine)
         SYNC_THREAD.start()
         return jsonify(message='Sync thread started')
     else:
@@ -57,6 +59,7 @@ def start_sync():
 
 @FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
 def stop_sync():
+    global SYNC_THREAD
     logger = logging.getLogger(__name__)
     logger.info('Stopping sync thread')
     if not SYNC_THREAD.stopped():
