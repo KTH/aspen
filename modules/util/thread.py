@@ -1,6 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
-from threading import Thread, Event
+from threading import Thread, Event, current_thread
 
 class SyncThread(Thread):
 
@@ -13,3 +13,9 @@ class SyncThread(Thread):
 
     def stopped(self):
         return self._stop_event.is_set()
+
+def thread_is_stoppped():
+    if current_thread().name is 'SyncThread':
+        this_thread = current_thread()
+        return this_thread.stopped()
+    return False

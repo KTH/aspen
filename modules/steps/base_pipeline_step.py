@@ -84,18 +84,12 @@ class BasePipelineStep:
             self.run_step(pipeline_data)
         except Exception as ex: # pylint: disable=W0703
             self.handle_pipeline_error(ex, pipeline_data)
-        if self.thread_is_stoppped():
+        if thread.thread_is_stoppped():
             self.log.info('Sync thread has been stopped. Stopping pipeline.')
             self.stop_pipeline()
         if self.next_step:
             self.next_step.run_pipeline_step(pipeline_data)
         return pipeline_data
-
-    def thread_is_stoppped(self):
-        if threading.current_thread().name is 'SyncThread':
-            current_thread = threading.current_thread()
-            return current_thread.stopped()
-        return False
 
     def check_environment_missing(self, pipeline_data, environment_missing):
         if environment_missing:

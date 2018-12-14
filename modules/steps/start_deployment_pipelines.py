@@ -8,7 +8,7 @@ __author__ = 'tinglev@kth.se'
 from concurrent.futures import ThreadPoolExecutor, wait
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
-from modules.util import data_defs, environment
+from modules.util import data_defs, environment, thread
 
 class StartDeploymentPipelines(BasePipelineStep):
 
@@ -25,6 +25,10 @@ class StartDeploymentPipelines(BasePipelineStep):
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
         # Loop all stack files
         for i in range(nr_of_stack_files):
+            if thread.thread_is_stoppped():
+                self.log.info('Stopping threaded deployments because thread has '
+                              'been stopped')
+                break
             file_path = pipeline_data[data_defs.STACK_FILES][i]
             # Append a deployment pipeline to the work load
             tasks.append(executor.submit(self.init_and_run, pipeline_data, file_path))
