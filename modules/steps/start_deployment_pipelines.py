@@ -27,8 +27,8 @@ class StartDeploymentPipelines(BasePipelineStep):
         with ThreadPoolExecutor(max_workers=parallelism) as executor:
             tasks = {executor.submit(self.init_and_run, pipeline_data, file_path)
                      for file_path in pipeline_data[data_defs.STACK_FILES]}
-            for task in as_completed(tasks):
-                self.log.debug('Completed async task with result "%s"', tasks[task].result())
+            for _ in as_completed(tasks):
+                self.log.debug('Done with pooled task')
         self.log.debug('All pooled executors done')
         return pipeline_data
 
