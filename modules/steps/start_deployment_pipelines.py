@@ -38,11 +38,16 @@ class StartDeploymentPipelines(BasePipelineStep):
                 wait(tasks)
                 executor = ThreadPoolExecutor(max_workers=parallelism)
                 self.log.debug('Async await done')
-                tasks = []
+                for task in tasks:
+                    del task
+                del tasks
         # Run all tasks that are left in the task array
         self.log.debug('Awaiting remaining "%s" async pipelines', len(tasks))
         wait(tasks)
         # garbage collect
+        executor.shutdown()
+        for task in tasks:
+            del task
         del tasks
         self.log.debug('Last async await done')
         return pipeline_data
