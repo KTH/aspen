@@ -5,6 +5,7 @@ several deployment pipelines in parallell"""
 
 __author__ = 'tinglev@kth.se'
 
+import gc
 from concurrent.futures import ThreadPoolExecutor, wait
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
@@ -24,31 +25,24 @@ class StartDeploymentPipelines(BasePipelineStep):
         tasks = []
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
         # Loop all stack files
-        for i in range(nr_of_stack_files):
-            if thread.thread_is_stoppped():
-                self.log.info('Stopping threaded deployments because thread has '
-                              'been stopped')
-                break
-            file_path = pipeline_data[data_defs.STACK_FILES][i]
-            # Append a deployment pipeline to the work load
-            tasks.append(executor.submit(self.init_and_run, pipeline_data, file_path))
-            # If we reach our parallelism max, run the appended tasks
-            if i % parallelism == 0:
-                self.log.debug('Awaiting "%s" async pipelines', len(tasks))
-                wait(tasks)
-                executor = ThreadPoolExecutor(max_workers=parallelism)
-                self.log.debug('Async await done')
-                for task in tasks:
-                    del task
-        # Run all tasks that are left in the task array
-        self.log.debug('Awaiting remaining "%s" async pipelines', len(tasks))
-        wait(tasks)
-        # garbage collect
-        executor.shutdown()
-        for task in tasks:
-            del task
+        with ThreadPoolExecutor(max_workers=parallelism) as executor:
+            for i in range(nr_of_stack_files):
+                if thread.thread_is_stoppped():
+                    self.log.info('Stopping threaded deployments because thread has '
+                                  'been stopped')
+                    break
+                file_path = pipeline_data[data_defs.STACK_FILES][i]
+                # Append a deployment pipeline to the work load
+                tasks.append(executor.submit(self.init_and_run, pipeline_data, file_path))
+                # If we reach our parallelism max, run the appended tasks
+                if (i % parallelism == 0) or (i == nr_of_stack_files - 1):
+                    self.log.debug('Awaiting "%s" async pipelines', len(tasks))
+                    wait(tasks)
+                    self.log.debug('Async await done')
+                    tasks = []
         del tasks
-        self.log.debug('Last async await done')
+        gc.collect()
+        self.log.debug('All pooled executors done')
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
