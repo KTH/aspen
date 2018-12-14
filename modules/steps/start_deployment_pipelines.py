@@ -6,7 +6,7 @@ several deployment pipelines in parallell"""
 __author__ = 'tinglev@kth.se'
 
 import gc
-from concurrent.futures import ThreadPoolExecutor, wait
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
 from modules.util import data_defs, environment, thread
@@ -21,27 +21,14 @@ class StartDeploymentPipelines(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
-        executor = ThreadPoolExecutor(max_workers=parallelism)
-        tasks = []
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
+        self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
         # Loop all stack files
         with ThreadPoolExecutor(max_workers=parallelism) as executor:
-            for i in range(nr_of_stack_files):
-                if thread.thread_is_stoppped():
-                    self.log.info('Stopping threaded deployments because thread has '
-                                  'been stopped')
-                    break
-                file_path = pipeline_data[data_defs.STACK_FILES][i]
-                # Append a deployment pipeline to the work load
-                tasks.append(executor.submit(self.init_and_run, pipeline_data, file_path))
-                # If we reach our parallelism max, run the appended tasks
-                if (i % parallelism == 0) or (i == nr_of_stack_files - 1):
-                    self.log.debug('Awaiting "%s" async pipelines', len(tasks))
-                    wait(tasks)
-                    self.log.debug('Async await done')
-                    tasks = []
-        del tasks
-        gc.collect()
+            tasks = {executor.submit(self.init_and_run, pipeline_data, file_path)
+                     for file_path in pipeline_data[data_defs.STACK_FILES]}
+            for task in as_completed(tasks):
+                self.log.debug('Completed async task with result "%s"', tasks[task].result())
         self.log.debug('All pooled executors done')
         return pipeline_data
 
