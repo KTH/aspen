@@ -29,7 +29,7 @@ SYNC_THREAD = thread.SyncThread(target=sync_routine)
 @FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
 def clear_app_from_cache(cluster, app):
     client = redis.get_client()
-    redis.clear_cache_with_filter(client, f'{cluster}*{app}')
+    redis.clear_cache_with_filter(client, f'{app}*{cluster}')
     return jsonify(message='Cache cleared')
 
 @FLASK_APP.route('/api/v1/cache/<cluster>', methods=['DELETE'])

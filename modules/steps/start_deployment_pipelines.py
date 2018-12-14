@@ -42,6 +42,8 @@ class StartDeploymentPipelines(BasePipelineStep):
         # Run all tasks that are left in the task array
         self.log.debug('Awaiting remaining "%s" async pipelines', len(tasks))
         wait(tasks)
+        # garbage collect
+        del tasks
         self.log.debug('Last async await done')
         return pipeline_data
 
