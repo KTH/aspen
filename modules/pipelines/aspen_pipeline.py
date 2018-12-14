@@ -32,4 +32,5 @@ class AspenPipeline():
             raise
         except Exception as err:
             self.log.error('Unhandled exception occured: "%s"', str(err))
+            self.log.exception(err)
             raise
