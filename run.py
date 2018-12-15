@@ -1,5 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
+import gc
 import time
 import logging
 from flask import Flask, jsonify
@@ -84,6 +85,7 @@ def get_status():
     return jsonify(status)
 
 def main():
+    gc.set_debug(gc.DEBUG_LEAK)
     log.init_logging()
     logger = logging.getLogger(__name__)
     known_hosts.write_entry_if_missing()
