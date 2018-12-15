@@ -11,9 +11,9 @@ FLASK_APP = Flask(__name__)
 def sync_routine():
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
-    pipeline = AspenPipeline()
     while not SYNC_THREAD.stopped():
         try:
+            pipeline = AspenPipeline()
             pipeline.run_pipeline()
             if SYNC_THREAD.stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
@@ -23,6 +23,9 @@ def sync_routine():
         except exceptions.AspenError as aspen_err:
             logger.error('Stopping sync thread due to previous error: %s', aspen_err)
             stop_sync()
+        finally:
+            # Always clean up
+            del pipeline
 
 SYNC_THREAD = thread.SyncThread(target=sync_routine)
 
