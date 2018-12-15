@@ -27,6 +27,7 @@ def sync_routine():
         finally:
             # Always clean up
             del pipeline
+            gc.collect()
 
 SYNC_THREAD = thread.SyncThread(target=sync_routine)
 
