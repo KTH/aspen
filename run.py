@@ -30,6 +30,7 @@ def sync_routine():
             gc.collect()
 
 SYNC_THREAD = thread.SyncThread(target=sync_routine)
+SYNC_THREAD.daemon = True
 
 @FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
 def clear_app_from_cache(cluster, app):
@@ -56,7 +57,9 @@ def start_sync():
     logger = logging.getLogger(__name__)
     logger.info('Starting sync thread')
     if SYNC_THREAD.stopped():
+        SYNC_THREAD.join()
         SYNC_THREAD = thread.SyncThread(target=sync_routine)
+        SYNC_THREAD.daemon = True
         SYNC_THREAD.start()
         return jsonify(message='Sync thread started')
     else:
