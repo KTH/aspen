@@ -15,6 +15,7 @@ coloredlogs = "==10.0"
 prometheus_client = "==0.3.1"
 redis = "==2.10.6"
 pycrypto = "==2.6.1"
+pympler = "==0.6"
 
 [dev-packages]
 pylint = "*"
