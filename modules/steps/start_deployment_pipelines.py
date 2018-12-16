@@ -5,7 +5,7 @@ several deployment pipelines in parallell"""
 
 __author__ = 'tinglev@kth.se'
 
-import gc
+from memory_profiler import profile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
@@ -19,6 +19,7 @@ class StartDeploymentPipelines(BasePipelineStep):
     def get_required_data_keys(self):
         return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
+    @profile
     def run_step(self, pipeline_data):
         # parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
         #nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
