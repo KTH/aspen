@@ -4,15 +4,12 @@ import gc
 import time
 import logging
 from flask import Flask, jsonify
-from pympler import tracker
 from modules.util import log, redis, environment, known_hosts, exceptions, thread
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
 
 def sync_routine():
-    tr = tracker.SummaryTracker()
-    tr.print_diff()
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
     while not SYNC_THREAD.stopped():
@@ -31,6 +28,7 @@ def sync_routine():
             # Always clean up
             del pipeline
             gc.collect()
+            print(gc.garbage)
 
 SYNC_THREAD = thread.SyncThread(target=sync_routine)
 SYNC_THREAD.daemon = True
