@@ -28,8 +28,8 @@ class StartDeploymentPipelines(BasePipelineStep):
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
             for task in as_completed(tasks):
-                result = tasks[task].result()
-                self.log.debug('Done with pooled task sized: %s', len(result))
+                result = tasks[task]
+                self.log.debug('Done with pooled task sized: %s', result)
         self.log.debug('All pooled executors done')
         return pipeline_data
 
