@@ -7,12 +7,10 @@ handles logging and exceptions"""
 __author__ = 'tinglev'
 
 from abc import ABCMeta, abstractmethod
-import sys
 import time
 import os
 import logging
 import subprocess
-import threading
 from modules.util import exceptions, data_defs, reporter_service, thread
 
 class BasePipelineStep:

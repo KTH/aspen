@@ -5,6 +5,7 @@ several deployment pipelines in parallell"""
 
 __author__ = 'tinglev@kth.se'
 
+import resource
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
@@ -24,13 +25,14 @@ class StartDeploymentPipelines(BasePipelineStep):
         #self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
         # Loop all stack files
         # max_workers = None defaults to #cpus * 5
+        self.log.info('Before tpe: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
         with ThreadPoolExecutor() as executor:
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
-            for task in as_completed(tasks):
-                del tasks[task]
+            for _ in as_completed(tasks):
                 self.log.debug('Done with pooled tasks')
         self.log.debug('All pooled executors done')
+        self.log.info('After tpe: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
