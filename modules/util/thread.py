@@ -1,6 +1,7 @@
 __author__ = 'tinglev@kth.se'
 
 from threading import Thread, Event, current_thread
+import threading
 
 class SyncThread(Thread):
 
@@ -19,3 +20,15 @@ def thread_is_stoppped():
         this_thread = current_thread()
         return this_thread.stopped()
     return False
+
+def get_sync_thread():
+    for thread in threading.enumerate():
+        if thread.name is 'SyncThread':
+            return thread
+    return None
+
+def create_and_start_sync_thread(sync_routine):
+    if not get_sync_thread():
+        sync_thread = SyncThread(target=sync_routine)
+        sync_thread.daemon = True
+        sync_thread.start()
