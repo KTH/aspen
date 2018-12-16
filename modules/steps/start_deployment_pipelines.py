@@ -20,16 +20,17 @@ class StartDeploymentPipelines(BasePipelineStep):
         return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
     def run_step(self, pipeline_data):
-        parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
-        nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
-        self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
+        # parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
+        #nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
+        #self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
         # Loop all stack files
-        with ThreadPoolExecutor(max_workers=1) as executor:
+        # max_workers = None defaults to #cpus * 5
+        with ThreadPoolExecutor() as executor:
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
             for task in as_completed(tasks):
-                result = tasks[task]
-                self.log.debug('Done with pooled task sized: %s', result)
+                del tasks[task]
+                self.log.debug('Done with pooled tasks')
         self.log.debug('All pooled executors done')
         return pipeline_data
 
@@ -37,7 +38,8 @@ class StartDeploymentPipelines(BasePipelineStep):
         deployment_pipeline = DeploymentPipeline()
         pipeline_data = self.init_deploy_pipeline_data(pipeline_data, file_path)
         deployment_pipeline.set_pipeline_data(pipeline_data)
-        return deployment_pipeline.run_pipeline()
+        deployment_pipeline.run_pipeline()
+        return
 
     def init_deploy_pipeline_data(self, pipeline_data, file_path):
         app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
