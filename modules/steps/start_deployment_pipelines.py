@@ -35,8 +35,9 @@ class StartDeploymentPipelines(BasePipelineStep):
         self.log.debug('All pooled executors done')
         self.log.info('After tpe: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
         self.log.info('Size of pipeline_data: %s', sys.getsizeof(pipeline_data))
-        if tasks:
-            self.log.info('Size of tasks: %s', sys.getsizeof(tasks))
+        self.log.info('Size of tasks: %s', sys.getsizeof(tasks))
+        tasks = None
+        self.log.info('Size of self: %s', sys.getsizeof(self))
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
