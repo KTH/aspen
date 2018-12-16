@@ -36,6 +36,10 @@ class DeploymentPipeline():
     def __init__(self):
         self.log = logging.getLogger(__name__)
         self.pipeline_data = {}
+        self.pipeline_steps = []
+        self.init_steps()
+
+    def init_steps(self):
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             ParseStackPath(),
             ClusterVerification(),

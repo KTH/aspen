@@ -26,9 +26,7 @@ def sync_routine():
             stop_sync()
         finally:
             # Always clean up
-            del pipeline
             gc.collect()
-            print(gc.garbage)
 
 SYNC_THREAD = thread.SyncThread(target=sync_routine)
 SYNC_THREAD.daemon = True
