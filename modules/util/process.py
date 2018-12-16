@@ -13,7 +13,8 @@ def run_with_output(cmd):
         logger.debug('Running command with output: "%s"', cmd)
         completed_process = subprocess.run(f'{cmd}', shell=True,
                                            stdout=subprocess.PIPE,
-                                           stderr=subprocess.PIPE)
+                                           stderr=subprocess.PIPE,
+                                           close_fds=True)
         if completed_process.stderr:
             return completed_process.stderr
         return completed_process.stdout
