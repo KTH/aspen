@@ -27,7 +27,9 @@ class CalculateMd5(BasePipelineStep):
         return pipeline_data
 
     def get_hash_of_all_files(self, file_path):
-        md5_hash = hashlib.md5(open(file_path, 'r').read().encode('utf-8'))
+        md5_hash = None
+        with open(file_path, 'r') as stack_file:
+            md5_hash = hashlib.md5(stack_file.read().encode('utf-8'))
         dir_name = os.path.dirname(file_path)
         files_to_skip = [os.path.join(dir_name, 'secrets.decrypted.env')]
         all_files_in_dir = [os.path.join(dir_name, f) for f in sorted(os.listdir(dir_name))
@@ -35,5 +37,6 @@ class CalculateMd5(BasePipelineStep):
         for file in all_files_in_dir:
             if not file in files_to_skip:
                 self.log.debug('Hashing file "%s" and updating complete hash', file)
-                md5_hash.update(open(file, 'r').read().encode('utf-8'))
+                with open(file, 'r') as other_file:
+                    md5_hash.update(open(other_file, 'r').read().encode('utf-8'))
         return md5_hash.hexdigest()

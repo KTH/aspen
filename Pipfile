@@ -7,7 +7,7 @@ python_version = "3.6"
 
 [packages]
 Flask = "==1.0.2"
-requests = "==2.18.4"
+requests = "==2.21.0"
 ansible = "==2.7.4"
 docker-compose = "==1.22.0"
 pyyaml = "==3.13"
