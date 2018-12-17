@@ -19,7 +19,6 @@ class GetImageTags(BasePipelineStep):
     def get_required_data_keys(self):
         return [data_defs.SERVICES]
 
-    @profile
     def run_step(self, pipeline_data):
         registry_url = environment.get_env(environment.DOCKER_REGISTRY_URL)
         for i, service in pipeline_data_utils.get_enumerated_services(pipeline_data):
@@ -35,7 +34,8 @@ class GetImageTags(BasePipelineStep):
 
     def get_tags_url(self, image_name, registry_url):
         return f'{registry_url}/v2/{image_name}/tags/list'
-
+    
+    @profile
     def get_tags_from_registry(self, url_to_call):
         user = environment.get_env(environment.DOCKER_REGISTRY_USER)
         password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
