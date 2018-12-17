@@ -4,7 +4,7 @@ Gets all tags from a docker registry for the given service images"""
 
 __author__ = 'tinglev@kth.se'
 
-import memory_profiler
+from memory_profiler import profile
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment, requests, pipeline_data_utils
 
