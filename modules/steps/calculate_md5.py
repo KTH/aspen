@@ -38,5 +38,5 @@ class CalculateMd5(BasePipelineStep):
             if not file in files_to_skip:
                 self.log.debug('Hashing file "%s" and updating complete hash', file)
                 with open(file, 'r') as other_file:
-                    md5_hash.update(open(other_file, 'r').read().encode('utf-8'))
+                    md5_hash.update(other_file.read().encode('utf-8'))
         return md5_hash.hexdigest()
