@@ -26,17 +26,13 @@ class StartDeploymentPipelines(BasePipelineStep):
         #self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
         # Loop all stack files
         # max_workers = None defaults to #cpus * 5
-        self.log.info('Before tpe: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
-        with ThreadPoolExecutor() as executor:
-            tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
-                     fp for fp in pipeline_data[data_defs.STACK_FILES]}
-            for _ in as_completed(tasks):
-                self.log.debug('Done with pooled tasks')
-        self.log.debug('All pooled executors done')
-        self.log.info('After tpe: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
-        self.log.info('Size of pipeline_data: %s', sys.getsizeof(pipeline_data))
-        self.log.info('Size of tasks: %s', sys.getsizeof(tasks))
-        self.log.info('Size of self: %s', sys.getsizeof(self))
+        map(lambda file_path: self.init_and_run(pipeline_data, file_path), [fp for fp in pipeline_data[data_defs.STACK_FILES]])
+        #map(self.init_and_run, [fp for fp in pipeline_data[data_defs.STACK_FILES]])
+        #with ThreadPoolExecutor() as executor:
+        #    tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
+        #             fp for fp in pipeline_data[data_defs.STACK_FILES]}
+        #    for _ in as_completed(tasks):
+        #        self.log.debug('Done with pooled tasks')
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):

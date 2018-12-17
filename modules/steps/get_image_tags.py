@@ -33,7 +33,7 @@ class GetImageTags(BasePipelineStep):
 
     def get_tags_url(self, image_name, registry_url):
         return f'{registry_url}/v2/{image_name}/tags/list'
-    
+
     def get_tags_from_registry(self, url_to_call):
         user = environment.get_env(environment.DOCKER_REGISTRY_USER)
         password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
