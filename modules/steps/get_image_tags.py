@@ -4,6 +4,7 @@ Gets all tags from a docker registry for the given service images"""
 
 __author__ = 'tinglev@kth.se'
 
+import memory_profiler
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment, requests, pipeline_data_utils
 
@@ -18,6 +19,7 @@ class GetImageTags(BasePipelineStep):
     def get_required_data_keys(self):
         return [data_defs.SERVICES]
 
+    @profile
     def run_step(self, pipeline_data):
         registry_url = environment.get_env(environment.DOCKER_REGISTRY_URL)
         for i, service in pipeline_data_utils.get_enumerated_services(pipeline_data):

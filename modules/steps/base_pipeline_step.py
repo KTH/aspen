@@ -80,11 +80,11 @@ class BasePipelineStep:
         self.check_step_data_missing(pipeline_data, step_data_missing)
         self.log.debug('Running "%s"', self.get_step_name())
         try:
-            mem_before = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
+            #mem_before = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
             self.run_step(pipeline_data)
-            mem_after = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
-            if mem_after - mem_before > 0:
-                self.log.info('Mem diff %s for step %s', str(mem_after - mem_before), self.get_step_name())
+            #mem_after = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024)
+            #if mem_after - mem_before > 0:
+            #    self.log.info('Mem diff %s for step %s', str(mem_after - mem_before), self.get_step_name())
         except Exception as ex: # pylint: disable=W0703
             self.handle_pipeline_error(ex, pipeline_data)
         if thread.thread_is_stoppped():
