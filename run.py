@@ -1,7 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
 import time
-import resource
 import logging
 from flask import Flask, jsonify
 from modules.util import log, redis, environment, known_hosts, exceptions, thread
@@ -19,14 +18,12 @@ def sync_routine():
     logger = logging.getLogger(__name__)
     while not thread.current_thread().stopped():
         try:
-            logger.info('Before thread: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
             create_and_run_pipeline()
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
                 break
             logger.info('Main pipeline done, waiting %s seconds before next run', delay)
             time.sleep(delay)
-            logger.info('After thread: %s', str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
         except exceptions.AspenError as aspen_err:
             logger.error('Stopping sync thread due to previous error: %s', aspen_err)
             stop_sync()
