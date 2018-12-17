@@ -6,6 +6,7 @@ handles logging and exceptions"""
 
 __author__ = 'tinglev'
 
+import resource
 from abc import ABCMeta, abstractmethod
 import time
 import os
@@ -79,7 +80,9 @@ class BasePipelineStep:
         self.check_step_data_missing(pipeline_data, step_data_missing)
         self.log.debug('Running "%s"', self.get_step_name())
         try:
+            self.log.info('Before step %s: %s', self.get_step_name(), str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
             self.run_step(pipeline_data)
+            self.log.info('After step %s: %s', self.get_step_name(), str(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024))
         except Exception as ex: # pylint: disable=W0703
             self.handle_pipeline_error(ex, pipeline_data)
         if thread.thread_is_stoppped():
