@@ -4,6 +4,7 @@ import gc
 import time
 import logging
 import objgraph
+from mem_top import mem_top
 from flask import Flask, jsonify
 from modules.util import log, redis, environment, known_hosts, exceptions, thread
 from modules.pipelines.aspen_pipeline import AspenPipeline
@@ -22,6 +23,7 @@ def sync_routine():
         try:
             objgraph.show_growth()
             print('gc.garbage is ', len(gc.garbage))
+            print(mem_top())
             create_and_run_pipeline()
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
