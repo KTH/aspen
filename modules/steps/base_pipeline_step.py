@@ -124,7 +124,7 @@ class BasePipelineStep:
             error.expected = False
         # Complement error with step data
         error = self.add_error_data(error, pipeline_data)
-        self.log.error('An error occured: "%s"', str(error))
+        self.log.error('An error occured: "%s"', str(error), exc_info=True)
         if error.fatal:
             reporter_service.handle_fatal_error(error)
         else:
