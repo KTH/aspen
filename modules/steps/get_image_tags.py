@@ -37,8 +37,5 @@ class GetImageTags(BasePipelineStep):
     def get_tags_from_registry(self, url_to_call):
         user = environment.get_env(environment.DOCKER_REGISTRY_USER)
         password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
-        response = requests.send_get(url_to_call, auth=(user, password))
-        try:
-            return response.json()["tags"]
-        finally:
-            response.close()
+        response = requests.get_urllib_json(url_to_call, auth=(user, password))
+        return response["tags"]

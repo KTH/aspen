@@ -26,14 +26,14 @@ class StartDeploymentPipelines(BasePipelineStep):
         #self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
         # Loop all stack files
         # max_workers = None defaults to #cpus * 5
-        for stack_file in pipeline_data[data_defs.STACK_FILES]:
-            self.init_and_run(pipeline_data, stack_file)
+        #for stack_file in pipeline_data[data_defs.STACK_FILES]:
+        #    self.init_and_run(pipeline_data, stack_file)
         #map(self.init_and_run, [fp for fp in pipeline_data[data_defs.STACK_FILES]])
-        #with ThreadPoolExecutor() as executor:
-        #    tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
-        #             fp for fp in pipeline_data[data_defs.STACK_FILES]}
-        #    for _ in as_completed(tasks):
-        #        self.log.debug('Done with pooled tasks')
+        with ThreadPoolExecutor() as executor:
+            tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
+                     fp for fp in pipeline_data[data_defs.STACK_FILES]}
+            for _ in as_completed(tasks):
+                self.log.debug('Done with pooled tasks')
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):

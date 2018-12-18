@@ -51,8 +51,8 @@ class LoadDockerHostIps(BasePipelineStep):
     def call_cluster_status_api(self):
         try:
             url = environment.get_env(environment.CLUSTER_STATUS_API_URL)
-            response = requests.send_get(url)
-            return response.json()
+            response = requests.get_urllib_json(url)
+            return response
         except Exception as err:
             raise exceptions.AspenError(f'Could not call cluster status api. '
                                         f'Error was: "{str(err)}"')

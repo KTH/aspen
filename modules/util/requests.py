@@ -1,6 +1,9 @@
 __author__ = 'tinglev@kth.se'
 
+import json
 import logging
+import urllib
+import base64
 from requests import get, post, put
 from requests.exceptions import Timeout, HTTPError
 from modules.util.exceptions import AspenError
@@ -19,6 +22,17 @@ def send_put(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
 def send_get(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
     response = send(get, url, json, auth, timeout)
     return raise_http_error(response)
+
+def get_urllib_json(url, auth=None):
+    request = urllib.request.Request(url)
+    json_body = None
+    if auth:
+        auth = base64.b64encode(f'{auth[0]}:{auth[1]}')
+        request.add_header(f'Authorization', 'Basic {auth}')
+    with urllib.request.urlopen(request) as response:
+        body = response.read()
+        json_body = json.loads(body.decode('utf-8'))
+    return json_body
 
 def raise_http_error(response):
     logger = logging.getLogger(__name__)
