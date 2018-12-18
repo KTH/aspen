@@ -1,5 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
+import gc
 import time
 import logging
 import objgraph
@@ -20,6 +21,7 @@ def sync_routine():
     while not thread.current_thread().stopped():
         try:
             objgraph.show_growth()
+            print('gc.garbage is ', len(gc.garbage))
             create_and_run_pipeline()
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
