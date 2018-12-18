@@ -27,7 +27,8 @@ def get_urllib_json(url, auth=None):
     request = urllib.request.Request(url)
     json_body = None
     if auth:
-        auth = base64.b64encode(f'{auth[0]}:{auth[1]}')
+        auth_string = f'{auth[0]}:{auth[1]}'
+        auth = base64.standard_b64encode(auth_string.encode('utf-8'))
         request.add_header(f'Authorization', 'Basic {auth}')
     with urllib.request.urlopen(request) as response:
         body = response.read()
