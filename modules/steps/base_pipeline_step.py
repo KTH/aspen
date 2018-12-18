@@ -6,7 +6,7 @@ handles logging and exceptions"""
 
 __author__ = 'tinglev'
 
-from memory_profiler import profile
+#from memory_profiler import profile
 from abc import ABCMeta, abstractmethod
 import time
 import os
@@ -70,7 +70,6 @@ class BasePipelineStep:
         if data_defs.APPLICATION_CLUSTER in pipeline_data:
             self.cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
 
-    @profile
     def run_pipeline_step(self, pipeline_data):
         self.set_app_and_cluster_name(pipeline_data)
         # Update logger in case we now have app and cluster
