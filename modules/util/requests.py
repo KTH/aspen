@@ -31,7 +31,7 @@ def get_urllib_json(url, auth=None):
         request.add_header(f'Authorization', 'Basic {auth}')
     with urllib.request.urlopen(request) as response:
         body = response.read()
-        json_body = json.loads(body.decode('utf-8'))
+        json_body = json.loads(body)
     return json_body
 
 def raise_http_error(response):
