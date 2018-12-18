@@ -39,4 +39,5 @@ class CalculateMd5(BasePipelineStep):
                 self.log.debug('Hashing file "%s" and updating complete hash', file)
                 with open(file, 'r') as other_file:
                     md5_hash.update(other_file.read().encode('utf-8'))
-        return md5_hash.hexdigest()
+        digest = md5_hash.hexdigest()
+        return digest

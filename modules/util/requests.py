@@ -23,6 +23,16 @@ def send_get(url, json=None, auth=None, timeout=DEFAULT_TIMEOUT):
     response = send(get, url, json, auth, timeout)
     return raise_http_error(response)
 
+def put_urllib_json(url, data):
+    request = urllib.request.Request(url)
+    request.add_header('Content-Type', 'application/json; charset=utf-8')
+    request.get_method = lambda: 'PUT'
+    json_data = json.dumps(data)
+    json_data_as_bytes = json_data.encode('utf-8')
+    request.add_header('Content-Length', len(json_data_as_bytes))
+    with urllib.request.urlopen(request, json_data_as_bytes) as _:
+        pass
+
 def get_urllib_json(url, auth=None):
     request = urllib.request.Request(url)
     json_body = None

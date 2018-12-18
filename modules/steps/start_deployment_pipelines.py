@@ -7,7 +7,6 @@ __author__ = 'tinglev@kth.se'
 
 import resource
 import sys
-import objgraph
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
@@ -35,7 +34,6 @@ class StartDeploymentPipelines(BasePipelineStep):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
             for _ in as_completed(tasks):
                 self.log.debug('Done with pooled tasks')
-        objgraph.show_growth()
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
