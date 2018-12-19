@@ -5,6 +5,9 @@ from modules.util import environment, data_defs
 
 class StopExcludedApps(BasePipelineStep):
 
+    def __init__(self):
+        BasePipelineStep.__init__(self)
+
     def get_required_env_variables(self):
         return []
 

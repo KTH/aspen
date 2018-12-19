@@ -14,6 +14,9 @@ from modules.util import data_defs, environment
 
 class StartDeploymentPipelines(BasePipelineStep):
 
+    def __init__(self):
+        BasePipelineStep.__init__(self)
+
     def get_required_env_variables(self):
         return []
 
@@ -42,8 +45,8 @@ class StartDeploymentPipelines(BasePipelineStep):
         deployment_pipeline = DeploymentPipeline()
         pipeline_data = self.init_deploy_pipeline_data(pipeline_data, file_path)
         deployment_pipeline.set_pipeline_data(pipeline_data)
-        deployment_pipeline.run_pipeline()
-        return
+        pipeline_data = deployment_pipeline.run_pipeline()
+        return pipeline_data
 
     def init_deploy_pipeline_data(self, pipeline_data, file_path):
         app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]

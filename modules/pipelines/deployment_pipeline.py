@@ -81,8 +81,8 @@ class DeploymentPipeline():
         try:
             stack_file = self.pipeline_data[data_defs.STACK_FILE_PATH]
             self.log.debug('Starting DeploymentPipline for file "%s"', stack_file)
-            self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
-            return
+            pipeline_data = self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
+            return pipeline_data
         except exceptions.DeploymentError as dep_err:
             self.log.error(('Deployment error in step "%s" '
                             'with pipeline_data "%s" '

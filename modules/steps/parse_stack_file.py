@@ -11,6 +11,9 @@ from modules.util.exceptions import DeploymentError
 
 class ParseStackFile(BasePipelineStep):
 
+    def __init__(self):
+        BasePipelineStep.__init__(self)
+
     def get_required_env_variables(self):
         return []
 
