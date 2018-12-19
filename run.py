@@ -1,6 +1,6 @@
 __author__ = 'tinglev@kth.se'
 
-import gc
+import sys
 import time
 import logging
 import objgraph
@@ -13,17 +13,18 @@ FLASK_APP = Flask(__name__)
 
 def create_and_run_pipeline():
     pipeline = AspenPipeline()
-    pipeline.run_pipeline()
-    return
+    pipeline_data = pipeline.run_pipeline()
+    return pipeline_data
 
 def sync_routine():
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
     while not thread.current_thread().stopped():
         try:
-            objgraph.show_growth()
+            #objgraph.show_growth()
             #print(mem_top())
-            create_and_run_pipeline()
+            pipeline_data = create_and_run_pipeline()
+            logger.info('Size of pipeline data in run was %s', sys.getsizeof(pipeline_data))
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
                 break
