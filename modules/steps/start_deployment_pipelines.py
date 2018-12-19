@@ -5,8 +5,6 @@ several deployment pipelines in parallell"""
 
 __author__ = 'tinglev@kth.se'
 
-import resource
-import sys
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
@@ -24,19 +22,20 @@ class StartDeploymentPipelines(BasePipelineStep):
         return [data_defs.STACK_FILES, data_defs.APPLICATION_PASSWORDS]
 
     def run_step(self, pipeline_data):
-        # parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
-        #nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
-        #self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
-        # Loop all stack files
-        # max_workers = None defaults to #cpus * 5
+        # 5 = 1 vCPUs * 5
+        parallelism = environment.get_with_default_int(environment.PARALLELISM, 15)
+        nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
+        self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
+
+        # Sequential version
         #for stack_file in pipeline_data[data_defs.STACK_FILES]:
         #    self.init_and_run(pipeline_data, stack_file)
-        #map(self.init_and_run, [fp for fp in pipeline_data[data_defs.STACK_FILES]])
-        with ThreadPoolExecutor() as executor:
+
+        # max_workers = None defaults to #cpus * 5
+        with ThreadPoolExecutor(max_workers=parallelism) as executor:
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
-            for task in as_completed(tasks):
-                result = task.result()
+            for _ in as_completed(tasks):
                 self.log.debug('Done with pooled tasks')
         return pipeline_data
 

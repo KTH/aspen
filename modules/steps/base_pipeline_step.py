@@ -17,7 +17,7 @@ from modules.util import exceptions, data_defs, reporter_service, thread
 
 class StepLogAdapter(LoggerAdapter):
     def process(self, msg, kwargs):
-        return '[%s] %s' % (self.extra['step_name'], msg), kwargs
+        return f'[{self.extra["step_name"]}] {msg}', kwargs
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
