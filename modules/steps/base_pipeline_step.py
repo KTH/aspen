@@ -80,7 +80,7 @@ class BasePipelineStep:
         self.check_step_data_missing(pipeline_data, step_data_missing)
         self.log.debug('Running "%s"', self.get_step_name())
         try:
-            self.run_step(pipeline_data)
+            pipeline_data = self.run_step(pipeline_data)
         except Exception as ex: # pylint: disable=W0703
             self.handle_pipeline_error(ex, pipeline_data)
         if thread.thread_is_stoppped():

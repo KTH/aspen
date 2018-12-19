@@ -32,7 +32,9 @@ class StartDeploymentPipelines(BasePipelineStep):
         with ThreadPoolExecutor() as executor:
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
-            for _ in as_completed(tasks):
+            for task in as_completed(tasks):
+                result = task.result()
+                self.log.info('Size of pipeline data was %s', sys.getsizeof(result))
                 self.log.debug('Done with pooled tasks')
         return pipeline_data
 
