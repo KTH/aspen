@@ -23,8 +23,7 @@ def sync_routine():
         try:
             #objgraph.show_growth()
             #print(mem_top())
-            pipeline_data = create_and_run_pipeline()
-            logger.info('Size of pipeline data in run was %s', sys.getsizeof(pipeline_data))
+            create_and_run_pipeline()
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
                 break

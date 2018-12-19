@@ -33,14 +33,11 @@ class StartDeploymentPipelines(BasePipelineStep):
         #    self.init_and_run(pipeline_data, stack_file)
         #map(self.init_and_run, [fp for fp in pipeline_data[data_defs.STACK_FILES]])
         with ThreadPoolExecutor() as executor:
-            total_size = 0
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
             for task in as_completed(tasks):
                 result = task.result()
-                total_size += sys.getsizeof(result)
                 self.log.debug('Done with pooled tasks')
-            self.log.info('Total pipeline data size was %s', total_size)
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):

@@ -11,8 +11,13 @@ from abc import ABCMeta, abstractmethod
 import time
 import os
 import logging
+from logging import LoggerAdapter
 import subprocess
 from modules.util import exceptions, data_defs, reporter_service, thread
+
+class StepLogAdapter(LoggerAdapter):
+    def process(self, msg, kwargs):
+        return '[%s] %s' % (self.extra['step_name'], msg), kwargs
 
 class BasePipelineStep:
     __metaclass__ = ABCMeta
@@ -21,6 +26,7 @@ class BasePipelineStep:
         self.application_name = None
         self.cluster_name = None
         self.next_step = None
+        self.logger = logging.getLogger('BasePipelineStep')
         self.configure_logger()
 
     @abstractmethod
@@ -48,7 +54,7 @@ class BasePipelineStep:
         return step_name
 
     def configure_logger(self):
-        self.log = logging.getLogger(self.get_step_name())
+        self.log = StepLogAdapter(self.logger, {'step_name': self.get_step_name()})
 
     def has_missing_step_data(self, data):
         for key in self.get_required_data_keys():
