@@ -22,8 +22,7 @@ def sync_routine():
     while not thread.current_thread().stopped():
         try:
             objgraph.show_growth()
-            print('gc.garbage is ', len(gc.garbage))
-            print(mem_top())
+            #print(mem_top())
             create_and_run_pipeline()
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
