@@ -23,7 +23,7 @@ class StartDeploymentPipelines(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         # 5 = 1 vCPUs * 5
-        parallelism = environment.get_with_default_int(environment.PARALLELISM, 15)
+        parallelism = environment.get_with_default_int(environment.PARALLELISM, 5)
         nr_of_stack_files = len(pipeline_data[data_defs.STACK_FILES])
         self.log.debug('Running async processing of %s stack files', nr_of_stack_files)
 

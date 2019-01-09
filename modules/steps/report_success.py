@@ -64,6 +64,8 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['detectifyProfileTokens'] = value
             elif name == 'se.kth.monitorUrl':
                 deployment_json['monitorPath'] = value
+            elif name == 'se.kth.testAccessibility':
+                deployment_json['testAccessibility'] = value
         if not 'monitorPath' in deployment_json:
             # Required
             deployment_json['monitorPath'] = None
