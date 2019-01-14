@@ -56,7 +56,6 @@ All program environment access is done through `modules/util/environment.py`
 |-------|--------------|
 | `CLUSTER_STATUS_URL_IS_FILE` | Set to anything to indicate that |
 `CLUSTER_STATUS_API_URL` | is a local file path instead |
-| `PUSH_TO_PROMETHEUS` | Set to anything to indicate that the pipeline should push metrics to prometheus |
 | `PARALLELISM` | How many parallel processes to run for deployments. Defaults to 5. |
 | `SLACK_ERROR_POST_URL` | The URL for error posts. Internally this is the url to our Dizin application. Defaults to None. |
 | `SLACK_DEPLOYMENT_POST_URL` | The URL for deployment posts. Internally this is the url to our Dizin application. Defaults to None. |
@@ -69,6 +68,14 @@ All program environment access is done through `modules/util/environment.py`
 | `FRONT_END_RULE_LABEL` | The deploy label to use for frontends. Defaults to `traefik.frontend.rule` |
 | `SYNC_START_ON_RUN` | Start the sync thread on application startup. Set to anything to enable |
 | `DELAY_SECS_BETWEEN_RUNS` | The time between pipeline runs. Defaults to 15 |
+| `EXCLUDED_APPS` | Application names to be excluded from deployment. Semi-colon separated list. |
+
+## Test environment
+
+| `SKIP_VALIDATION_TESTS` | Skip the validation tests |
+| `VALIDATE_DEPLOYMENT_URL` | URL to use for deployment schema validation |
+| `VALIDATE_ERROR_URL` | URL to use for error schema validation |
+| `VALIDATE_RECOMMENDATION_URL` | URL to use for recommendation schema validation |
 
 ## Hard coded requirements
 
@@ -106,4 +113,4 @@ passwords:
 
 ## Optional integrations
 
-Aspen supports sending errors, successful deployments and recommendations for labels to an external service (see optional environment configuration above). KTH uses it's custom made application Alvares to handle these requests, and push them through a pipeline of sorts. The external service could for instance send messages and errors to Slack, saving them to a database for further processing or something else.
+Aspen supports sending errors, successful deployments and recommendations for labels to an external service (see optional environment configuration above). KTH uses it's custom made application [Alvares](https://gita.sys.kth.se/Infosys/alvares) to handle these requests, and push them through a pipeline of sorts. The external service could for instance send messages and errors to Slack, saving them to a database for further processing or something else.
