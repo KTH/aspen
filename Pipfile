@@ -14,10 +14,6 @@ pyyaml = "==3.13"
 coloredlogs = "==10.0"
 prometheus_client = "==0.3.1"
 redis = "==2.10.6"
-pycrypto = "==2.6.1"
-memory-profiler = "==0.55.0"
-objgraph = "==3.4.0"
-mem_top = "==0.1.6"
 
 [dev-packages]
 pylint = "*"

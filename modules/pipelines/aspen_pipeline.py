@@ -30,8 +30,8 @@ class AspenPipeline():
     def run_pipeline(self):
         try:
             self.log.info('Starting AspenPipeline with "%s" steps', len(self.pipeline_steps))
-            self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
-            return
+            pipeline_data = self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
+            return pipeline_data
         except exceptions.AspenError as as_err:
             self.log.error('AspenError occured: "%s"', str(as_err))
             raise
