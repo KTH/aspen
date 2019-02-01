@@ -50,7 +50,14 @@ def get_pipeline_data():
                 data_defs.S_LABELS: [
                     'label1=value1,value11',
                     'label2=value2',
-                    'se.kth.monitorUrl=/_monitor'
+                    'se.kth.monitorUrl=/_monitor',
+                    'se.kth.publicName.english="Test API"',
+                    'se.kth.publicName.swedish="Testnings API"',
+                    'se.kth.description.english=API for course system',
+                    'se.kth.description.swedish="API för kurssystem"',
+                    'se.kth.slackChannels=#one,#two',
+                    'se.kth.importance=medium',
+                    'se.kth.detectify.profileToken=abc123,zxc456'
                 ],
                 data_defs.S_DEPLOY_LABELS: [
                     'traefik.frontend.rule=PathPrefix:/kth-azure-app'

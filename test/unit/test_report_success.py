@@ -30,24 +30,13 @@ class TestReportSuccess(unittest.TestCase):
 
     def test_get_service_labels(self):
         step = ReportSuccess()
-        service = {
-            data_defs.S_LABELS: [
-                'se.kth.slackChannels=#one,#two',
-                'se.kth.publicNameSwedish=Namn',
-                'se.kth.publicNameEnglish=Name',
-                'se.kth.descriptionSwedish=Beskrivning',
-                'se.kth.descriptionEnglish=Description',
-                'se.kth.importance=medium',
-                'se.kth.detectify.profileToken=abc123,zxc456',
-                'se.kth.monitorUrl=/_monitor'
-            ]
-        }
+        service = mock_test_data.get_pipeline_data()[data_defs.SERVICES][0]
         expected = {
             'slackChannels': '#one,#two',
-            'publicNameSwedish': 'Namn',
-            'publicNameEnglish': 'Name',
-            'descriptionSwedish': 'Beskrivning',
-            'descriptionEnglish': 'Description',
+            'publicNameSwedish': 'Testnings API',
+            'publicNameEnglish': 'Test API',
+            'descriptionSwedish': 'API för kurssystem',
+            'descriptionEnglish': 'API for course system',
             'importance': 'medium',
             'detectifyProfileTokens': 'abc123,zxc456',
             'monitorPath': '/_monitor'
