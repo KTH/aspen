@@ -8,7 +8,7 @@ __author__ = 'tinglev@kth.se'
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.pipelines.deployment_pipeline import DeploymentPipeline
-from modules.util import data_defs, environment
+from modules.util import data_defs, environment, thread
 
 class StartDeploymentPipelines(BasePipelineStep):
 
@@ -40,6 +40,8 @@ class StartDeploymentPipelines(BasePipelineStep):
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
+        if thread.thread_is_stoppped():
+            return pipeline_data
         deployment_pipeline = DeploymentPipeline()
         pipeline_data = self.init_deploy_pipeline_data(pipeline_data, file_path)
         deployment_pipeline.set_pipeline_data(pipeline_data)

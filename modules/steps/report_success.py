@@ -49,27 +49,27 @@ class ReportSuccess(BasePipelineStep):
     def get_service_labels(self, deployment_json, service):
         for (name, value) in pipeline_data_utils.get_labels(service):
             if name == 'se.kth.slackChannels':
-                deployment_json['slackChannels'] = value
-            elif name == 'se.kth.publicNameSwedish':
-                deployment_json['publicNameSwedish'] = value
-            elif name == 'se.kth.publicNameEnglish':
-                deployment_json['publicNameEnglish'] = value
-            elif name == 'se.kth.descriptionSwedish':
-                deployment_json['descriptionSwedish'] = value
-            elif name == 'se.kth.descriptionEnglish':
-                deployment_json['descriptionEnglish'] = value
+                deployment_json['slackChannels'] = value.strip('"')
+            elif name == 'se.kth.publicName.swedish':
+                deployment_json['publicNameSwedish'] = value.strip('"')
+            elif name == 'se.kth.publicName.english':
+                deployment_json['publicNameEnglish'] = value.strip('"')
+            elif name == 'se.kth.description.swedish':
+                deployment_json['descriptionSwedish'] = value.strip('"')
+            elif name == 'se.kth.description.english':
+                deployment_json['descriptionEnglish'] = value.strip('"')
             elif name == 'se.kth.importance':
-                deployment_json['importance'] = value
+                deployment_json['importance'] = value.strip('"')
             elif name == 'se.kth.detectify.profileToken':
-                deployment_json['detectifyProfileTokens'] = value
+                deployment_json['detectifyProfileTokens'] = value.strip('"')
             elif name == 'se.kth.monitorUrl':
-                deployment_json['monitorPath'] = value
+                deployment_json['monitorPath'] = value.strip('"')
             elif name == 'se.kth.testAccessibility':
-                deployment_json['testAccessibility'] = value
+                deployment_json['testAccessibility'] = value.strip('"')
             elif name == 'se.kth.accessibilityUrls':
-                deployment_json['accessibilityUrls'] = value
+                deployment_json['accessibilityUrls'] = value.strip('"')
         if not 'monitorPath' in deployment_json:
-            # Required
+            # Required (add empty if missing)
             deployment_json['monitorPath'] = None
         return deployment_json
 
