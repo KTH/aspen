@@ -64,6 +64,8 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['detectifyProfileTokens'] = value.strip('"')
             elif name == 'se.kth.monitorUrl':
                 deployment_json['monitorPath'] = value.strip('"')
+            elif name == 'se.kth.monitorPattern':
+                deployment_json['monitorPattern'] = value.strip('"')
             elif name == 'se.kth.testAccessibility':
                 deployment_json['testAccessibility'] = value.strip('"')
             elif name == 'se.kth.accessibilityUrls':
