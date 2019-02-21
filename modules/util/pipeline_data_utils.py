@@ -1,6 +1,5 @@
 __author__ = 'tinglev@kth.se'
 
-import logging
 from modules.util import data_defs
 
 def get_services(pipeline_data):
@@ -30,7 +29,6 @@ def service_uses_semver(service):
     return service[data_defs.S_IMAGE][data_defs.IMG_IS_SEMVER]
 
 def get_application_passwords(pipeline_data):
-    logger = logging.getLogger(__name__)
     if (data_defs.APPLICATION_PASSWORDS in pipeline_data and
             'passwords' in pipeline_data[data_defs.APPLICATION_PASSWORDS]):
         return pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords'].items()
