@@ -29,6 +29,7 @@ from modules.steps.second_conditional_stop import SecondConditionalStop
 from modules.steps.verify_pipeline_data import VerifyPipelineData
 from modules.steps.verify_frontend_rule import VerifyFrontendRule
 from modules.steps.stop_excluded_apps import StopExcludedApps
+from modules.steps.volume_step import VolumeStep
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -65,6 +66,7 @@ class DeploymentPipeline():
             RestartPolicyChecker(),
             ResourcePolicyChecker(),
             DecryptAppSecrets(),
+            VolumeStep(),
             GetDockerHostIp(),
             DeployApplication(),
             # Run when tests are added to test_complete_pipeline and integration_tests

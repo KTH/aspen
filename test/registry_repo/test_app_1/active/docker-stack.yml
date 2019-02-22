@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 # bump it!
 # Declare all services this deployment contains.
@@ -45,6 +45,12 @@ services:
       - 3000
     # Labels used for drill down in OMS
     # cluser="active" sets dockerinfo_labels_cluster_s:"active" i OMS
+    volumes:
+      - type: bind
+        source: /source/path
+        target: /target/path
+      - ./relative/source:/relative/target
+
     labels:
       # Usful for filtering in OMS
       - se.kth.cluster="active"

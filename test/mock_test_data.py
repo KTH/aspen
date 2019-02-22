@@ -1,5 +1,8 @@
 __author__ = 'tinglev@kth.se'
 
+import os
+import yaml
+from root_path import PROJECT_ROOT
 from modules.util import data_defs, exceptions, cache_defs
 
 def get_mock_cache_entry():
@@ -82,6 +85,11 @@ def get_pipeline_data():
             }
         ]
     }
+
+def get_parsed_stack_file():
+    test_file = 'test/registry_repo/test_app_1/active/docker-stack.yml'
+    with open(os.path.join(PROJECT_ROOT, test_file)) as stack_file:
+        return yaml.load(stack_file.read())
 
 def get_parsed_stack_content():
     return {
