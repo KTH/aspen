@@ -1,0 +1,41 @@
+version: '3.2'
+
+#
+# Run this integration test by running:
+# ID=$(docker build -q .) && LOCAL_IMAGE_ID=$ID docker-compose -f docker-compose-unit-tests.yml up --abort-on-container-exit --always-recreate-deps
+#
+
+services:
+  #############################################
+  # Start app as a container
+  #############################################
+  redis-rejson:
+    image: redislabs/rejson:latest
+    ports:
+      - 6379:6379
+
+  web:
+    depends_on:
+      - redis-rejson
+    # if not --build and kth-azure-app already exists in
+    # your local computers registry 'image' is used.
+    image: $LOCAL_IMAGE_ID
+
+    # LOCAL_IMAGE_ID, IMAGE_NAME and IMAGE_VERSION
+
+    # Since we do not want to add tests to our 
+    # production image. We mount the catalog
+    # 'tests' on in the repo on your local machine
+    # to /tests on the inside of the container.
+    # The volume mount is done at startup.
+    volumes:
+      - ./test:/repo/test
+      - ./mock_api.py:/repo/mock_api.py
+      - ./run_unit_tests.sh:/repo/run_unit_tests.sh
+
+    # The unit test command that triggers tests to be run
+    # inside the container
+    # This example runs test in package.json which is
+    # part of the kth-azure-app image.
+    command: ./run_unit_tests.sh docker
+

@@ -70,9 +70,6 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['testAccessibility'] = value.strip('"')
             elif name == 'se.kth.accessibilityUrls':
                 deployment_json['accessibilityUrls'] = value.strip('"')
-        if not 'monitorPath' in deployment_json:
-            # Required (add empty if missing)
-            deployment_json['monitorPath'] = None
         return deployment_json
 
     def get_application_path(self, service):

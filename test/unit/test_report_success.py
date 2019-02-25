@@ -39,7 +39,7 @@ class TestReportSuccess(unittest.TestCase):
             'descriptionEnglish': 'API for course system',
             'importance': 'medium',
             'detectifyProfileTokens': 'abc123,zxc456',
-            'monitorPath': '/_monitor'
+            'monitorUrl': '/_monitor'
         }
         result = step.get_service_labels({}, service)
         self.assertEqual(result, expected)
