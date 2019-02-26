@@ -30,6 +30,7 @@ from modules.steps.verify_pipeline_data import VerifyPipelineData
 from modules.steps.verify_frontend_rule import VerifyFrontendRule
 from modules.steps.stop_excluded_apps import StopExcludedApps
 from modules.steps.volume_step import VolumeStep
+from modules.steps.send_recommendations import SendRecommendations
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -73,6 +74,7 @@ class DeploymentPipeline():
             VerifyDeploySuccess(),
             WriteCacheEntry(),
             RemoveErrorCacheEntry(),
+            SendRecommendations(),
             ReportSuccess()
         ])
 
