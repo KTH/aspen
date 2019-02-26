@@ -74,7 +74,7 @@ class DeploymentPipeline():
             VerifyDeploySuccess(),
             WriteCacheEntry(),
             RemoveErrorCacheEntry(),
-            #SendRecommendations(),
+            SendRecommendations(),
             ReportSuccess()
         ])
 
