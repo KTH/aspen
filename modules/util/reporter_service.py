@@ -136,19 +136,14 @@ def get_combined_service_labels(pipeline_data):
     labels = {}
     for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
         if 'labels' in service:
-            print("-------------> 1. : Got lables {}".format(len(service['labels'])))
-            try: 
-                for name, value in [label.split('=') for label in service['labels']]:
-                    print("-------------> 1. : name: {0} value: {}.".format(name, value))
-                    if not name in labels:
-                        labels[name] = {}
-                    if labels[name]:
-                        labels[name] = f'{labels[name]},{value}'
-                    else:
-                        labels[name] = f'{value}'
-            except ValueError as err:
-                print("-------------> 2. : {0}".format(err))
-
+            for name, value in [label.split('=', 1) for label in service['labels']]:
+                value = value.strip('"')
+                if not name in labels:
+                    labels[name] = {}
+                if labels[name]:
+                    labels[name] = f'{labels[name]},{value}'
+                else:
+                    labels[name] = f'{value}'
     # labels = {'label1':'value1','value2',...}
     return labels
 

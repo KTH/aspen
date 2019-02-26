@@ -101,7 +101,8 @@ def get_parsed_stack_content():
                 },
                 'labels': [
                     'se.kth.slackChannels=#pipeline',
-                    'se.kth.importance=high'
+                    'se.kth.importance=high',
+                    'se.kth.documentationUrl.operations="https://confluence.sys.kth.se/confluence/pages/viewpage.action?pageId=41750988"'
                 ]
             },
             'api': {
