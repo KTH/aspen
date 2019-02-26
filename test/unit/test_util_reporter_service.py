@@ -15,7 +15,8 @@ class TestSendRecommendations(unittest.TestCase):
         result = reporter_service.get_combined_service_labels(pipeline_data)
         expected = {
             'se.kth.slackChannels': '#pipeline,#team-pipeline,#ita-ops',
-            'se.kth.importance': 'high'
+            'se.kth.importance': 'high',
+            'se.kth.documentationUrl.operations': 'https://confluence.sys.kth.se/confluence/pages/viewpage.action?pageId=41750988'
             }
         self.assertEqual(result, expected)
 

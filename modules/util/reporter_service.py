@@ -133,7 +133,8 @@ def get_combined_service_labels(pipeline_data):
     labels = {}
     for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
         if 'labels' in service:
-            for name, value in [label.split('=') for label in service['labels']]:
+            for name, value in [label.split('=', 1) for label in service['labels']]:
+                value = value.strip('"')
                 if not name in labels:
                     labels[name] = {}
                 if labels[name]:
