@@ -74,7 +74,7 @@ def call_with_payload(url, payload):
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):
     return {
-        "message": "{}: {}".format(application_name, recommendation_text),
+        "message": "*{}*: {}".format(application_name, recommendation_text),
         "slackChannels": slack_channels
         }
 
