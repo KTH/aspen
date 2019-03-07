@@ -2,12 +2,19 @@ __author__ = 'tinglev@kth.se'
 
 import time
 import logging
+from enum import Enum
 from flask import Flask, jsonify
 from modules.util import log, redis, environment, known_hosts, exceptions, thread, data_defs
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
+class SyncThreadState(Enum):
+    RUNNING = 1
+    WAITING = 2
+    STOPPED = 3
+
 FLASK_APP = Flask(__name__)
 DEPLOYMENTS_LAST_RUN = 0
+SYNC_THREAD_STATE = SyncThreadState.STOPPED
 
 def create_and_run_pipeline():
     pipeline = AspenPipeline()
@@ -19,20 +26,25 @@ def sync_routine():
     # not too ashamed to use a global variable for data sharing with main
     # thread
     global DEPLOYMENTS_LAST_RUN
+    global SYNC_THREAD_STATE
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
     while not thread.current_thread().stopped():
         try:
+            SYNC_THREAD_STATE = SyncThreadState.RUNNING
             pipeline_data = create_and_run_pipeline()
             # The only line that modifies the shared variable
             DEPLOYMENTS_LAST_RUN = pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN]
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
+                SYNC_THREAD_STATE = SyncThreadState.STOPPED
                 break
             logger.info('Main pipeline done, waiting %s seconds before next run', delay)
+            SYNC_THREAD_STATE = SyncThreadState.WAITING
             time.sleep(delay)
         except exceptions.AspenError as aspen_err:
             logger.error('Stopping sync thread due to previous error: %s', aspen_err)
+            SYNC_THREAD_STATE = SyncThreadState.STOPPED
             stop_sync()
 
 @FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
@@ -64,9 +76,9 @@ def start_sync():
         return jsonify(message='Sync thread created and started')
     elif sync_thread.stopped():
         sync_thread.stopped = False
-        return jsonify(message='Sync thread started')
+        return jsonify(message='Sync thread started'), 200
     else:
-        return jsonify(message='Sync thread already running')
+        return jsonify(message='Sync thread already running'), 404
 
 @FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
 def stop_sync():
@@ -75,9 +87,9 @@ def stop_sync():
     sync_thread = thread.get_sync_thread()
     if sync_thread and not sync_thread.stopped():
         sync_thread.stop()
-        return jsonify(message='Sync thread stopped')
+        return jsonify(message='Sync thread stopped'), 200
     else:
-        return jsonify(message='Sync thread already stopped')
+        return jsonify(message='Sync thread already stopped'), 404
 
 @FLASK_APP.route('/api/v1/status', methods=['GET'])
 def get_status():
@@ -99,6 +111,10 @@ def get_status():
 @FLASK_APP.route('/api/v1/deployments', methods=['GET'])
 def get_deployments_for_last_run():
     return jsonify({'deployments': DEPLOYMENTS_LAST_RUN})
+
+@FLASK_APP.route('/api/v1/state', methods=['GET'])
+def get_sync_thread_state():
+    return jsonify({'state': SYNC_THREAD_STATE})
 
 def main():
     log.init_logging()
