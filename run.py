@@ -114,7 +114,7 @@ def get_deployments_for_last_run():
 
 @FLASK_APP.route('/api/v1/state', methods=['GET'])
 def get_sync_thread_state():
-    return jsonify({'state': SYNC_THREAD_STATE})
+    return jsonify({'state': SYNC_THREAD_STATE.name})
 
 def main():
     log.init_logging()
