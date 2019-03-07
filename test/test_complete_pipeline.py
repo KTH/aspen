@@ -6,7 +6,7 @@ import unittest
 import mock
 import root_path
 from modules.pipelines.aspen_pipeline import AspenPipeline
-from modules.util import environment
+from modules.util import environment, data_defs
 
 class TestCompletePipeline(unittest.TestCase):
 
@@ -36,7 +36,7 @@ class TestCompletePipeline(unittest.TestCase):
                              mock_get_latest_changes,
                              mock_run_docker_login):
         pipeline = AspenPipeline()
-        pipeline.run_pipeline()
+        pipeline_data = pipeline.run_pipeline()
         mock_get_service_names.return_value = ['service']
         # Assertions
         mock_run_docker_login.assert_called_once()
@@ -71,11 +71,13 @@ class TestCompletePipeline(unittest.TestCase):
         mock_run_docker_cmd.reset_mock()
         mock_run_docker_login.reset_mock()
         mock_get_latest_changes.reset_mock()
+        self.assertEqual(pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN], 4)
         time.sleep(3)
-        pipeline.run_pipeline()
+        pipeline_data = pipeline.run_pipeline()
         mock_run_docker_login.assert_called_once()
         mock_get_latest_changes.assert_called_once()
         mock_run_docker_cmd.assert_not_called()
+        self.assertEqual(pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN], 0)
 
 if __name__ == '__main__':
     unittest.main()

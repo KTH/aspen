@@ -32,11 +32,19 @@ class StartDeploymentPipelines(BasePipelineStep):
         #    self.init_and_run(pipeline_data, stack_file)
 
         # max_workers = None defaults to #cpus * 5
+        deployments = 0
         with ThreadPoolExecutor(max_workers=parallelism) as executor:
             tasks = {executor.submit(self.init_and_run, pipeline_data, fp):
                      fp for fp in pipeline_data[data_defs.STACK_FILES]}
-            for _ in as_completed(tasks):
+            for task in as_completed(tasks):
+                result = task.result()
+                if (result and
+                    data_defs.WAS_DEPLOYED in result and
+                    result[data_defs.WAS_DEPLOYED]):
+                    deployments += 1
                 self.log.debug('Done with pooled tasks')
+        self.log.info(f'Last run resulted in {deployments} successful deployments')
+        pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN] = deployments
         return pipeline_data
 
     def init_and_run(self, pipeline_data, file_path):
@@ -56,4 +64,5 @@ class StartDeploymentPipelines(BasePipelineStep):
             data_defs.APPLICATION_PASSWORDS: app_passwords,
             data_defs.DOCKER_HOST_IPS: cluster_lb_ips
         }
+        pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN] = 0
         return pipeline_data

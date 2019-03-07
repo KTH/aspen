@@ -3,10 +3,11 @@ __author__ = 'tinglev@kth.se'
 import time
 import logging
 from flask import Flask, jsonify
-from modules.util import log, redis, environment, known_hosts, exceptions, thread
+from modules.util import log, redis, environment, known_hosts, exceptions, thread, data_defs
 from modules.pipelines.aspen_pipeline import AspenPipeline
 
 FLASK_APP = Flask(__name__)
+DEPLOYMENTS_LAST_RUN = 0
 
 def create_and_run_pipeline():
     pipeline = AspenPipeline()
@@ -14,11 +15,17 @@ def create_and_run_pipeline():
     return pipeline_data
 
 def sync_routine():
+    # Since we're only running a single thread for deployments I'm
+    # not too ashamed to use a global variable for data sharing with main
+    # thread
+    global DEPLOYMENTS_LAST_RUN
     delay = environment.get_with_default_int(environment.DELAY_SECS_BETWEEN_RUNS, 15)
     logger = logging.getLogger(__name__)
     while not thread.current_thread().stopped():
         try:
-            create_and_run_pipeline()
+            pipeline_data = create_and_run_pipeline()
+            # The only line that modifies the shared variable
+            DEPLOYMENTS_LAST_RUN = pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN]
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
                 break
@@ -88,6 +95,10 @@ def get_status():
         'cache_size': cache_size
     }
     return jsonify(status)
+
+@FLASK_APP.route('/api/v1/deployments', methods=['GET'])
+def get_deployments_for_last_run():
+    return jsonify({'deployments': DEPLOYMENTS_LAST_RUN})
 
 def main():
     log.init_logging()

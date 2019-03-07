@@ -25,6 +25,7 @@ class ReportSuccess(BasePipelineStep):
     def run_step(self, pipeline_data):
         deployment_json = self.create_deployment_json(pipeline_data)
         reporter_service.handle_deployment_success(deployment_json)
+        pipeline_data[data_defs.WAS_DEPLOYED] = True
         return pipeline_data
 
     def create_deployment_json(self, pipeline_data):
@@ -63,16 +64,13 @@ class ReportSuccess(BasePipelineStep):
             elif name == 'se.kth.detectify.profileToken':
                 deployment_json['detectifyProfileTokens'] = value.strip('"')
             elif name == 'se.kth.monitorUrl':
-                deployment_json['monitorPath'] = value.strip('"')
+                deployment_json['monitorUrl'] = value.strip('"')
             elif name == 'se.kth.monitorPattern':
                 deployment_json['monitorPattern'] = value.strip('"')
             elif name == 'se.kth.testAccessibility':
                 deployment_json['testAccessibility'] = value.strip('"')
             elif name == 'se.kth.accessibilityUrls':
                 deployment_json['accessibilityUrls'] = value.strip('"')
-        if not 'monitorPath' in deployment_json:
-            # Required (add empty if missing)
-            deployment_json['monitorPath'] = None
         return deployment_json
 
     def get_application_path(self, service):

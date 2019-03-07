@@ -34,5 +34,6 @@ class InitServicePipelineData(BasePipelineStep):
                 service_json[data_defs.S_DEPLOY_LABELS] = service['deploy']['labels']
             service_data.append(service_json)
         pipeline_data[data_defs.SERVICES] = service_data
+        pipeline_data[data_defs.WAS_DEPLOYED] = False
         self.log.debug('Service data set to "%s"', service_data)
         return pipeline_data
