@@ -51,6 +51,8 @@ class ReportSuccess(BasePipelineStep):
         for (name, value) in pipeline_data_utils.get_labels(service):
             if name == 'se.kth.slackChannels':
                 deployment_json['slackChannels'] = value.strip('"')
+            elif name == 'se.kth.team':
+                deployment_json['team'] = value.strip('"')
             elif name == 'se.kth.publicName.swedish':
                 deployment_json['publicNameSwedish'] = value.strip('"')
             elif name == 'se.kth.publicName.english':

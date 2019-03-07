@@ -8,10 +8,13 @@ from modules.util import redis, requests, pipeline_data_utils
 def handle_recommendation(pipeline_data, application_name, recommendation_text):
     logger = logging.getLogger(__name__)
     recommendation_url = environment.get_env(environment.SLACK_RECOMMENDATION_POST_URL)
+    print("{} - recommendation_url '{}'".format(application_name, recommendation_url))
     if recommendation_url:
         combined_labels = get_combined_service_labels(pipeline_data)
         slack_channels = get_slack_channels(combined_labels)
         payload = create_recommedation_object(application_name, recommendation_text, slack_channels)
+        print("{} - payload '{}'".format(application_name, payload))
+    
         response = call_with_payload(recommendation_url, payload)
         if response:
             logger.debug('Response was: "%s"', response)
@@ -71,7 +74,7 @@ def call_with_payload(url, payload):
 
 def create_recommedation_object(application_name, recommendation_text, slack_channels):
     return {
-        "message": "{}: {}".format(application_name, recommendation_text),
+        "message": "*{}*: {}".format(application_name, recommendation_text),
         "slackChannels": slack_channels
         }
 
@@ -133,7 +136,8 @@ def get_combined_service_labels(pipeline_data):
     labels = {}
     for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
         if 'labels' in service:
-            for name, value in [label.split('=') for label in service['labels']]:
+            for name, value in [label.split('=', 1) for label in service['labels']]:
+                value = value.strip('"')
                 if not name in labels:
                     labels[name] = {}
                 if labels[name]:
