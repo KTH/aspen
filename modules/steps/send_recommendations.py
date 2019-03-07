@@ -34,14 +34,10 @@ class SendRecommendations(BasePipelineStep):
             label_name = label[0]
             example_text = label[1]
             if not self.has_service_label(pipeline_data, label_name):
-                print("{} - Missing label '{}'".format(data_defs.APPLICATION_NAME, label_name))
                 recommendation_text = self.create_recommendation_text(label_name, example_text)
                 reporter_service.handle_recommendation(pipeline_data,
                                                        application_name,
                                                        recommendation_text)
-            else:
-                print("{} - Got label '{}'".format(data_defs.APPLICATION_NAME, label_name))
-
 
     def create_recommendation_text(self, label_name, example_value):
         return (f'{self.get_random_emoji()} {self.get_random_flavor_text()}\n '
