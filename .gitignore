@@ -105,3 +105,6 @@ test/integration/*
 !test/integration/vault.password.in
 !test/integration/*.py
 test/**/secrets.decrypted.env
+
+# Editor settings
+/.vscode
