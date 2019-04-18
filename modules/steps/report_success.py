@@ -73,6 +73,9 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['testAccessibility'] = value.strip('"')
             elif name == 'se.kth.accessibilityUrls':
                 deployment_json['accessibilityUrls'] = value.strip('"')
+            elif name == 'se.kth.publicUserDocumentationUrl':
+                deployment_json['publicUserDocumentationUrl'] = value.strip('"')
+                
         return deployment_json
 
     def get_application_path(self, service):
