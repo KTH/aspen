@@ -5,7 +5,7 @@ import logging
 import urllib
 import base64
 from requests import get, post, put
-from requests.exceptions import Timeout, HTTPError
+from requests.exceptions import RequestException, HTTPError
 from modules.util.exceptions import AspenError
 from modules.util import environment
 
@@ -60,13 +60,13 @@ def send(method_func, url, json, auth, timeout):
     logger = logging.getLogger(__name__)
     try:
         return method_func(url, json=json, auth=auth, timeout=timeout)
-    except ConnectionError as conn_err:
-        msg = ('Connection error while calling slack reporting service. Error was: "{}"'
-               .format(str(conn_err)))
+    except RequestException as req_err:
+        msg = ('Request error while calling slack reporting service. Error was: "{}"'
+               .format(str(req_err)))
         logger.error(msg)
         raise AspenError(msg)
-    except Timeout as timeout_err:
-        msg = ('Timeout error while calling slack reporting service. Error was: "{}"'
-               .format(str(timeout_err)))
+    except Exception as general_err:
+        msg = ('General error while calling slack reporting service. Error was: "{}"'
+               .format(str(general_err)))
         logger.error(msg)
         raise AspenError(msg)
