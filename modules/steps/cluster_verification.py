@@ -15,7 +15,7 @@ class ClusterVerification(BasePipelineStep):
         BasePipelineStep.__init__(self)
 
     def get_required_env_variables(self):
-        return [environment.CLUSTERS_TO_DEPLOY]
+        return []
 
     def get_required_data_keys(self):
         return [data_defs.APPLICATION_CLUSTER]
