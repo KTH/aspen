@@ -43,9 +43,12 @@ def sync_routine():
             SYNC_THREAD_STATE = SyncThreadState.WAITING
             time.sleep(delay)
         except exceptions.AspenError as aspen_err:
-            logger.error('Stopping sync thread due to previous error: %s', aspen_err)
-            SYNC_THREAD_STATE = SyncThreadState.STOPPED
-            stop_sync()
+            if aspen_err.fatal:
+                logger.error('Stopping sync thread due to previous error: %s', aspen_err)
+                SYNC_THREAD_STATE = SyncThreadState.STOPPED
+                stop_sync()
+            else:
+                logger.warning('Caught a non-fatal AspenError: %s', aspen_err)
 
 @FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
 def clear_app_from_cache(cluster, app):
@@ -80,13 +83,20 @@ def start_sync():
     else:
         return jsonify(message='Sync thread already running'), 404
 
-@FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
 def stop_sync():
     logger = logging.getLogger(__name__)
     logger.info('Stopping sync thread')
     sync_thread = thread.get_sync_thread()
     if sync_thread and not sync_thread.stopped():
         sync_thread.stop()
+        return True
+    else:
+        return False
+
+@FLASK_APP.route('/api/v1/sync/stop', methods=['GET'])
+def stop_sync_and_return():
+    got_stopped = stop_sync()
+    if got_stopped:
         return jsonify(message='Sync thread stopped'), 200
     else:
         return jsonify(message='Sync thread already stopped'), 404
