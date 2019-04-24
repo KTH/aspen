@@ -32,6 +32,11 @@ class LoadDockerHostIps(BasePipelineStep):
 
     def verify_cluster_to_deploy_has_ip(self, cluster_data):
         clusters_to_deploy = environment.get_env_list(environment.CLUSTERS_TO_DEPLOY)
+        if not clusters_to_deploy:
+            self.log.warning(
+                'CLUSTERS_TO_DEPLOY not set. No deployments will be done. Intentional?'
+            )
+            return
         for cluster_to_deploy in clusters_to_deploy:
             for cluster in cluster_data:
                 if cluster['status'] == cluster_to_deploy:

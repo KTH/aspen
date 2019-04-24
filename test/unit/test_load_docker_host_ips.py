@@ -18,13 +18,27 @@ class TestLoadDockerHostIps(unittest.TestCase):
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0]['status'], 'active')
 
-    def test_verify_cluster_to_deploy_has_ip(self):
+    def test_verify_no_cluster_ip_env(self):
+        step = LoadDockerHostIps()
+        cluster_data = mock_test_data.get_cluster_ip_response()
+        try:
+            if os.environ[environment.CLUSTERS_TO_DEPLOY]:
+                del os.environ[environment.CLUSTERS_TO_DEPLOY]
+            step.verify_cluster_to_deploy_has_ip(cluster_data)
+        except Exception:
+            self.fail('Shouldnt happen')        
+
+    def test_verify_error_on_no_cluster_ip(self):
+        step = LoadDockerHostIps()
+        cluster_data = mock_test_data.get_cluster_ip_response()       
+        os.environ[environment.CLUSTERS_TO_DEPLOY] = 'nope'
+        self.assertRaises(exceptions.AspenError, step.verify_cluster_to_deploy_has_ip, cluster_data)
+
+    def test_verify_cluster_has_ip(self):
         step = LoadDockerHostIps()
         cluster_data = mock_test_data.get_cluster_ip_response()
         try:
             os.environ[environment.CLUSTERS_TO_DEPLOY] = 'stage'
             step.verify_cluster_to_deploy_has_ip(cluster_data)
         except Exception:
-            self.fail('No entry for stage')
-        os.environ[environment.CLUSTERS_TO_DEPLOY] = 'nope'
-        self.assertRaises(exceptions.AspenError, step.verify_cluster_to_deploy_has_ip, cluster_data)
+            self.fail('Shouldnt happen')        
