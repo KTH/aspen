@@ -32,7 +32,7 @@ class GetDockerHostIp(BasePipelineStep):
         application_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]
         for cluster in cluster_data:
             if cluster['status'] == application_cluster:
-                return cluster['lb_ip']
+                return cluster['load_balancer_ip']
         raise exceptions.DeploymentError('Application not targeted for cluster')
 
     def get_current_cluster_status(self, cluster_data, pipeline_data):
