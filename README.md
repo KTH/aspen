@@ -11,7 +11,7 @@ Deployment orchestration tool using git repository driven application configurat
 
 ## To run locally
 
-`pipenv install --dev && ./pipenv run python run.py`
+`pipenv install --dev --pre && ./pipenv run python run.py`
 
 ## To run tests
 
