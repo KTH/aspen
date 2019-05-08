@@ -3,21 +3,21 @@ url = "https://pypi.python.org/simple"
 verify_ssl = true
 
 [requires]
-python_version = "3.6"
+python_version      = "3.6"
 
 [packages]
-Flask = "==1.0.2"
-requests = "==2.20.1"
-ansible = "==2.7.4"
-docker-compose = "==1.23.2"
-pyyaml = "==3.13"
-coloredlogs = "==10.0"
-prometheus_client = "==0.3.1"
-redis = "==2.10.6"
+Flask               = "==1.0.2"
+requests            = ">=2.20.1"
+ansible             = "==2.7.10"
+docker-compose      = "==1.24.0"
+pyyaml              = ">=3.13"
+coloredlogs         = "==10.0"
+prometheus_client   = "==0.6.0"
+redis               = "==3.2.1"
 
 [dev-packages]
-pylint = "*"
-mock = "==2.0.0"
-green = "==2.12.1"
-responses = "==0.10.4"
-coverage = "==4.5.1"
+pylint              = "==2.3.1"
+mock                = "==3.0.5"
+green               = "==2.16.1"
+responses           = "==0.10.6"
+coverage            = "==4.5.3"
