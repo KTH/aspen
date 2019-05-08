@@ -5,7 +5,7 @@ if [ "$1" != "docker" ]; then
     docker run -d -p 6379:6379 --name redis-rejson redislabs/rejson:latest
     REDIS_URL=localhost
 else
-    pipenv install --dev
+    pipenv install --dev --pre
     REDIS_URL=redis-rejson
 fi
 
