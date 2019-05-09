@@ -47,9 +47,9 @@ All program environment access is done through `modules/util/environment.py`
 | `CLUSTER_STATUS_URL_IS_FILE` | Set to anything to indicate that |
 `CLUSTER_STATUS_API_URL` | is a local file path instead |
 | `PARALLELISM` | How many parallel processes to run for deployments. Defaults to 5. |
-| `SLACK_ERROR_POST_URL` | The URL for error posts. Internally this is the url to our [Alvares application](https://github.com/kth/alvares/). Defaults to None. |
-| `SLACK_DEPLOYMENT_POST_URL` | The URL for deployment posts. Internally this is the url to our Dizin application. Defaults to None. |
-| `SLACK_RECOMMENDATION_POST_URL` | The URL for recommendation posts. Internally this is the url to our Dizin application. Defaults to None. |
+| `SLACK_ERROR_POST_URL` | The URL for error posts. Internally this is the url to our [Alvares](https://github.com/kth/alvares/) application. Defaults to None. |
+| `SLACK_DEPLOYMENT_POST_URL` | The URL for deployment posts. Internally this is the url to our [Alvares](https://github.com/kth/alvares/) application. Defaults to None. |
+| `SLACK_RECOMMENDATION_POST_URL` | The URL for recommendation posts. Internally this is the url to our [Alvares](https://github.com/kth/alvares/) application. Defaults to None. |
 | `VERIFY_START_DELAY_SECS` | The delay between attempts when verifying that a deployed stack has all of its replicas started. Defaults to 5. |
 | `VERIFY_START_RETRY_TIMES` | The number of times to try and verify a successful deploy before considering it a failed deploy. Defaults to 5. |
 | `REQUEST_TIMEOUT` | The default timeout to use when issuing requests against other services. Defaults to 5. |
