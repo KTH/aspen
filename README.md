@@ -1,4 +1,4 @@
-# aspen :ski:
+# Aspen :ski:
 
 Deployment orchestration tool using git repository driven application configurations and secrets.
 
