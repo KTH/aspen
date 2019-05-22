@@ -2,7 +2,7 @@ __author__ = 'tinglev@kth.se'
 
 import logging
 import traceback
-from modules.util import environment, exceptions, data_defs
+from modules.util import environment, exceptions, data_defs, error_cache
 from modules.util import redis, requests, pipeline_data_utils
 
 def handle_recommendation(pipeline_data, application_name, recommendation_text):
@@ -31,24 +31,33 @@ def handle_deployment_success(deployment_json):
 
 def handle_deployment_error(error: exceptions.DeploymentError):
     logger = logging.getLogger(__name__)
+    add_here_to_msg = False
     if not error.reportable:
         logger.debug('Error.reportable is set to False: skipping')
         return
-    is_already_reported = has_cached_error(error)
-    if is_already_reported:
-        # This error has already been reported
-        logger.debug('Error has already been reported: skipping')
-        return
+    cached_error = error_cache.has_cached_error(error)
+    if cached_error:
+        if not error_cache.should_be_reported_again(cached_error):
+            # This error has already been reported
+            logger.debug('Error has already been reported: skipping')
+            return
+        else:
+            # We are re-reporting an error, make sure someone sees it
+            add_here_to_msg = True
+    report_error_to_slack(error, add_here_to_msg)
+
+def report_error_to_slack(error, add_here_to_msg):
+    logger = logging.getLogger(__name__)
     logger.debug('Found new reportable error: reporting to Slack')
     combined_labels = get_combined_service_labels(error.pipeline_data)
     error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
     if error_url:
-        error_json = create_error_object(error, combined_labels)
+        error_json = create_error_object(error, combined_labels, add_here_to_msg)
         logger.debug('Calling "%s" with "%s"', error_url, error_json)
         response = call_with_payload(error_url, error_json)
         if response:
             logger.debug('Response was: "%s"', response)
-            write_to_error_cache(error)
+            error_cache.write_to_error_cache(error)
     else:
         logger.warning('Found error to report, but not SLACK_ERROR_POST_URL was set')
 
@@ -57,7 +66,7 @@ def handle_fatal_error(error: exceptions.DeploymentError):
     logger.debug('Found new reportable error: reporting to Slack')
     error_url = environment.get_env(environment.SLACK_ERROR_POST_URL)
     if error_url:
-        error_json = create_error_object(error, None)
+        error_json = create_error_object(error, None, False)
         logger.debug('Calling "%s" with "%s"', error_url, error_json)
         response = call_with_payload(error_url, error_json)
         if response:
@@ -75,29 +84,9 @@ def create_recommedation_object(application_name, recommendation_text, slack_cha
         "slackChannels": slack_channels
         }
 
-def write_to_error_cache(error):
-    pipeline_data = error.pipeline_data
-    application_name = pipeline_data[data_defs.APPLICATION_NAME]
-    cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
-    error_cache_key = f'{cluster_name}.{application_name}'
-    redis_client = redis.get_client()
-    redis.execute_json_set(redis_client, error_cache_key, {'step_name': error.step_name})
-
-def has_cached_error(error):
-    pipeline_data = error.pipeline_data
-    application_name = pipeline_data[data_defs.APPLICATION_NAME]
-    cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
-    error_cache_key = f'{cluster_name}.{application_name}'
-    result = get_error_cache(error_cache_key)
-    return result and result['step_name'] == error.step_name
-
-def get_error_cache(error_cache_key):
-    redis_client = redis.get_client()
-    return redis.execute_json_get(redis_client, error_cache_key)
-
-def create_error_object(error, combined_labels):
+def create_error_object(error, combined_labels, add_here_to_msg):
     error_json = {
-        'message': create_error_message(error),
+        'message': create_error_message(error, add_here_to_msg),
         'slackChannels': None,
         'stackTrace': None
     }
@@ -107,7 +96,7 @@ def create_error_object(error, combined_labels):
         error_json['stackTrace'] = traceback.format_exc().rstrip('\n')
     return error_json
 
-def create_error_message(error):
+def create_error_message(error, add_here_to_msg):
     step, application, cluster = '', '', ''
     if hasattr(error, 'step_name') and error.step_name:
         step = error.step_name
@@ -116,15 +105,16 @@ def create_error_message(error):
             application = error.pipeline_data[data_defs.APPLICATION_NAME]
         if data_defs.APPLICATION_CLUSTER in error.pipeline_data:
             cluster = error.pipeline_data[data_defs.APPLICATION_CLUSTER]
-    return format_error_message(cluster, application, step, error)
+    return format_error_message(cluster, application, step, error, add_here_to_msg)
 
-def format_error_message(cluster, application, step, error):
+def format_error_message(cluster, application, step, error, add_here_to_msg):
     # Only use backticks for error message if the message itself doesn't already
     # have any in it
     error_str = str(error)
     if '`' not in str(error):
         error_str = f'`{error_str}`'
-    return (f'Cluster: `{cluster}`, '
+    at_here = '@here ' if add_here_to_msg else ''
+    return (f'{at_here}Cluster: `{cluster}`, '
             f'Application: `{application}`, '
             f'Step: `{step}`, '
             f'Error: {error_str}')
