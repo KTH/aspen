@@ -34,7 +34,11 @@ def sync_routine():
             SYNC_THREAD_STATE = SyncThreadState.RUNNING
             pipeline_data = create_and_run_pipeline()
             # The only line that modifies the shared variable
-            DEPLOYMENTS_LAST_RUN = pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN]
+            if data_defs.DEPLOYMENTS_LAST_RUN in pipeline_data:
+                DEPLOYMENTS_LAST_RUN = pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN]
+            else:
+                # Probably due to previous error
+                DEPLOYMENTS_LAST_RUN = 0
             if thread.current_thread().stopped():
                 logger.info('Sync thread has stopped. Call /api/v1/sync/start to restart')
                 SYNC_THREAD_STATE = SyncThreadState.STOPPED
