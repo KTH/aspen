@@ -27,7 +27,7 @@ def has_cached_error(error):
         application_name = pipeline_data[data_defs.APPLICATION_NAME]
     else:
         return None
-    if data_defs.APPLICATION_CLUSTER:
+    if data_defs.APPLICATION_CLUSTER in pipeline_data:
         cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
     else:
         return None
