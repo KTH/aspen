@@ -23,8 +23,14 @@ def write_to_error_cache(error: exceptions.DeploymentError):
 
 def has_cached_error(error):
     pipeline_data = error.pipeline_data
-    application_name = pipeline_data[data_defs.APPLICATION_NAME]
-    cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
+    if data_defs.APPLICATION_NAME in pipeline_data:
+        application_name = pipeline_data[data_defs.APPLICATION_NAME]
+    else:
+        return None
+    if data_defs.APPLICATION_CLUSTER in pipeline_data:
+        cluster_name = pipeline_data[data_defs.APPLICATION_CLUSTER]
+    else:
+        return None
     error_cache_key = f'{cluster_name}.{application_name}'
     result = get_error_cache(error_cache_key)
     if result and result['step_name'] == error.step_name:
