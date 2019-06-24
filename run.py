@@ -53,6 +53,7 @@ def sync_routine():
                 stop_sync()
             else:
                 logger.warning('Caught a non-fatal AspenError: %s', aspen_err)
+    SYNC_THREAD_STATE = SyncThreadState.STOPPED
 
 @FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
 def clear_app_from_cache(cluster, app):
