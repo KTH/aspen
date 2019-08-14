@@ -110,14 +110,14 @@ def create_error_message(error, add_here_to_msg):
 def format_error_message(cluster, application, step, error, add_here_to_msg):
     # Only use backticks for error message if the message itself doesn't already
     # have any in it
-    error_str = str(error)
-    if '`' not in str(error):
-        error_str = f'`{error_str}`'
-    at_here = '@here ' if add_here_to_msg else ''
-    return (f'{at_here}Cluster: `{cluster}`, '
-            f'Application: `{application}`, '
-            f'Step: `{step}`, '
-            f'Error: {error_str}')
+    error_str = str(error).replace('`', "").replace('\'', "").replace('\"', "")
+    
+    error_str = f'```{error_str}```'
+    
+    at_here = '<!here> 'if add_here_to_msg else ''
+
+    return (f'{at_here}Error deploying *{cluster}/{application}* in step _{step}_ '
+            f'{error_str}')
 
 def get_combined_service_labels(pipeline_data):
     labels = {}

@@ -28,8 +28,7 @@ class TestSendRecommendations(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error()
         result = reporter_service.create_error_object(error, combined_labels, False)
         expected = {
-            'message': ('Cluster: ``, Application: ``, '
-                        'Step: `ParseStackFile`, Error: `This is a deployment error`'),
+            'message': ('Error deploying */* in step _ParseStackFile_ ```This is a deployment error```'),
             'stackTrace': None,
             'slackChannels': '#pipeline,#team-pipeline,#ita-ops'
         }
@@ -46,11 +45,11 @@ class TestSendRecommendations(unittest.TestCase):
         error.pipeline_data = pipeline_data
         result = reporter_service.create_error_object(error, combined_labels, False)
         expected = {
-            'message': ('Cluster: `stage`, Application: `kth-azure-app`, '
-                        'Step: `ParseStackFile`, Error: `This is a deployment error`'),
+            'message': ('Error deploying *stage/kth-azure-app* in step _ParseStackFile_ ```This is a deployment error```'),
             'stackTrace': None,
             'slackChannels': '#pipeline,#team-pipeline,#ita-ops'
         }
+
         self.assertEqual(result, expected)
 
     def test_create_stack_error_object(self):
@@ -62,8 +61,7 @@ class TestSendRecommendations(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error(expected=False)
         result = reporter_service.create_error_object(error, combined_labels, False)
         expected = {
-            'message': ('Cluster: ``, Application: ``, Step: `ParseStackFile`, '
-                        'Error: `This is a deployment error`'),
+            'message': ('Error deploying */* in step _ParseStackFile_ ```This is a deployment error```'),
             'stackTrace': 'Stack\ntrace',
             'slackChannels': None
         }
@@ -77,8 +75,7 @@ class TestSendRecommendations(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error()
         result = reporter_service.create_error_object(error, combined_labels, True)
         expected = {
-            'message': ('@here Cluster: ``, Application: ``, '
-                        'Step: `ParseStackFile`, Error: `This is a deployment error`'),
+            'message': ('<!here> Error deploying */* in step _ParseStackFile_ ```This is a deployment error```'),
             'stackTrace': None,
             'slackChannels': '#pipeline,#team-pipeline,#ita-ops'
         }
