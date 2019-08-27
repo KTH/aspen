@@ -1,4 +1,5 @@
-# Aspen :ski:
+# Aspen :ski:  ![alt text](https://api.travis-ci.org/KTH/aspen.svg?branch=master)
+
 
 Deployment orchestration tool using git repository driven application configurations and secrets.
 
