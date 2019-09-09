@@ -30,7 +30,7 @@ class CalculateSemanticVersion(BasePipelineStep):
                     best_match = max_satisfying(image_data[data_defs.IMG_TAGS],
                                                 image_data[data_defs.IMG_SEMVER_VERSION])
                 except exceptions.DeploymentError as semver_error:
-                    raise exceptions.DeploymentError('Unable to figure out max version for `{}: {}` from docker-stack.yml'.format(image_data[data_defs.IMG_SEMVER_ENV_KEY], image_data[data_defs.IMG_SEMVER_VERSION]))
+                    raise exceptions.DeploymentError('Unable to figure out which version to deploy from {}: {} in {}docker-stack.yml'.format(image_data[data_defs.IMG_SEMVER_ENV_KEY], image_data[data_defs.IMG_SEMVER_VERSION], image_data[data_defs.STACK_FILE_PATH]))
 
                 self.log.debug('Best match was "%s"', best_match)
                 image_data[data_defs.IMG_BEST_SEMVER_MATCH] = best_match
