@@ -29,12 +29,11 @@ class GetImageTags(BasePipelineStep):
                 try:
                     image_data[data_defs.IMG_TAGS] = self.get_tags_from_registry(tags_url)
                     self.log.debug('Tags set to "%s"', image_data[data_defs.IMG_TAGS])
-                except HTTPError as http_error:
-                    self.log.info('Fail to get tags for url {} {}'.format(tags_url, http_error))
-                    if "404" in str(http_error):
+                except Exception as e:
+                    self.log.info('Fail to get tags for url {} {}'.format(tags_url, e))
+                    if "404" in str(e):
                         raise exceptions.DeploymentError('There are no images named {} in the :docker: registry, as specified in the docker-stack.yml. Misspelling or not pushed yet?'.format(image_data[data_defs.IMG_NAME]))
-                    else:
-                        raise http_error
+                    raise
 
                 pipeline_data[data_defs.SERVICES][i][data_defs.S_IMAGE] = image_data
         return pipeline_data
