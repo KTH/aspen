@@ -7,6 +7,9 @@ __author__ = 'tinglev@kth.se'
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, environment, requests, pipeline_data_utils, exceptions
 from requests.exceptions import HTTPError
+from modules.util.exceptions import DeploymentError
+from requests.exceptions import HTTPError
+
 class GetImageTags(BasePipelineStep):
 
     def __init__(self):
@@ -29,11 +32,12 @@ class GetImageTags(BasePipelineStep):
                 try:
                     image_data[data_defs.IMG_TAGS] = self.get_tags_from_registry(tags_url)
                     self.log.debug('Tags set to "%s"', image_data[data_defs.IMG_TAGS])
-                except Exception as e:
-                    self.log.info('Fail to get tags for url {} {}'.format(tags_url, e))
-                    if "404" in str(e):
-                        raise exceptions.DeploymentError('There are no images named {} in the :docker: registry, as specified in the docker-stack.yml. Misspelling or not pushed yet?'.format(image_data[data_defs.IMG_NAME]))
-                    raise
+                except HTTPError as http_err:
+                    self.log.info('Fail to get tags for url {} {}'.format(tags_url, http_err))
+                    if "404" in str(http_err):
+                        raise DeploymentError('There are no images named {} in the :docker: registry, as specified in the docker-stack.yml. Misspelling or not pushed yet?'.format(image_data[data_defs.IMG_NAME]))
+                    else:
+                        raise e
 
                 pipeline_data[data_defs.SERVICES][i][data_defs.S_IMAGE] = image_data
         return pipeline_data
