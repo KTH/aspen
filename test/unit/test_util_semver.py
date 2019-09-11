@@ -67,9 +67,16 @@ class TestUtilSemver(unittest.TestCase):
         self.assertTrue(semver.is_valid_semver(version))
 
     def test_max_satisfying(self):
-        versions = ['2.0.0', '2.0.1', '2.1.13', '0.1.0', '0.12.0', '12.12.12']
-        self.assertEqual(semver.max_satisfying(versions, '~2.0.0'), '2.0.1')
-        self.assertEqual(semver.max_satisfying(versions, '^2.0.0'), '2.1.13')
-        self.assertEqual(semver.max_satisfying(versions, '^0.0.0'), '0.12.0')
+        versions = [
+            '2.0.0_abc123',
+            '2.0.1_abc123',
+            '2.1.13_abc123',
+            '0.1.0_abc123',
+            '0.12.0_abc123',
+            '12.12.12_abc123'
+        ]
+        self.assertEqual(semver.max_satisfying(versions, '~2.0.0'), '2.0.1_abc123')
+        self.assertEqual(semver.max_satisfying(versions, '^2.0.0'), '2.1.13_abc123')
+        self.assertEqual(semver.max_satisfying(versions, '^0.0.0'), '0.12.0_abc123')
         self.assertRaises(exceptions.DeploymentError,
                           semver.max_satisfying, versions, '~12.13.0')

@@ -9,8 +9,9 @@ from functools import cmp_to_key
 from modules.util import regex, exceptions
 
 def max_satisfying(versions, semver_version):
+    without_static = [v for v in versions if '_' in v]
     sorted_versions = [v for v in
-                       sorted(versions, key=cmp_to_key(sort_compare))
+                       sorted(without_static, key=cmp_to_key(sort_compare))
                        if is_valid_static(v)]
     return find_best_match(sorted_versions, semver_version)
 
