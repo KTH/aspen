@@ -48,4 +48,7 @@ class GetImageTags(BasePipelineStep):
         user = environment.get_env(environment.DOCKER_REGISTRY_USER)
         password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
         response = requests.get_urllib_json(url_to_call, auth=(user, password))
-        return response["tags"]
+        return self.filter_latest(response['tags'])
+
+    def filter_latest(self, tags):
+        return [t for t in tags if t != 'latest']
