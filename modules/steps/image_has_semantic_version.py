@@ -48,4 +48,4 @@ class ImageHasSemanticVersion(BasePipelineStep):
                 for env_var, env_val in service['environment'].items():
                     if env_var == semver_env_key:
                         return env_val
-        raise exceptions.DeploymentError('Missing env var value for semver')
+        raise exceptions.DeploymentError('SemVer definition `{}` found in image url but could not be not found under *environment* in docker-stack.yml'.format(semver_env_key))
