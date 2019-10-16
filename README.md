@@ -1,7 +1,6 @@
 # Aspen :ski:  ![alt text](https://api.travis-ci.org/KTH/aspen.svg?branch=master)
 
-
-Deployment orchestration tool using git repository driven application configurations and secrets.
+*Deployment orchestration tool that uses Git as ad database for storing Docker Compose files and deploying them accordingly on changes into Docker Swarm clusters. Also SemVer and secrets handling.*
 
 ## Required installations (when not running as a docker image)
 
