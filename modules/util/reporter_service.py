@@ -123,14 +123,16 @@ def get_combined_service_labels(pipeline_data):
     labels = {}
     for _, service in pipeline_data_utils.get_parsed_services(pipeline_data):
         if 'labels' in service:
-            for name, value in [label.split('=', 1) for label in service['labels']]:
-                value = value.strip('"')
-                if not name in labels:
-                    labels[name] = {}
-                if labels[name]:
-                    labels[name] = f'{labels[name]},{value}'
-                else:
-                    labels[name] = f'{value}'
+            for label in service['labels']:
+                if isinstance(label, str) and '=' in label:
+                    name, value = label.split('=', 1)
+                    value = value.strip('"')
+                    if not name in labels:
+                        labels[name] = {}
+                    if labels[name]:
+                        labels[name] = f'{labels[name]},{value}'
+                    else:
+                        labels[name] = f'{value}'
     # labels = {'label1':'value1','value2',...}
     return labels
 

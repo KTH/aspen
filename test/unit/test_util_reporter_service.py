@@ -20,6 +20,17 @@ class TestSendRecommendations(unittest.TestCase):
             }
         self.assertEqual(result, expected)
 
+    def test_bad_get_combined_service_labels(self):
+        pipeline_data = {
+            data_defs.STACK_FILE_PARSED_CONTENT: mock_test_data.get_bad_parsed_stack_file()
+        }
+        result = reporter_service.get_combined_service_labels(pipeline_data)
+        expected = {
+            'se.kth.slackChannels': '#team-pipeline-build,#pipeline-logs,#ita-ops',
+            'se.kth.importance': 'low'
+            }
+        self.assertEqual(result, expected)
+
     def test_create_empty_error_object(self):
         pipeline_data = {
             data_defs.STACK_FILE_PARSED_CONTENT: mock_test_data.get_parsed_stack_content()

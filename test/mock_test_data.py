@@ -89,7 +89,12 @@ def get_pipeline_data():
 def get_parsed_stack_file():
     test_file = 'test/registry_repo/test_app_1/active/docker-stack.yml'
     with open(os.path.join(PROJECT_ROOT, test_file)) as stack_file:
-        return yaml.load(stack_file.read())
+        return yaml.load(stack_file.read(), Loader=yaml.FullLoader)
+
+def get_bad_parsed_stack_file():
+    bad_test_file = 'test/registry_repo/test_app_1/active/bad-docker-stack.yml'
+    with open(os.path.join(PROJECT_ROOT, bad_test_file)) as stack_file:
+        return yaml.load(stack_file.read(), Loader=yaml.FullLoader)  
 
 def get_parsed_stack_content():
     return {
