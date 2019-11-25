@@ -26,24 +26,27 @@ class LoadDockerHostIps(BasePipelineStep):
             cluster_data = self.load_cluster_status_from_file()
         else:
             cluster_data = self.call_cluster_status_api()
-        self.verify_cluster_to_deploy_has_ip(cluster_data)
+        pipeline_data[data_defs.CLUSTERS_TO_DEPLOY] = self.verify_cluster_to_deploy_has_ip(cluster_data)
         pipeline_data[data_defs.DOCKER_HOST_IPS] = cluster_data
         return pipeline_data
 
     def verify_cluster_to_deploy_has_ip(self, cluster_data):
         clusters_to_deploy = environment.get_env_list(environment.CLUSTERS_TO_DEPLOY)
+        clusters_with_ip = []
         if not clusters_to_deploy:
             self.log.warning(
                 'CLUSTERS_TO_DEPLOY not set. No deployments will be done. Intentional?'
             )
-            return
+            return clusters_with_ip
         for cluster_to_deploy in clusters_to_deploy:
             for cluster in cluster_data:
                 if cluster['status'] == cluster_to_deploy:
+                    clusters_with_ip.append(cluster_to_deploy)
                     break
             else:
-                raise exceptions.AspenError(f'Cluster {cluster_to_deploy} has no entry '
-                                            f'in the cluster status api respose')
+                self.log.warning(f'Cluster {cluster_to_deploy} has no entry '
+                                 f'in the cluster status api respose')
+        return clusters_with_ip
 
     def load_cluster_status_from_file(self):
         cluster_file = environment.get_env(environment.CLUSTER_STATUS_API_URL)
