@@ -30,13 +30,14 @@ def service_uses_semver(service):
 
 def get_application_passwords(pipeline_data):
     if (data_defs.APPLICATION_PASSWORDS in pipeline_data and
-            'passwords' in pipeline_data[data_defs.APPLICATION_PASSWORDS]):
+            'passwords' in pipeline_data[data_defs.APPLICATION_PASSWORDS] and
+            pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords']):
         return pipeline_data[data_defs.APPLICATION_PASSWORDS]['passwords'].items()
     return []
 
 def get_parsed_services(pipeline_data):
     if data_defs.STACK_FILE_PARSED_CONTENT in pipeline_data:
         parsed_content = pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]
-        if 'services' in parsed_content:
+        if 'services' in parsed_content and parsed_content['services']:
             return parsed_content['services'].items()
     return []
