@@ -5,6 +5,7 @@ several deployment pipelines in parallell"""
 
 __author__ = 'tinglev@kth.se'
 
+import copy
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from modules.util.data_defs import CLUSTERS_TO_DEPLOY
 from modules.steps.base_pipeline_step import BasePipelineStep
@@ -53,7 +54,6 @@ class StartDeploymentPipelines(BasePipelineStep):
         deployment_pipeline = DeploymentPipeline()
         pipeline_data = self.init_deploy_pipeline_data(pipeline_data, file_path)
         deployment_pipeline.set_pipeline_data(pipeline_data)
-        print('pld: %s', pipeline_data)
         pipeline_data = deployment_pipeline.run_pipeline()
         return pipeline_data
 
@@ -61,11 +61,16 @@ class StartDeploymentPipelines(BasePipelineStep):
         app_passwords = pipeline_data[data_defs.APPLICATION_PASSWORDS]
         cluster_lb_ips = pipeline_data[data_defs.DOCKER_HOST_IPS]
         clusters_to_deploy = pipeline_data[data_defs.CLUSTERS_TO_DEPLOY]
-        pipeline_data = {
-            data_defs.STACK_FILE_PATH: file_path,
-            data_defs.APPLICATION_PASSWORDS: app_passwords,
-            data_defs.DOCKER_HOST_IPS: cluster_lb_ips,
-            data_defs.CLUSTERS_TO_DEPLOY: clusters_to_deploy
-        }
-        pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN] = 0
-        return pipeline_data
+        # Copy the piplines data to each individual deployment, so
+        # we have access to passwords, deployment clusters and ips
+        new_pipeline_data = copy.deepcopy(pipeline_data)
+        new_pipeline_data[data_defs.STACK_FILE_PATH] = file_path
+        #pipeline_data = {
+        #
+        #    data_defs.STACK_FILE_PATH: file_path,
+        #    data_defs.APPLICATION_PASSWORDS: app_passwords,
+        #    data_defs.DOCKER_HOST_IPS: cluster_lb_ips,
+        #    data_defs.CLUSTERS_TO_DEPLOY: clusters_to_deploy
+        #}
+        #pipeline_data[data_defs.DEPLOYMENTS_LAST_RUN] = 0
+        return new_pipeline_data

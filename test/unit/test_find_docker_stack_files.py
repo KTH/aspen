@@ -12,7 +12,7 @@ class TestFindDockerStackFiles(unittest.TestCase):
         step = FindDockerStackFiles()
         step.registry_root = os.path.join(root, 'test/registry_repo')
         stack_files = step.walk_repository()
-        self.assertEqual(len(stack_files), 4)
+        self.assertEqual(len(stack_files), 5)
         self.assertTrue(
             os.path.join(root, 'test/registry_repo/test_app_1/active/docker-stack.yml')
             in stack_files)

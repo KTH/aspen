@@ -1,0 +1,201 @@
+version: '3.7'
+
+# bump it!
+# Declare all services this deployment contains.
+services:
+
+  # Name of the service. Should be something descriptive.
+  web:
+    # What image to deploy.
+    # Images from KTHs own registry should start with "kthregistryv2.sys.kth.se/"
+    # "kth-azure-app" is the name of the application and the version after the ":"
+    # is what version of the image to use. This could either be a static version
+    # (as shown in the commented line below) or a semver based version.
+    # To use a semver based versioning exchange the static version number with
+    # an environment variable on the format ${[SERVICENAME]_VERSION} as shown below.
+    image: kthregistryv2.sys.kth.se/kth-azure-app:${WEB_VERSION}
+    # image: kthregistryv2.sys.kth.se/kth-azure-app:2.4.123_2b42b2c
+
+    # Define the environment for the service. This is the place to put all
+    # non-secret environment variables that you want to have defined differenly
+    # for each cluster.
+    environment:
+      # This is where we set the image version variable to use a semver based version.
+      # The version this points to is the version set in each applications docker.conf file.
+      # The supported formats for semver are "~major.minor.not_used" and "^major.minor.not_used"
+      # A starting ~ declares that each new build of the given major and minor versions should be
+      # deployed. As long as the major and minor versions stay the same (here 2 and 4) each
+      # build by jenkins will be deployed.
+      # A starting ^ declares that we want to deploy all builds as long as the major version
+      # doesn't change. So even if we change our applications docker.conf from 2.4 to 2.5
+      # the application will still get automatically deployed.
+      WEB_VERSION: "~2.9.0"
+      NON_SECRET_SETTING: "This only exists for this service and this cluster"
+      
+    # The env_file points to an environment file to use for additional environment settings.
+    # This should point to this application and cluster in cellus-registry.
+    # The easiest way to do this is to copy the below line and replace application and cluster.
+    # The secrets.decrypted.env is a file that get's created at runtime by cellus and is the
+    # decrypted version of the secrets.env that should exist in the same directory as this
+    # docker-stack.yml file.
+    env_file:
+      - secrets.decrypted.env
+    # What ports does the application expose?
+    ports:
+      - 3000
+    # Labels used for drill down in OMS
+    # cluser="active" sets dockerinfo_labels_cluster_s:"active" i OMS
+    volumes:
+      - type: bind
+        source: /source/path
+        target: /target/path
+      - ./relative/source:/relative/target
+
+    labels:
+      # Usful for filtering in OMS
+      - se.kth.cluster="active"
+      
+      # se.kth.slackChannels sets what slack channels deployment messages should
+      # be posted to. This is in addition to the statically configured slack channel
+      # that cellus/dizin uses. Remember to use quotation marks. Multiple channels
+      # can be provided by using commas: "#channel1,#channel2"
+      - se.kth.slackChannels="#team-pipeline-build,#pipeline-logs"
+      
+      # se.kth.monitorUrl lets you set a specific url to use for monitoring. The url
+      # should be provided in full with protocol and _monitor endpoint. The endpoint
+      # will be polled for "APPLICATION_STATUS: OK" so make sure you're actually pointing
+      # to a URL that can provide this response.
+      - se.kth.monitorUrl="https://app.kth.se/kth-azure-app/_monitor"
+      
+      #
+      # Is this application important for any form of operations, or support to act upon.
+      # values: low, medium, high.
+      # 
+      # i.e: - se.kth.importance="high"
+      #
+      - se.kth.importance="low"
+      
+      # Public name in Swedish      
+      - se.kth.publicName.swedish="Continuous delivery referens applikation"
+      
+      # Public name in English
+      - se.kth.publicName.english="Continuous Delivery Reference Application"
+      
+      # Application description in Swedish
+      - se.kth.description.swedish="Referens applikation för KTH:s Docker kluster i Azure. Om denna tjänst har diftsörning har hela klustret problem."
+      
+      # Application description in English
+      - se.kth.description.english="Reference application for KTHs Docker clusters."
+      
+      
+    # Dependencies to other services in this docker-stack.yml is declared here. Use the name
+    # of the service as the id of the dependency.
+    depends_on:
+     - redis
+    # This section is new to version 3 of the file format and specifies information regarding
+    # how the deployment of the service should be done.
+    deploy:
+      # How many replicas should be running of this service?
+      replicas: 2
+
+      # Take down one container at a time. 
+      update_config:
+        parallelism: 1
+        
+      # Labels to be set for the service at runtime
+      labels:
+        # The com.df-family of labels are used by docker flow proxy
+        # to publish a service to the outside world
+        # Notify should be set to true
+        - com.df.notify=true
+        # Distribute should be set to true
+        - com.df.distribute=true
+        # servicePath declares at what URL you want to expose this service.
+        # The final url will be something like https://app.sys.kth.se/[this labels value]
+        - com.df.servicePath=/kth-azure-app/
+        # The reqPathSearch and reqPathReplace are rewrite rules to make sure
+        # that the published application recieves requests that begins with / instead
+        # of /[servicePath value]/
+        #- com.df.reqPathSearch=/kth-azure-app/
+        #- com.df.reqPathReplace=/
+        # What port does this service run on internally? (See "ports" above)
+        # Externally all published services are accessed on :443 which is then SSL
+        # terminated before reaching this given internal port of the service.
+        - com.df.port=3000
+
+      # Decided what policy to enforce when restarting the container
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+
+      placement:
+        constraints:
+          - node.role == worker
+
+      # Decides the reserverd and limitations of cpu and memory usage
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 300M
+        reservations:
+          cpus: '0.05'
+          memory: 50M
+    # Limit the logging stored on the worker vm:s. All logs are found in OMS.
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "5"
+
+    # Declares which docker provided networks that this service should use.
+    # See the description of the different networks and how they are used at the
+    # end of this file.
+    networks:
+      # Default should always be set
+      - default
+      # Use proxy if you want this service to be published
+      - proxy
+
+  redis:
+    image: redis:3.2.6-alpine
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "5"
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == worker
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 2
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 300M
+        reservations:
+          cpus: '0.05'
+          memory: 50M
+    ports:
+      - 6379
+    networks:
+      - default
+
+# This section should always exist in this file. It describes which
+# networks are accessible to the services declared in the file.
+networks:
+  # The default network is an internal network used for communication between
+  # the different services. This provides DNS entries for each service that
+  # in the kth-azure-app example makes the "web" service able to connect
+  # to the "redis" service by using the hostname "redis"
+  default:
+    external: false
+  # The proxy network is an external network (created outside the scope of
+  # this docker-stack.yml file). The network is created by docker flow proxy
+  # which uses it as the network from which to publish services that are
+  # declared to be published (see the "deploy" -> "labels" section above).
+  proxy:
+    external: true
+

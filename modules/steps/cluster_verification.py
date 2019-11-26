@@ -18,7 +18,7 @@ class ClusterVerification(BasePipelineStep):
         return []
 
     def get_required_data_keys(self):
-        return [data_defs.APPLICATION_CLUSTER]
+        return [data_defs.APPLICATION_CLUSTER, data_defs.CLUSTERS_TO_DEPLOY]
 
     def run_step(self, pipeline_data):
         application_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]

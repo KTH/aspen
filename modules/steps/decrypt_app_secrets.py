@@ -27,6 +27,8 @@ class DecryptAppSecrets(BasePipelineStep):
         if data_defs.USES_SECRETS in pipeline_data and pipeline_data[data_defs.USES_SECRETS]:
             base_dir = os.path.dirname(pipeline_data[data_defs.STACK_FILE_PATH])
             self.run_decrypt(base_dir, pipeline_data)
+        else:
+            self.log.debug('App doesnt use secrets')
         return pipeline_data
 
     def run_decrypt(self, base_dir, pipeline_data):
