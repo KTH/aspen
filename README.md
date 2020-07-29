@@ -106,3 +106,5 @@ passwords:
 ## Optional integrations
 
 Aspen supports sending errors, successful deployments and recommendations for labels to an external service (see optional environment configuration above). KTH uses it's custom made application [Alvares](https://github.com/KTH/alvares) to handle these requests, and push them through a pipeline of sorts. The external service could for instance send messages and errors to Slack, saving them to a database for further processing or something else.
+
+
