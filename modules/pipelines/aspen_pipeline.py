@@ -7,7 +7,7 @@ from modules.steps.find_docker_stack_files import FindDockerStackFiles
 from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
 from modules.steps.registry_login import RegistryLogin
 from modules.steps.load_docker_host_ips import LoadDockerHostIps
-from modules.util import pipeline, exceptions
+from modules.util import pipeline, exceptions, environment
 
 class AspenPipeline():
 
@@ -29,7 +29,7 @@ class AspenPipeline():
 
     def run_pipeline(self):
         try:
-            self.log.info('Starting AspenPipeline with "%s" steps', len(self.pipeline_steps))
+            self.log.info('Starting AspenPipeline with "%s" steps to clusters "%s"', len(self.pipeline_steps), environment.get_env(environment.CLUSTERS_TO_DEPLOY))
             pipeline_data = self.pipeline_steps[0].run_pipeline_step(self.pipeline_data)
             return pipeline_data
         except exceptions.AspenError as as_err:
