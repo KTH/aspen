@@ -11,7 +11,8 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache --repository http://nl.alpinelinux.org/alpine/v3.6/main bash && \
     # installs gcc + deps
-    apk add --no-cache make linux-headers curl libffi-dev openssl-dev build-base openssh git && \
+    apk add --no-cache make linux-headers curl libffi-dev openssl-dev build-base openssh git python3-dev && \
+    apk add --no-cache  libffi-dev libxml2 libxslt  libxslt-dev python-dev && \
     apk add docker && \
     rm -rf /var/cache/apk/*
 

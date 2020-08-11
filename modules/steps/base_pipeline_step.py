@@ -100,7 +100,7 @@ class BasePipelineStep:
         if environment_missing:
             self.log.error('Step environment missing "%s" for step "%s", and pipeline_data "%s"',
                            environment_missing, self.get_step_name(), pipeline_data)
-            raise exceptions.DeploymentError('Step environment not ok',
+            raise exceptions.DeploymentError(f'Mandatory env {environment_missing} missing',
                                              pipeline_data=pipeline_data,
                                              step_name=self.get_step_name())
 
