@@ -22,7 +22,7 @@ def handle_deployment_success(deployment_json):
     logger = logging.getLogger(__name__)
     deployment_url = environment.get_env(environment.SLACK_DEPLOYMENT_POST_URL)
     if deployment_url:
-        logger.info('Reporting successful deployment')
+        logger.info(f'{deployment_json["cluster"]} / {deployment_json["applicationName"]} Reporting successful deployment ')
         response = call_with_payload(deployment_url, deployment_json)
         if response:
             logger.debug('Response was: "%s"', response)
