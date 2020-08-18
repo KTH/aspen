@@ -13,5 +13,8 @@ jobs:
   workspace:
     clean: outputs
   steps:
-  - bash: pip install --upgrade pip && pip install pipenv
+  - bash: pip install --upgrade pip
+  - bash: pip install pipenv
+  - checkout: evolene
+  - bash: ./create_dist.sh
 
