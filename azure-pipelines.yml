@@ -7,8 +7,8 @@ resources:
       endpoint: github.com_jotunskij
 
 jobs:
-- job: upgrade_pip
-  displayName: Upgrade pip
+- job: run_evolene
+  displayName: Build with Evolene
   continueOnError: true
   workspace:
     clean: outputs
@@ -19,7 +19,7 @@ jobs:
       addToPath: true
       architecture: 'x64'
   - bash: pip install --upgrade pip
-  - bash: pip install pipenv --target=$EVOLENE_DIRECTORY
+  - bash: pip install --target=$EVOLENE_DIRECTORY pipenv
   - checkout: evolene
   - checkout: self
   - bash: $EVOLENE_DIRECTORY/pipenv install
