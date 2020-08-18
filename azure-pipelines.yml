@@ -22,5 +22,6 @@ jobs:
   - bash: pip install pipenv
   - checkout: evolene
   - checkout: self
+  - bash: $EVOLENE_DIRECTORY/pipenv install
   - bash: $EVOLENE_DIRECTORY/run.sh $(Agent.BuildDirectory)/s/aspen
 
