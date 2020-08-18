@@ -16,5 +16,5 @@ jobs:
   - bash: pip install --upgrade pip
   - bash: pip install pipenv
   - checkout: evolene
-  - bash: ./create_dist.sh
+  - bash: $(Agent.BuildDirectory)/create_dist.sh
 
