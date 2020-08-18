@@ -1,0 +1,17 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+resources:
+  repositories:
+    - repository: evolene
+      type: github
+      name: KTH/evolene
+variables: # several syntaxes, see specific section
+trigger: trigger
+pr: pr
+jobs:
+- job: MyJob
+  displayName: My First Job
+  continueOnError: true
+  workspace:
+    clean: outputs
+  steps:
+  - script: echo My first job
