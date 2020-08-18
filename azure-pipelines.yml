@@ -4,6 +4,7 @@ resources:
     - repository: evolene
       type: github
       name: KTH/evolene
+      endpoint: 
 jobs:
 - job: install_pip
   displayName: Install pip
