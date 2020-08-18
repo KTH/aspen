@@ -6,11 +6,17 @@ resources:
       name: KTH/evolene
       endpoint: github.com_jotunskij
 
-
-
 jobs:
-- job: install_pip
-  displayName: Install pip
+- job: upgrade_pip
+  displayName: Upgrade pip
+  continueOnError: true
+  workspace:
+    clean: outputs
+  steps:
+  - bash: pip install --upgrade pip
+
+- job: install_pipenv
+  displayName: Install pipenv
   continueOnError: true
   workspace:
     clean: outputs
