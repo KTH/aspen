@@ -5,6 +5,9 @@ resources:
       type: github
       name: KTH/evolene
       endpoint: github.com_jotunskij
+
+
+
 jobs:
 - job: install_pip
   displayName: Install pip
@@ -12,4 +15,4 @@ jobs:
   workspace:
     clean: outputs
   steps:
-  - bash: apt-get install pip
+  - bash: pip install pipenv
