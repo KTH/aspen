@@ -4,14 +4,11 @@ resources:
     - repository: evolene
       type: github
       name: KTH/evolene
-variables: # several syntaxes, see specific section
-trigger: trigger
-pr: pr
 jobs:
-- job: MyJob
-  displayName: My First Job
+- job: install_pip
+  displayName: Install pip
   continueOnError: true
   workspace:
     clean: outputs
   steps:
-  - script: echo My first job
+  - bash: apt-get install pip
