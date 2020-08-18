@@ -19,7 +19,7 @@ jobs:
       addToPath: true
       architecture: 'x64'
   - bash: pip install --upgrade pip
-  - bash: pip install pipenv
+  - bash: pip install pipenv --target=$EVOLENE_DIRECTORY
   - checkout: evolene
   - checkout: self
   - bash: $EVOLENE_DIRECTORY/pipenv install
