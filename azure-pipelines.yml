@@ -6,12 +6,6 @@ resources:
       name: KTH/evolene
       endpoint: github.com_jotunskij
 
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
-    architecture: 'x64'
-
 jobs:
 - job: upgrade_pip
   displayName: Upgrade pip
@@ -19,6 +13,11 @@ jobs:
   workspace:
     clean: outputs
   steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+      architecture: 'x64'
   - bash: pip install --upgrade pip
   - bash: pip install pipenv
   - checkout: evolene
