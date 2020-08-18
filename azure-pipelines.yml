@@ -6,6 +6,12 @@ resources:
       name: KTH/evolene
       endpoint: github.com_jotunskij
 
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+    architecture: 'x64'
+
 jobs:
 - job: upgrade_pip
   displayName: Upgrade pip
