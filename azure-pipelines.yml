@@ -23,9 +23,7 @@ jobs:
   - checkout: self
   - bash: mkdir $EVOLENE_DIRECTORY/temp
   - bash: pip install --target $EVOLENE_DIRECTORY/temp pipenv
-  - bash: ls $EVOLENE_DIRECTORY/temp 
-  - bash: ls $EVOLENE_DIRECTORY/temp/pipenv
-  - bash: mv -f $EVOLENE_DIRECTORY/temp/pipenv/* $EVOLENE_DIRECTORY
+  - bash: mv -f $EVOLENE_DIRECTORY/temp/bin/* $EVOLENE_DIRECTORY
   - bash: $EVOLENE_DIRECTORY/pipenv install
   - bash: $EVOLENE_DIRECTORY/run.sh $(Agent.BuildDirectory)/s/$(Build.Repository.Name)
 
