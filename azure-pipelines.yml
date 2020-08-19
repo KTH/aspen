@@ -22,7 +22,7 @@ jobs:
   - checkout: evolene
   - checkout: self
   - bash: pip install --target $EVOLENE_DIRECTORY pipenv
-  - bash: cp $EVOLENE_DIRECTORY/* $EVOLENE_DIRECTORY
+  - bash: cp $EVOLENE_DIRECTORY/pipenv/* $EVOLENE_DIRECTORY
   - bash: $EVOLENE_DIRECTORY/pipenv install
   - bash: $EVOLENE_DIRECTORY/run.sh $(Agent.BuildDirectory)/s/$(Build.Repository.Name)
 
