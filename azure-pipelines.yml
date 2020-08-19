@@ -19,9 +19,9 @@ jobs:
       addToPath: true
       architecture: 'x64'
   - bash: pip install --upgrade pip
-  - bash: pip install --target $EVOLENE_DIRECTORY pipenv
   - checkout: evolene
   - checkout: self
+  - bash: pip install --target $EVOLENE_DIRECTORY pipenv
   - bash: $EVOLENE_DIRECTORY/pipenv install
   - bash: $EVOLENE_DIRECTORY/run.sh $(Agent.BuildDirectory)/s/aspen
 
