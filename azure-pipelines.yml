@@ -18,15 +18,19 @@ jobs:
       versionSpec: '3.6'
       addToPath: true
       architecture: 'x64'
+
   - bash: pip install --upgrade pip
+
   - checkout: evolene
   - checkout: self
-  #- bash: mkdir $EVOLENE_DIRECTORY/temp
-  #- bash: pip install --target $EVOLENE_DIRECTORY/pipenv pipenv
-  #- bash: mv -f $EVOLENE_DIRECTORY/temp/* $EVOLENE_DIRECTORY/pipenv
+
   - bash: pip install pipenv
+
   - bash: pipenv install
     workingDirectory: evolene
+
   - bash: $EVOLENE_DIRECTORY/run.sh
     workingDirectory: ${{ replace(variables.Agent.BuildDirectory, 'KTH/', '') }}
+    env:
+      WORKSPACE: ${{ replace(variables.Agent.BuildDirectory, 'KTH/', '') }}
 
