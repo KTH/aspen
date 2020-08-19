@@ -30,10 +30,10 @@ jobs:
     workingDirectory: evolene
 
   - bash: ls -al
-    workingDirectory: ${{ replace(variables.Agent.BuildDirectory, 'KTH/', '') }}
+    workingDirectory: ${{ replace(variables.Build.Repository.Name, 'KTH/', '') }}
 
   - bash: $EVOLENE_DIRECTORY/run.sh
-    workingDirectory: ${{ replace(variables.Agent.BuildDirectory, 'KTH/', '') }}
+    workingDirectory: ${{ replace(variables.Build.Repository.Name, 'KTH/', '') }}
     env:
-      WORKSPACE: ${{ replace(variables.Agent.BuildDirectory, 'KTH/', '') }}
+      WORKSPACE: ${{ replace(variables.Build.Repository.Name, 'KTH/', '') }}
 
