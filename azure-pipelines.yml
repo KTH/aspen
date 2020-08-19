@@ -26,7 +26,7 @@ jobs:
   #- bash: mv -f $EVOLENE_DIRECTORY/temp/* $EVOLENE_DIRECTORY/pipenv
   - bash: pip install pipenv
   - bash: pipenv install
-    workingDirectory: $EVOLENE_DIRECTORY
+    workingDirectory: evolene
   - bash: $EVOLENE_DIRECTORY/run.sh
-    workingDirectory: $(Agent.BuildDirectory)/s/$(Build.Repository.Name)
+    workingDirectory: $(Build.Repository.Name)
 
