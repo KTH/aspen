@@ -21,9 +21,12 @@ jobs:
   - bash: pip install --upgrade pip
   - checkout: evolene
   - checkout: self
-  - bash: mkdir $EVOLENE_DIRECTORY/temp
-  - bash: pip install --target $EVOLENE_DIRECTORY/pipenv pipenv
+  #- bash: mkdir $EVOLENE_DIRECTORY/temp
+  #- bash: pip install --target $EVOLENE_DIRECTORY/pipenv pipenv
   #- bash: mv -f $EVOLENE_DIRECTORY/temp/* $EVOLENE_DIRECTORY/pipenv
-  - bash: $EVOLENE_DIRECTORY/pipenv/bin/pipenv install
-  - bash: $EVOLENE_DIRECTORY/run.sh $(Agent.BuildDirectory)/s/$(Build.Repository.Name)
+  - bash: pip install pipenv
+  - bash: pipenv install
+    workingDirectory: $EVOLENE_DIRECTORY
+  - bash: $EVOLENE_DIRECTORY/run.sh
+    workingDirectory: $(Agent.BuildDirectory)/s/$(Build.Repository.Name)
 
