@@ -16,6 +16,7 @@ jobs:
     EVOLENE_DIRECTORY: $(Agent.BuildDirectory)/s/evolene
     WORKSPACE: $(Agent.BuildDirectory)/s/self
     BUILD_NUMBER: $(Build.BuildNumber)
+    GIT_COMMIT: $(Build.SourceVersion)
   steps:
   - task: UsePythonVersion@0
     inputs:
