@@ -37,6 +37,6 @@ jobs:
   - bash: ls -al
     workingDirectory: $(WORKSPACE)
 
-  - bash: $EVOLENE_DIRECTORY/run.sh
+  - bash: $(EVOLENE_DIRECTORY)/run.sh
     workingDirectory: $(WORKSPACE)
 
