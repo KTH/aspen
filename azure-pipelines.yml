@@ -20,7 +20,6 @@ jobs:
     GIT_BRANCH: $(Build.SourceBranch)
     REGISTRY_HOST: 'kthregistryv2.sys.kth.se'
     REGISTRY_USER: 'jenkins'
-    REGISTRY_PASSWORD: $(REGISTRY_PASSWORD)
   steps:
 
   - task: UsePythonVersion@0
