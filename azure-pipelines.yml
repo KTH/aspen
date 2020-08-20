@@ -18,7 +18,16 @@ jobs:
     BUILD_NUMBER: $(Build.BuildNumber)
     GIT_COMMIT: $(Build.SourceVersion)
     GIT_BRANCH: $(Build.SourceBranch)
+    REGISTRY_HOST: 'kthregistryv2.sys.kth.se'
+    REGISTRY_USER: 'jenkins'
+    REGISTRY_PASSWORD: ''
   steps:
+  - task: Docker@2
+    displayName: Logging into KTH Registry 2
+    inputs:
+      containerRegistry: 'kthregistryv2'
+      command: 'login'
+      addPipelineData: false
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.6'
