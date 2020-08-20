@@ -34,8 +34,8 @@ jobs:
   - bash: ls -al
     workingDirectory: $(projectDir)
 
-  - bash: echo $WORKSPACE && $EVOLENE_DIRECTORY/run.sh
-    workingDirectory: $(Agent.BuildDirectory)/s/$(replace(variables.Build.Repository.Name, 'KTH/', ''))
+  - bash: echo $(projectDir) && $EVOLENE_DIRECTORY/run.sh
+    workingDirectory: $(Agent.BuildDirectory)/s/$(projectDir)
     env:
-      WORKSPACE: $(Agent.BuildDirectory)/s/$(replace(variables.Build.Repository.Name, 'KTH/', ''))
+      WORKSPACE: $(projectDir)
 
