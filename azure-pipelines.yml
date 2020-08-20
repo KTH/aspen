@@ -29,6 +29,8 @@ jobs:
   - bash: pipenv install
     workingDirectory: evolene
 
+  - bash: echo ${{replace(variables.Build.Repository.Name, 'KTH/', '')}}
+
   - bash: ls -al
     workingDirectory: ${{replace(variables.Build.Repository.Name, 'KTH/', '')}}
 
