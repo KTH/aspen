@@ -31,10 +31,8 @@ jobs:
   - bash: pipenv install
     workingDirectory: evolene
 
-  - bash: echo $(projectDir)
-
   - bash: ls -al
-    workingDirectory: ${{replace(variables.Build.Repository.Name, 'KTH/', '')}}
+    workingDirectory: $(projectDir)
 
   - bash: echo $WORKSPACE && $EVOLENE_DIRECTORY/run.sh
     workingDirectory: $(Agent.BuildDirectory)/s/$(replace(variables.Build.Repository.Name, 'KTH/', ''))
