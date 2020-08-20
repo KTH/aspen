@@ -17,6 +17,7 @@ jobs:
     WORKSPACE: $(Agent.BuildDirectory)/s/self
     BUILD_NUMBER: $(Build.BuildNumber)
     GIT_COMMIT: $(Build.SourceVersion)
+    GIT_BRANCH: $(Build.SourceBranch)
   steps:
   - task: UsePythonVersion@0
     inputs:
