@@ -30,7 +30,7 @@ jobs:
     workingDirectory: evolene
 
   - bash: ls -al
-    workingDirectory: $(Agent.BuildDirectory)/s/$(replace(variables.Build.Repository.Name, 'KTH/', ''))
+    workingDirectory: $(Agent.BuildDirectory)/s/${{replace(variables.Build.Repository.Name, 'KTH/', '')}}
 
   - bash: echo $WORKSPACE && $EVOLENE_DIRECTORY/run.sh
     workingDirectory: $(Agent.BuildDirectory)/s/$(replace(variables.Build.Repository.Name, 'KTH/', ''))
