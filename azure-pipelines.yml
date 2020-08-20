@@ -46,4 +46,6 @@ jobs:
 
   - bash: $(EVOLENE_DIRECTORY)/run.sh
     workingDirectory: $(WORKSPACE)
+    env:
+      REGISTRY_PASSWORD: $(Secret.Registry.Password)
 
