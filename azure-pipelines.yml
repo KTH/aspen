@@ -13,7 +13,7 @@ jobs:
   workspace:
     clean: outputs
   variables:
-    projectDir: $[replace(variables['Build.Repository.Name'], 'KTH/', '')]
+    projectDir: ${{replace(variables['Build.Repository.Name'], 'KTH/', '')}}
   steps:
   - task: UsePythonVersion@0
     inputs:
