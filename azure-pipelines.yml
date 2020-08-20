@@ -25,9 +25,9 @@ jobs:
   - bash: pip install --upgrade pip
 
   - checkout: evolene
-    path: evolene
+    path: $(Agent.BuildDirectory)/s/evolene
   - checkout: self
-    path: self
+    path: $(Agent.BuildDirectory)/s/self
 
   - bash: pip install pipenv
 
