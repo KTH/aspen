@@ -13,7 +13,8 @@ jobs:
   workspace:
     clean: outputs
   variables:
-    projectDir: ${{replace(variables['Build.Repository.Name'], 'KTH/', '')}}
+    EVOLENE_DIRECTORY: $(Agent.BuildDirectory)/s/evolene
+    WORKSPACE: $(Agent.BuildDirectory)/s/self
   steps:
   - task: UsePythonVersion@0
     inputs:
@@ -24,7 +25,9 @@ jobs:
   - bash: pip install --upgrade pip
 
   - checkout: evolene
+    path: evolene
   - checkout: self
+    path: self
 
   - bash: pip install pipenv
 
@@ -32,10 +35,8 @@ jobs:
     workingDirectory: evolene
 
   - bash: ls -al
-    workingDirectory: $(projectDir)
+    workingDirectory: $(WORKSPACE)
 
-  - bash: echo $(projectDir) && $EVOLENE_DIRECTORY/run.sh
-    workingDirectory: $(Agent.BuildDirectory)/s/$(projectDir)
-    env:
-      WORKSPACE: $(projectDir)
+  - bash: $EVOLENE_DIRECTORY/run.sh
+    workingDirectory: $(WORKSPACE)
 
