@@ -20,6 +20,7 @@ jobs:
     GIT_BRANCH: $(Build.SourceBranch)
     REGISTRY_HOST: 'kthregistryv2.sys.kth.se'
     REGISTRY_USER: 'jenkins'
+    DEBUG: 1
   steps:
 
   - task: UsePythonVersion@0
