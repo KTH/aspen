@@ -34,6 +34,7 @@ class ReportSuccess(BasePipelineStep):
         app_cluster = pipeline_data[data_defs.APPLICATION_CLUSTER]
         deployment_json['applicationName'] = app_name
         deployment_json['cluster'] = app_cluster
+        deployment_json['replicas'] = pipeline_data[data_defs.REPLICAS]
         deployment_json = self.get_service_values(deployment_json, pipeline_data)
         return deployment_json
 

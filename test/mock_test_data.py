@@ -33,6 +33,7 @@ def get_pipeline_data():
         data_defs.STACK_FILE_DIR_HASH: 'alejfbabovudbasepvbsoev',
         data_defs.APPLICATION_CLUSTER: 'stage',
         data_defs.APPLICATION_NAME: 'kth-azure-app',
+        data_defs.REPLICAS: 'replicas',
         data_defs.SERVICES: [
             {
                 data_defs.S_NAME: 'web',
@@ -125,6 +126,7 @@ def get_parsed_stack_content():
                     'se.kth.slackChannels=#team-pipeline,#ita-ops'
                 ],
                 'deploy': {
+                    'replicas': 3,
                     'resources': {
                         'limits': {
                             'cpus': 0.5,

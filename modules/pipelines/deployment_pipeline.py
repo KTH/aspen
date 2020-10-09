@@ -31,6 +31,7 @@ from modules.steps.verify_frontend_rule import VerifyFrontendRule
 from modules.steps.stop_excluded_apps import StopExcludedApps
 from modules.steps.volume_step import VolumeStep
 from modules.steps.send_recommendations import SendRecommendations
+from modules.steps.parse_replicas import ParseReplicas
 from modules.util import pipeline, data_defs, exceptions, reporter_service
 
 class DeploymentPipeline():
@@ -53,6 +54,7 @@ class DeploymentPipeline():
             ParseImageData(),
             VerifyPipelineData(),
             VerifyFrontendRule(),
+            ParseReplicas(),
             ImageHasSemanticVersion(),
             # Stop if is_semver == false and md5_cache == md5_local
             FirstConditionalStop(),
