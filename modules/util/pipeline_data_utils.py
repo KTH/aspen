@@ -14,7 +14,7 @@ def get_enumerated_services(pipeline_data):
 
 def get_labels(service):
     if service and service[data_defs.S_LABELS]:
-        return ((l.split('=')[0], l.split('=')[1]) for l in service[data_defs.S_LABELS])
+        return ((l.split('=', 1)[0], l.split('=', 1)[1]) for l in service[data_defs.S_LABELS])
     return iter([])
 
 def service_env_as_string(service):

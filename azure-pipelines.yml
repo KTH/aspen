@@ -1,0 +1,51 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+resources:
+  repositories:
+    - repository: evolene
+      type: github
+      name: KTH/evolene
+      endpoint: github.com_jotunskij
+
+jobs:
+- job: run_evolene
+  displayName: Build with Evolene
+  continueOnError: true
+  workspace:
+    clean: outputs
+  variables:
+    EVOLENE_DIRECTORY: $(Agent.BuildDirectory)/s/evolene
+    WORKSPACE: $(Agent.BuildDirectory)/s/self
+    BUILD_NUMBER: $(Build.BuildID)
+    GIT_COMMIT: $(Build.SourceVersion)
+    GIT_BRANCH: $(Build.SourceBranch)
+    REGISTRY_HOST: 'kthregistryv2.sys.kth.se'
+    REGISTRY_USER: 'jenkins'
+    DEBUG: 1
+  steps:
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+      addToPath: true
+      architecture: 'x64'
+
+  - bash: pip install --upgrade pip
+
+  - checkout: evolene
+    path: s/evolene
+  - checkout: self
+    path: s/self
+
+  - bash: pip install pipenv
+
+  - bash: pipenv install
+    workingDirectory: $(EVOLENE_DIRECTORY)
+
+  - bash: ls -al
+    workingDirectory: $(WORKSPACE)
+
+  - bash: $(EVOLENE_DIRECTORY)/run.sh
+    workingDirectory: $(WORKSPACE)
+    env:
+      REGISTRY_PASSWORD: $(Secret.Registry.Password)
+
