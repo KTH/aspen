@@ -30,14 +30,14 @@ class ParseReplicas(BasePipelineStep):
     def get_replicas(self, service):
         
         if 'deploy' not in service:
-            raise DeploymentError('Did not find a deploy section in docker-stack.yml.')
+            raise DeploymentError('Could not find a deploy section in docker-stack.yml.')
         
         # Handle global services
-        if 'mode' in service['deploy'] and service['deploy']['mode'] is 'global':
+        if 'mode' in service['deploy'] and service['deploy']['mode'].strip() == 'global'.strip():
             return 'global'
         
         if 'replicas' not in service['deploy']:
-            raise DeploymentError('Did not find replicas attribute in docker-stack.yml.')
+            raise DeploymentError('Could not find the "replicas" attribute in docker-stack.yml.')
 
         return service['deploy']['replicas']
             
