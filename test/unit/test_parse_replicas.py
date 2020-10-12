@@ -26,6 +26,21 @@ class TestParseReplicas(unittest.TestCase):
         try:
             step.run_step(pipeline_data)
         except:
-            self.fail()       
-        
+            self.fail()     
         self.assertEqual(pipeline_data[data_defs.REPLICAS], 3)
+
+    def test_global_mode(self):
+        step = ParseReplicas()
+        pipeline_data = {data_defs.STACK_FILE_PARSED_CONTENT:
+                         mock_test_data.get_parsed_stack_content()}
+        pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']['web']['deploy'] = {
+            'mode': 'global'
+        }
+        pipeline_data[data_defs.STACK_FILE_PARSED_CONTENT]['services']['api']['deploy'] = {
+            'mode': 'global'
+        }
+        try:
+            step.run_step(pipeline_data)
+        except:
+            self.fail()
+        self.assertEqual(pipeline_data[data_defs.REPLICAS], 'global')
