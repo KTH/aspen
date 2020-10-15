@@ -56,13 +56,13 @@ class SendRecommendations(BasePipelineStep):
             "Recommended docker-stack.yml config",
             "Improve your app by adding",
             "More awesomeness if you add",
-            ":ingemar: Ingemar approves adding",
+            "I am :ingemar: Ingemar. And I approve this message",
             "Psst dude you forgot",
             "Add this coizzle for massizzle iizzle",
             "... just add it and you will not see this again!",
             "All the cool kids have it",
             "Carl XVI tycker det blir mer kungligt om du addar",
-            "Paddy slar mig pa kaften om du inte addar"
+            "#ita-ops will start Falmingo :hipflamingos: dancing"
         ]
 
         return flavor_texts[random.randint(0, (len(flavor_texts) -1))]
