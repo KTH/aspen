@@ -62,7 +62,7 @@ class SendRecommendations(BasePipelineStep):
             "... just add it and you will not see this again!",
             "All the cool kids have it",
             "Carl XVI tycker det blir mer kungligt om du addar",
-            "#ita-ops will start Falmingo :hipflamingos: dancing"
+            "#ita-ops will start flamingo :hipflamingos: dancing"
         ]
 
         return flavor_texts[random.randint(0, (len(flavor_texts) -1))]
