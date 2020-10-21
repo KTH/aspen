@@ -58,7 +58,7 @@ class VerifyDeploySuccess(BasePipelineStep):
                            service, match.group(1), match.group(2), self.wait_seconds)
             time.sleep(self.wait_seconds)
         else:
-            msg = (f'Application didnt start correctly. Service ps output is: '
+            msg = (f'Application didnt start correctly. Service ps output is: \n'
                    f'```\n{self.get_ps_output(pipeline_data, service)}\n```')
             raise exceptions.DeploymentError(msg)
 
