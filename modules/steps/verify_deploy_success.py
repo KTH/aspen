@@ -59,7 +59,7 @@ class VerifyDeploySuccess(BasePipelineStep):
             time.sleep(self.wait_seconds)
         else:
             msg = (f'Application didnt start correctly. Service ps output is: \n'
-                   f'```\n{self.get_ps_output(pipeline_data, service)}\n```')
+                   f'\n{self.get_ps_output(pipeline_data, service)}\n')
             raise exceptions.DeploymentError(msg)
 
     def get_running_replicas(self, pipeline_data, service):
