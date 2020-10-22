@@ -76,6 +76,8 @@ class ReportSuccess(BasePipelineStep):
                 deployment_json['accessibilityUrls'] = value.strip('"')
             elif name == 'se.kth.publicUserDocumentationUrl':
                 deployment_json['publicUserDocumentationUrl'] = value.strip('"')
+            elif name == 'se.kth.privateOperationsDocumentationUrl':
+                deployment_json['privateOperationsDocumentationUrl'] = value.strip('"')
                 
         return deployment_json
 
