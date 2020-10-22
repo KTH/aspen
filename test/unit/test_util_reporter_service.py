@@ -39,7 +39,7 @@ class TestSendRecommendations(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error()
         result = reporter_service.create_error_object(error, combined_labels, False)
         expected = {
-            'message': ('Error deploying */* in step _ParseStackFile_ ```This is a deployment error```'),
+            'message': ('Error deploying */* in step _ParseStackFile_ \nThis is a deployment error'),
             'stackTrace': None,
             'slackChannels': '#pipeline,#team-pipeline,#ita-ops'
         }
@@ -56,7 +56,7 @@ class TestSendRecommendations(unittest.TestCase):
         error.pipeline_data = pipeline_data
         result = reporter_service.create_error_object(error, combined_labels, False)
         expected = {
-            'message': ('Error deploying *stage/kth-azure-app* in step _ParseStackFile_ ```This is a deployment error```'),
+            'message': ('Error deploying *stage/kth-azure-app* in step _ParseStackFile_ \nThis is a deployment error'),
             'stackTrace': None,
             'slackChannels': '#pipeline,#team-pipeline,#ita-ops'
         }
@@ -72,7 +72,7 @@ class TestSendRecommendations(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error(expected=False)
         result = reporter_service.create_error_object(error, combined_labels, False)
         expected = {
-            'message': ('Error deploying */* in step _ParseStackFile_ ```This is a deployment error```'),
+            'message': ('Error deploying */* in step _ParseStackFile_ \nThis is a deployment error'),
             'stackTrace': 'Stack\ntrace',
             'slackChannels': None
         }
@@ -86,7 +86,7 @@ class TestSendRecommendations(unittest.TestCase):
         error = mock_test_data.get_mock_deployment_error()
         result = reporter_service.create_error_object(error, combined_labels, True)
         expected = {
-            'message': ('<!here> Error deploying */* in step _ParseStackFile_ ```This is a deployment error```'),
+            'message': ('<!here> Error deploying */* in step _ParseStackFile_ \nThis is a deployment error'),
             'stackTrace': None,
             'slackChannels': '#pipeline,#team-pipeline,#ita-ops'
         }

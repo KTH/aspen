@@ -112,12 +112,12 @@ def format_error_message(cluster, application, step, error, add_here_to_msg):
     # have any in it
     error_str = str(error).replace('`', "").replace('\'', "").replace('\"', "")
     
-    error_str = f'```{error_str}```'
+    #error_str = f'```{error_str}```'
     
     at_here = '<!here> 'if add_here_to_msg else ''
 
     return (f'{at_here}Error deploying *{cluster}/{application}* in step _{step}_ '
-            f'{error_str}')
+            f'\n{error_str}')
 
 def get_combined_service_labels(pipeline_data):
     labels = {}
