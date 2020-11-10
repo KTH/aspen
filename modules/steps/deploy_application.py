@@ -37,6 +37,10 @@ class DeployApplication(BasePipelineStep):
                 application_env = f'{application_env} {service_env_str}'
             else:
                 application_env = service_env_str
+        
+        application_name_env = f'APPLICATION_NAME={pipeline_data[data_defs.APPLICATION_NAME]}'
+        application_env = f'{application_env} {application_name_env}'
+                
         return application_env.rstrip()
 
     def run_deploy(self, pipeline_data, environment):
