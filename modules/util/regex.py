@@ -36,3 +36,6 @@ def get_service_name_from_update_deploy():
 
 def get_nr_of_replicas():
     return r'^.+?([0-9]+)/([0-9]+).*$'
+
+def get_valid_image_tag():
+    return r'^[0-9]+\.[0-9]+\.[0-9]+_{0,1}(.*)$'
