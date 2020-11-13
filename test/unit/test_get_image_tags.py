@@ -34,6 +34,6 @@ class TestGetImageTags(unittest.TestCase):
         }
         self.assertEqual(git.get_tags_url(image_data), 'https://kthregistry.azurecr.io/acr/v1/kth-azure-app/_tags')
 
-    def testget_tags_from_registry(self):
+    def test_get_tags_from_registry(self):
         # TODO: B E N G T S S O N - fix this plz!!11
         pass
