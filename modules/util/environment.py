@@ -49,6 +49,12 @@ VALIDATE_RECOMMENDATION_URL = 'VALIDATE_RECOMMENDATION_URL'
 def get_env(env_name):
     return os.environ.get(env_name)
 
+def get_env_no_trailing_slash(env_name):
+    value = os.environ.get(env_name)
+    if value:
+        return value.rstrip('/')
+    return value
+
 def get_env_list(env_name):
     env_value = os.environ.get(env_name)
     if env_value:
@@ -57,7 +63,7 @@ def get_env_list(env_name):
 
 def get_registry_path():
     return os.path.join(root_path.PROJECT_ROOT,
-                        get_env(REGISTRY_SUB_DIRECTORY))
+                        str(get_env(REGISTRY_SUB_DIRECTORY)))
 
 def get_with_default_int(env_key, default):
     env_value = os.environ.get(env_key)
@@ -73,5 +79,8 @@ def get_with_default_string(env_key, default):
     else:
         return default
 
-def get_using_azure_repository(image_data):
-    return get_env(AZURE_REGISTRY_URL).endswith(image_data[data_defs.IMG_REGISTRY])
+def use_azure_repository(image_data):
+    registry_url = get_env(AZURE_REGISTRY_URL)
+    if registry_url and data_defs.IMG_REGISTRY in image_data:
+        return image_data[data_defs.IMG_REGISTRY] in registry_url
+    return False

@@ -42,24 +42,24 @@ class GetImageTags(BasePipelineStep):
                 pipeline_data[data_defs.SERVICES][i][data_defs.S_IMAGE] = image_data
         return pipeline_data
 
-    def get_tags_url(self, image_data, registry_url):
+    def get_tags_url(self, image_data):
         image_name = image_data[data_defs.IMG_NAME]
-        if environment.get_using_azure_repository(image_data):
-            registry_url = environment.get_env(environment.AZURE_REGISTRY_URL)
+        if environment.use_azure_repository(image_data):
+            registry_url = environment.get_env_no_trailing_slash(environment.AZURE_REGISTRY_URL)
             return f'{registry_url}/acr/v1/{image_name}/_tags'
         else:
-            registry_url = environment.get_env(environment.DOCKER_REGISTRY_URL)
+            registry_url = environment.get_env_no_trailing_slash(environment.DOCKER_REGISTRY_URL)
             return f'{registry_url}/v2/{image_name}/tags/list'
 
     def get_tags_from_registry(self, image_data, url_to_call):
-        if environment.get_using_azure_repository(image_data):
+        if environment.use_azure_repository(image_data):
             user = environment.get_env(environment.AZURE_REGISTRY_USER)
             password = environment.get_env(environment.AZURE_REGISTRY_PWD)
         else:
             user = environment.get_env(environment.DOCKER_REGISTRY_USER)
             password = environment.get_env(environment.DOCKER_REGISTRY_PWD)
         response = requests.get_urllib_json(url_to_call, auth=(user, password))
-        if environment.get_using_azure_repository(image_data):
+        if environment.use_azure_repository(image_data):
             tags = [ version["name"] for version in response["tags"] ]
         else:
             tags = response["tags"]
