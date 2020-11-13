@@ -19,6 +19,10 @@ class TestCompletePipeline(unittest.TestCase):
         os.environ[environment.DOCKER_REGISTRY_PWD] = 'will_be_mocked'
         os.environ[environment.DOCKER_REGISTRY_USER] = 'will_be_mocked'
         os.environ[environment.DOCKER_REGISTRY_URL] = 'http://localhost:5000/tags'
+        os.environ[environment.AZURE_REGISTRY_PWD] = 'will_be_mocked'
+        os.environ[environment.AZURE_REGISTRY_USER] = 'will_be_mocked'
+        os.environ[environment.AZURE_REGISTRY_URL] = 'http://localhost:5000/tags'
+
         os.environ[environment.CLUSTER_STATUS_API_URL] = 'http://localhost:5000/clusters'
         os.environ[environment.REGISTRY_REPOSITORY_URL] = 'http://localhost/cellus-registry'
         os.environ[environment.REGISTRY_SUB_DIRECTORY] = os.path.join(r_path, 'test/registry_repo')

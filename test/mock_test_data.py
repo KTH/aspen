@@ -365,3 +365,37 @@ def get_tags_response():
             "2.9.185_974c427"
         ]
     }
+
+def get_azure_tags_response():
+    return {
+        "registry": "kthregistry.azurecr.io",
+        "imageName": "kth-azure-app",
+        "tags": [
+            {
+                "name": "2.9.158_f9c44d7",
+                "digest": "sha256:ccef4da0b4bdc3ed85b80eecb4956907a247baa859f98204bc26c043c42e563a",
+                "createdTime": "2020-11-09T16:27:02.7868203Z",
+                "lastUpdateTime": "2020-11-09T16:27:02.7868203Z",
+                "signed": False,
+                "changeableAttributes": {
+                    "deleteEnabled": True,
+                    "writeEnabled": True,
+                    "readEnabled": True,
+                    "listEnabled": True
+                }
+            },
+            {
+                "name": "2.9.185_974c427",
+                "digest": "sha256:ccef4da0b4bdc3ed85b80eecb4956907a247baa859f98204bc26c043c42e563a",
+                "createdTime": "2020-11-09T16:27:42.3597204Z",
+                "lastUpdateTime": "2020-11-09T16:27:42.3597204Z",
+                "signed": False,
+                "changeableAttributes": {
+                    "deleteEnabled": True,
+                    "writeEnabled": True,
+                    "readEnabled": True,
+                    "listEnabled": True
+                }
+            }
+        ]
+    }

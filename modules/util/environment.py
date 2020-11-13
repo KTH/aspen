@@ -6,6 +6,7 @@ __author__ = 'tinglev@kth.se'
 
 import os
 import root_path
+from modules.util import data_defs
 
 # REQUIRED
 REGISTRY_SUB_DIRECTORY = 'REGISTRY_SUB_DIRECTORY'
@@ -17,6 +18,9 @@ CLUSTER_STATUS_API_URL = 'CLUSTER_STATUS_API_URL'
 DOCKER_REGISTRY_URL = 'DOCKER_REGISTRY_URL'
 DOCKER_REGISTRY_USER = 'DOCKER_REGISTRY_USER'
 DOCKER_REGISTRY_PWD = 'DOCKER_REGISTRY_PWD'
+AZURE_REGISTRY_URL = 'AZURE_REGISTRY_URL'
+AZURE_REGISTRY_USER = 'AZURE_REGISTRY_USER'
+AZURE_REGISTRY_PWD = 'AZURE_REGISTRY_PWD'
 REDIS_URL = 'REDIS_URL'
 
 # OPTIONAL
@@ -68,3 +72,6 @@ def get_with_default_string(env_key, default):
         return str(env_value)
     else:
         return default
+
+def get_using_azure_repository(image_data):
+    return get_env(AZURE_REGISTRY_URL).endswith(image_data[data_defs.IMG_REGISTRY])

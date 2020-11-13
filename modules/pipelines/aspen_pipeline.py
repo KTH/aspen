@@ -6,6 +6,7 @@ from modules.steps.decrypt_app_passwords import DecryptAppPasswords
 from modules.steps.find_docker_stack_files import FindDockerStackFiles
 from modules.steps.start_deployment_pipelines import StartDeploymentPipelines
 from modules.steps.registry_login import RegistryLogin
+from modules.steps.azure_registry_login import AzureRegistryLogin
 from modules.steps.load_docker_host_ips import LoadDockerHostIps
 from modules.util import pipeline, exceptions, environment
 
@@ -20,6 +21,7 @@ class AspenPipeline():
     def init_steps(self):
         self.pipeline_steps = pipeline.create_pipeline_from_array([
             RegistryLogin(),
+            AzureRegistryLogin(),
             FetchAppRegistry(),
             DecryptAppPasswords(),
             FindDockerStackFiles(),
