@@ -9,7 +9,7 @@ app = Flask(__name__) # pylint: disable=C0103
 def mock_tags():
     return jsonify(mock_test_data.get_tags_response())
 
-@app.route("/acr/v1/kth-azure-app/_tags")
+@app.route("/tags/acr/v1/kth-azure-app/_tags")
 def mock_azure_tags():
     return jsonify(mock_test_data.get_azure_tags_response())
 
