@@ -64,7 +64,7 @@ def clear_app_from_cache(cluster, app):
 @FLASK_APP.route('/api/v1/cache/<cluster>', methods=['DELETE'])
 def clear_cluster_from_cache(cluster):
     client = redis.get_client()
-    redis.clear_cache_with_filter(client, f'{cluster}')
+    redis.clear_cache_for_cluster(client, f'{cluster}')
     return jsonify(message='Cache cleared')
 
 @FLASK_APP.route('/api/v1/cache', methods=['DELETE'])

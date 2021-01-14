@@ -76,3 +76,10 @@ def clear_cache_with_filter(client, key_filter):
     logger.info('Found %s keys to clear', len(keys))
     for key in [key.decode("utf-8") for key in keys]:
         execute_json_delete(client, key)
+
+def clear_cache_for_cluster(client, cluster_status): #cluster_status = stage,active..
+    logger = logging.getLogger(__name__)
+    keys = execute_command(client, f'KEYS /{cluster_status}')
+    logger.info('Found %s keys to clear', len(keys))
+    for key in [key.decode("utf-8") for key in keys]:
+        execute_json_delete(client, key)
