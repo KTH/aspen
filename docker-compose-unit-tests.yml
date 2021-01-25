@@ -9,14 +9,14 @@ services:
   #############################################
   # Start app as a container
   #############################################
-  redis-rejson:
-    image: redislabs/rejson:latest
+  redis:
+    image: redis:latest
     ports:
       - 6379:6379
 
   web:
     depends_on:
-      - redis-rejson
+      - redis
     # if not --build and kth-azure-app already exists in
     # your local computers registry 'image' is used.
     image: $LOCAL_IMAGE_ID

@@ -5,7 +5,7 @@ import unittest
 from unittest.mock import MagicMock
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-from modules.util import error_cache
+from modules.util import error_cache, environment
 
 class TestErrorCache(unittest.TestCase):
 
@@ -17,3 +17,9 @@ class TestErrorCache(unittest.TestCase):
         five_minutes_later = datetime.now() + relativedelta(minutes=+5)
         error_cache.get_now = MagicMock(return_value=five_minutes_later)
         self.assertFalse(error_cache.should_be_reported_again(cache_entry))
+
+    def test_get_cache_key(self):
+        os.environ[environment.MANAGEMENT_RES_GRP] = 'dev-ev'
+        pipeline_data = { 'STACK_FILE_PATH' : '/deploy/aspen/stage'}
+        cache_key = error_cache.get_cache_key(pipeline_data)
+        self.assertEqual(cache_key, 'error/dev-ev/deploy/aspen/stage')

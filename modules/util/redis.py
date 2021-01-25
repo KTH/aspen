@@ -31,7 +31,7 @@ def execute_json_set(client, key, value):
     try:
         logger = logging.getLogger(__name__)
         logger.debug('Writing key "%s" and value "%s"', key, value)
-        client.execute_command('JSON.SET', key, '.', json.dumps(value))
+        client.execute_command('SET', key, json.dumps(value))
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt execute redis set cmd. '
                                          f'Error was: "{str(redis_err)}"')
@@ -40,7 +40,7 @@ def execute_json_get(client, key):
     try:
         logger = logging.getLogger(__name__)
         logger.debug('Getting key "%s"', key)
-        value = client.execute_command('JSON.GET', key)
+        value = client.execute_command('GET', key)
         if value:
             return json.loads(value)
         return value
@@ -52,7 +52,7 @@ def execute_json_delete(client, key):
     try:
         logger = logging.getLogger(__name__)
         logger.debug('Deleting key "%s"', key)
-        return client.execute_command('JSON.DEL', key)
+        return client.execute_command('DEL', key)
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt execute redis delete cmd. '
                                          f'Error was: "{str(redis_err)}"')
@@ -70,16 +70,16 @@ def get_all_keys(client):
     keys = execute_command(client, f'KEYS *')
     return [key.decode("utf-8") for key in keys]
 
-def clear_cache_with_filter(client, key_filter):
+def clear_cache_for_cluster_and_app(client, mgt_res_grp, cluster, app):
     logger = logging.getLogger(__name__)
-    keys = execute_command(client, f'KEYS *{key_filter}*')
+    keys = execute_command(client, f'KEYS {mgt_res_grp}/*/{app}/{cluster}*')
     logger.info('Found %s keys to clear', len(keys))
     for key in [key.decode("utf-8") for key in keys]:
         execute_json_delete(client, key)
 
-def clear_cache_for_cluster(client, cluster_status): #cluster_status = stage,active..
+def clear_cache_for_cluster(client, mgt_res_grp, cluster): #cluster_status = stage,active..
     logger = logging.getLogger(__name__)
-    keys = execute_command(client, f'KEYS */{cluster_status}')
+    keys = execute_command(client, f'KEYS {mgt_res_grp}/*/{cluster}*')
     logger.info('Found %s keys to clear', len(keys))
     for key in [key.decode("utf-8") for key in keys]:
         execute_json_delete(client, key)

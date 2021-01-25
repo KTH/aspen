@@ -39,6 +39,7 @@ All program environment access is done through `modules/util/environment.py`
 | `DOCKER_REGISTRY_USER` | The user to use when logging into the docker image registry |
 | `DOCKER_REGISTRY_PWD` | The password to use when logging into the docker image registry |
 | `REDIS_URL` | The URL to redis being used as a cache. If deployed as a docker stack/compose this should probably be "redis" |
+| `MANAGEMENT_RES_GRP` | The name of the owning resource group (dev-ev, everest-management..). This is used as a key (in combination with cluster status and file path) in the cache system |
 
 ## Optional environment
 

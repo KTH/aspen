@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# Start local reJSON
+# Start local redis
 if [ "$1" != "docker" ]; then
-    docker run -d -p 6379:6379 --name redis-rejson redislabs/rejson:latest
+    docker run -d -p 6379:6379 --name redis redis:latest
     REDIS_URL=localhost
 else
     pipenv install --dev --pre
-    REDIS_URL=redis-rejson
+    REDIS_URL=redis
 fi
 
 # Stack mock API server
@@ -18,8 +18,8 @@ REDIS_URL=$REDIS_URL pipenv run green -vv --run-coverage --failfast "test/unit" 
 # Kill mock API server
 kill $MOCK_API_PID 
 
-# Stop and remove reJSON
+# Stop and remove redis
 if [ "$1" != "docker" ]; then
-    docker stop redis-rejson
-    docker rm -f redis-rejson
+    docker stop redis
+    docker rm -f redis
 fi

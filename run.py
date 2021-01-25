@@ -55,23 +55,16 @@ def sync_routine():
                 logger.warning('Caught a non-fatal AspenError: %s', aspen_err)
     SYNC_THREAD_STATE = SyncThreadState.STOPPED
 
-@FLASK_APP.route('/api/v1/cache/<cluster>/<app>', methods=['DELETE'])
+@FLASK_APP.route('/api/v1/cache/<mgt_res_grp>/<cluster>/<app>', methods=['DELETE'])
 def clear_app_from_cache(cluster, app):
     client = redis.get_client()
-    redis.clear_cache_with_filter(client, f'{app}*{cluster}')
+    redis.clear_cache_for_cluster_and_app(client, mgt_res_grp, cluster, app)
     return jsonify(message='Cache cleared')
 
-@FLASK_APP.route('/api/v1/cache/<cluster>', methods=['DELETE'])
+@FLASK_APP.route('/api/v1/cache/<mgt_res_grp>/<cluster>', methods=['DELETE'])
 def clear_cluster_from_cache(cluster):
     client = redis.get_client()
-    redis.clear_cache_for_cluster(client, f'{cluster}')
-    return jsonify(message='Cache cleared')
-
-@FLASK_APP.route('/api/v1/cache', methods=['DELETE'])
-def clear_cache():
-    logger = logging.getLogger(__name__)
-    redis.delete_entire_cache()
-    logger.info('Cleared redis cache')
+    redis.clear_cache_for_cluster(client, mgt_res_grp, cluster)
     return jsonify(message='Cache cleared')
 
 @FLASK_APP.route('/api/v1/sync/start', methods=['GET'])

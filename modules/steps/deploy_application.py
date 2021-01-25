@@ -6,7 +6,7 @@ environment (for instance semver versioning)"""
 __author__ = 'tinglev@kth.se'
 
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, process, pipeline_data_utils
+from modules.util import data_defs, process, pipeline_data_utils, environment
 
 class DeployApplication(BasePipelineStep):
 
