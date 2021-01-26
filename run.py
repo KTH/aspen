@@ -56,13 +56,13 @@ def sync_routine():
     SYNC_THREAD_STATE = SyncThreadState.STOPPED
 
 @FLASK_APP.route('/api/v1/cache/<mgt_res_grp>/<cluster>/<app>', methods=['DELETE'])
-def clear_app_from_cache(cluster, app):
+def clear_app_from_cache(mgt_res_grp, cluster, app):
     client = redis.get_client()
     redis.clear_cache_for_cluster_and_app(client, mgt_res_grp, cluster, app)
     return jsonify(message='Cache cleared')
 
 @FLASK_APP.route('/api/v1/cache/<mgt_res_grp>/<cluster>', methods=['DELETE'])
-def clear_cluster_from_cache(cluster):
+def clear_cluster_from_cache(mgt_res_grp, cluster):
     client = redis.get_client()
     redis.clear_cache_for_cluster(client, mgt_res_grp, cluster)
     return jsonify(message='Cache cleared')
