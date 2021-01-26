@@ -83,3 +83,9 @@ def clear_cache_for_cluster(client, mgt_res_grp, cluster): #cluster_status = sta
     logger.info('Found %s keys to clear', len(keys))
     for key in [key.decode("utf-8") for key in keys]:
         execute_json_delete(client, key)
+
+def get_management_key_count(client, mgt_res_grp):
+    logger = logging.getLogger(__name__)
+    keys = execute_command(client, f'KEYS {mgt_res_grp}/*')
+    logger.info('Found %s keys', len(keys))
+    return len(keys)

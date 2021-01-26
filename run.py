@@ -99,12 +99,12 @@ def stop_sync_and_return():
     else:
         return jsonify(message='Sync thread already stopped'), 404
 
-@FLASK_APP.route('/api/v1/status', methods=['GET'])
-def get_status():
+@FLASK_APP.route('/api/v1/status/<mgt_res_grp>', methods=['GET'])
+def get_status(mgt_res_grp):
     logger = logging.getLogger(__name__)
     logger.info('Returning status')
     redis_client = redis.get_client()
-    cache_size = redis.execute_command(redis_client, 'DBSIZE')
+    cache_size = redis.get_management_key_count(redis_client, mgt_res_grp)
     sync_thread = thread.get_sync_thread()
     if not sync_thread:
         running = False

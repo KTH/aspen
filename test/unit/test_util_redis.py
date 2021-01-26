@@ -82,3 +82,14 @@ class TestRedis(unittest.TestCase):
         self.assertEqual(len(keys), 2)
         self.assertTrue(f'error/{mgt_res_grp}/repos/deploy/tamarack-test/test' in keys)
         self.assertTrue(f'{mgt_res_grp}/repos/deploy/tamarack-test/active' in keys)
+
+    def test_5_key_count(self):
+        client = redis.get_client()
+        redis.delete_entire_cache()
+        redis.execute_json_set(client, 'dev-ev/repos/deploy/tamarack/stage/docker-stack.yml', {'value': '1'})       
+        redis.execute_json_set(client, 'everest-management/repos/deploy/tamarack-test/test', {'value': '2'})
+        redis.execute_json_set(client, 'everest-management/repos/deploy/tamarack-test2/test', {'value': '3'})
+        key_count = redis.get_management_key_count(client, 'dev-ev')
+        self.assertEqual(key_count, 1)
+        key_count = redis.get_management_key_count(client, 'everest-management')
+        self.assertEqual(key_count, 2)
