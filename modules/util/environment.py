@@ -21,6 +21,10 @@ DOCKER_REGISTRY_PWD = 'DOCKER_REGISTRY_PWD'
 AZURE_REGISTRY_URL = 'AZURE_REGISTRY_URL'
 AZURE_REGISTRY_USER = 'AZURE_REGISTRY_USER'
 AZURE_REGISTRY_PWD = 'AZURE_REGISTRY_PWD'
+# Format:
+# redis://[[username]:[password]]@localhost:6379/0
+# rediss://[[username]:[password]]@localhost:6379/0
+# unix://[[username]:[password]]@/path/to/socket.sock?db=0
 REDIS_URL = 'REDIS_URL'
 MANAGEMENT_RES_GRP = 'MANAGEMENT_RES_GRP'
 

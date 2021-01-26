@@ -11,8 +11,8 @@ from modules.util import exceptions, environment
 
 def get_client():
     try:
-        redis_url = environment.get_with_default_string(environment.REDIS_URL, 'redis')
-        return redis.StrictRedis(redis_url)
+        redis_url = environment.get_with_default_string(environment.REDIS_URL, 'redis://redis:6379')
+        return redis.StrictRedis.from_url(redis_url)
     except redis.RedisError as redis_err:
         raise exceptions.DeploymentError(f'Couldnt create redis client. Error was: '
                                          f'"{str(redis_err)}"')

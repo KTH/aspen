@@ -3,10 +3,10 @@
 # Start local redis
 if [ "$1" != "docker" ]; then
     docker run -d -p 6379:6379 --name redis redis:latest
-    REDIS_URL=localhost
+    REDIS_URL=redis://localhost:6379
 else
     pipenv install --dev --pre
-    REDIS_URL=redis
+    REDIS_URL=redis://redis:6379
 fi
 
 # Stack mock API server
