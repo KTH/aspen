@@ -11,6 +11,11 @@ from modules.util import (data_defs, cache_defs,
                             redis, pipeline_data_utils,
                             environment)
 
+def get_cache_key(pipeline_data):
+    mgt_res_grp = environment.get_env(environment.MANAGEMENT_RES_GRP)
+    file_path = pipeline_data[data_defs.STACK_FILE_PATH]
+    return f'{mgt_res_grp}/{file_path.lstrip("/")}'  
+
 class WriteCacheEntry(BasePipelineStep):
 
     def __init__(self):
@@ -22,18 +27,13 @@ class WriteCacheEntry(BasePipelineStep):
     def get_required_data_keys(self):
         return [data_defs.STACK_FILE_PATH,
                 data_defs.STACK_FILE_DIR_HASH,
-                data_defs.SERVICES]
-
-    def get_cache_key(self, pipeline_data):
-        mgt_res_grp = environment.get_env(environment.MANAGEMENT_RES_GRP)
-        file_path = pipeline_data[data_defs.STACK_FILE_PATH]
-        return f'{mgt_res_grp}/{file_path.lstrip("/")}'        
+                data_defs.SERVICES]      
 
     def run_step(self, pipeline_data):
         redis_client = redis.get_client()
         image_versions = self.generate_image_versions(pipeline_data)
         cache_entry = self.generate_cache_entry(pipeline_data, image_versions)
-        cache_key = self.get_cache_key(pipeline_data)
+        cache_key = get_cache_key(pipeline_data)
         redis.execute_json_set(redis_client, cache_key, cache_entry)
         self.log.debug('Wrote cache entry "%s" for key "%s"', cache_entry, cache_key)
         return pipeline_data
