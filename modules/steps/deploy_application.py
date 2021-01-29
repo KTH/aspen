@@ -7,8 +7,11 @@ __author__ = 'tinglev@kth.se'
 
 from os import environ
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, process, pipeline_data_utils, environment
-
+from modules.util import (
+    data_defs, process, 
+    pipeline_data_utils
+)
+from modules.util import environment as module_env
 class DeployApplication(BasePipelineStep):
 
     def __init__(self):
@@ -52,7 +55,7 @@ class DeployApplication(BasePipelineStep):
                f'-H tcp://{cluster_lb_ip} stack deploy '
                f'--with-registry-auth '
                f'--compose-file {stack_file} {name}')
-        skip_deployment = environment.get_env(environment.SKIP_DEPLOYMENT)
+        skip_deployment = module_env.get_env(module_env.SKIP_DEPLOYMENT)
         if skip_deployment:
             self.log.info('SKIP_DEPLOY set - skipping deployment')
         else:
