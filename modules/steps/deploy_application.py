@@ -57,6 +57,7 @@ class DeployApplication(BasePipelineStep):
                f'--compose-file {stack_file} {name}')
         skip_deployment = module_env.get_env(module_env.SKIP_DEPLOYMENT)
         if skip_deployment:
+            pipeline_data[data_defs.DEPLOY_OUTPUT] = ''
             self.log.info('SKIP_DEPLOY set - skipping deployment')
         else:
             deploy_output = self.run_docker_cmd(cmd)
