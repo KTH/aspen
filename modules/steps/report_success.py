@@ -7,8 +7,10 @@ __author__ = 'tinglev@kth.se'
 
 import time
 from modules.steps.base_pipeline_step import BasePipelineStep
-from modules.util import data_defs, reporter_service, pipeline_data_utils
-
+from modules.util import (
+    data_defs, reporter_service, 
+    pipeline_data_utils, environment
+)
 class ReportSuccess(BasePipelineStep):
 
     def __init__(self):
@@ -24,7 +26,9 @@ class ReportSuccess(BasePipelineStep):
 
     def run_step(self, pipeline_data):
         deployment_json = self.create_deployment_json(pipeline_data)
-        reporter_service.handle_deployment_success(deployment_json)
+        skip_deployment = environment.get_env(environment.SKIP_DEPLOYMENT)
+        if not skip_deployment:
+            reporter_service.handle_deployment_success(deployment_json)
         pipeline_data[data_defs.WAS_DEPLOYED] = True
         return pipeline_data
 

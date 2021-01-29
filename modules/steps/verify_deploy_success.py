@@ -30,6 +30,9 @@ class VerifyDeploySuccess(BasePipelineStep):
         return [data_defs.DEPLOY_OUTPUT, data_defs.DOCKER_HOST_IP]
 
     def run_step(self, pipeline_data):
+        skip_deployment = environment.get_env(environment.SKIP_DEPLOYMENT)
+        if skip_deployment:
+            return pipeline_data
         service_names = self.get_all_service_names(pipeline_data)
         if not service_names:
             raise exceptions.DeploymentError(f'Couldnt get service names from deployment '

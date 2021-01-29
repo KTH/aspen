@@ -60,6 +60,7 @@ All program environment access is done through `modules/util/environment.py`
 | `SYNC_START_ON_RUN` | Start the sync thread on application startup. Set to anything to enable |
 | `DELAY_SECS_BETWEEN_RUNS` | The time between pipeline runs. Defaults to 15 |
 | `EXCLUDED_APPS` | Application names to be excluded from deployment. Semi-colon separated list. |
+| `SKIP_DEPLOYMENT` | Do not perform actual deployments, used to prepopulate cache |
 
 ## Test environment
 

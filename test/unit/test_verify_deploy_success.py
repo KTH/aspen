@@ -24,7 +24,7 @@ class TestVerifyDeploySuccess(unittest.TestCase):
         step = VerifyDeploySuccess()
         result = step.get_all_service_names(pipeline_data)
         self.assertEqual(len(result), 1)
-        self.assertEqual(result[0], 'dizin_dizin')     
+        self.assertEqual(result[0], 'dizin_dizin') 
 
     def test_get_running_replicas(self):
         step = VerifyDeploySuccess()

@@ -5,6 +5,7 @@ environment (for instance semver versioning)"""
 
 __author__ = 'tinglev@kth.se'
 
+from os import environ
 from modules.steps.base_pipeline_step import BasePipelineStep
 from modules.util import data_defs, process, pipeline_data_utils, environment
 
@@ -51,9 +52,13 @@ class DeployApplication(BasePipelineStep):
                f'-H tcp://{cluster_lb_ip} stack deploy '
                f'--with-registry-auth '
                f'--compose-file {stack_file} {name}')
-        deploy_output = self.run_docker_cmd(cmd)
-        pipeline_data[data_defs.DEPLOY_OUTPUT] = deploy_output.decode('utf-8')
-        self.log.debug('Deployment output was: "%s"', deploy_output)
+        skip_deployment = environment.get_env(environment.SKIP_DEPLOYMENT)
+        if skip_deployment:
+            self.log.info('SKIP_DEPLOY set - skipping deployment')
+        else:
+            deploy_output = self.run_docker_cmd(cmd)
+            pipeline_data[data_defs.DEPLOY_OUTPUT] = deploy_output.decode('utf-8')
+            self.log.debug('Deployment output was: "%s"', deploy_output)
         return pipeline_data
 
     def run_docker_cmd(self, cmd):
